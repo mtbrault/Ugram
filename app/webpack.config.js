@@ -14,8 +14,18 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /\.tsx?$/,
-				loader: 'ts-loader'
+				test: /\.ts(x?)$/,
+				exclude: /node_modules/,
+				use: [
+					{
+						loader: "ts-loader"
+					}
+				]
+			},
+			{
+				enforce: "pre",
+				test: /\.js$/,
+				loader: "source-map-loader"
 			},
 			{
 				test: /\.s[ac]ss$/i,

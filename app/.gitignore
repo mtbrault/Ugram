@@ -24,8 +24,8 @@ yarn-error.log*
 *.lock
 
 #IDE config files
-/.idea
-/.vscode
+../.idea/
+../.vscode/
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
