@@ -1,5 +1,6 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require("path");
+const moment = require('moment');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
 	entry: './index.tsx',
@@ -9,7 +10,7 @@ module.exports = {
 	},
 	output: {
 		path: path.join(__dirname, '/dist'),
-		filename: 'bundle.min.js'
+		filename: 'build.min.js?' + moment().unix()
 	},
 	module: {
 		rules: [
@@ -42,5 +43,8 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			template: './index.html'
 		})
-	]
+	],
+	performance: {
+		hints: false
+	}
 };
