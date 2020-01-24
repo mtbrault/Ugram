@@ -1,19 +1,24 @@
 import React from 'react';
-import {Router, Route, Switch} from 'react-router-dom';
-import createBrowserHistory from 'history/createBrowserHistory';
-
-import Home from './components/Home';
-import Profile from './components/Profile';
+import { Provider } from 'react-redux';
+import { Router, Route, Switch } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+import Home from './pages/Home';
+import Profile from './pages/Profile';
+import store from './store';
 
 const history = createBrowserHistory();
 
-const App: React.FC = () => (
-  <Router history={history}>
-    <Switch>
-      <Route exact path="/profile" component={Profile} />
-      <Route path="/" component={Home} />
-    </Switch>
-  </Router>
-)
+const App: React.FC = () => {
+  return (
+    <Provider store={store}>
+      <Router history={history}>
+        <Switch>
+          <Route exact path="/profile" component={Profile} />
+          <Route path="/" component={Home} />
+        </Switch>
+      </Router>
+    </Provider>
+  );
+}
 
 export default App;
