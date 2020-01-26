@@ -1,0 +1,30 @@
+{
+  "name": "ugram-backend",
+  "version": "0.0.1",
+  "description": "backend API for the ugram project",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GLO3112-classrooms/ugram-h2020-team-08.git"
+  },
+  "keywords": [
+    "ugram",
+    "backend",
+    "API"
+  ],
+  "author": "team08",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GLO3112-classrooms/ugram-h2020-team-08/issues"
+  },
+  "homepage": "https://github.com/GLO3112-classrooms/ugram-h2020-team-08#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "jest": "^25.1.0"
+  }
+}
