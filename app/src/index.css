@@ -5,6 +5,7 @@ body {
     font-family: 'Rubik', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: ghostwhite;
 }
 
 code {
@@ -14,4 +15,29 @@ code {
 
 #root {
     padding: 30px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.container {
+    margin: 15px 0;
+}
+
+.btn-center {
+    text-align: center;
+    margin: 10px;
+}
+
+.input-container {
+    margin: 20px 0;
+}
+
+.input-container .ant-input {
+    background-color: ghostwhite;
+}
+
+.input-container .ant-input-suffix {
+    right: 0;
 }
