@@ -1,3 +1,5 @@
 #IDE config files
 /.idea/
 /.vscode/
+
+yarn.lock
