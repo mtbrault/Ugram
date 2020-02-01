@@ -6,8 +6,8 @@ import store from './store';
 
 import Home from './pages/Home';
 import Profile from './pages/Profile';
-import Login from './pages/Login';
-import Register from './pages/Register';
+import Login from './pages/RegisterLogin/Login';
+import Register from './pages/RegisterLogin/Register';
 
 const history = createBrowserHistory();
 
