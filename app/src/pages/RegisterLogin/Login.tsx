@@ -1,27 +1,10 @@
-import React, { ReactNode, useState } from 'react';
+import React, { useState } from 'react';
 
 import {
-  Card, Row, Col, Input, Button,
+  Card, Row, Col, Button,
 } from 'antd/es';
 
-
-interface LoginInputProps {
-  id: string;
-  title: string;
-  type: string;
-  suffix?: ReactNode;
-}
-
-const LoginInput = ({
-  title, id, type, suffix,
-} : LoginInputProps) => (
-  <Row type="flex" justify="center" className="input-container">
-    <Col span={20}>
-      <b>{title}</b>
-      <Input id={id} type={type} suffix={suffix} />
-    </Col>
-  </Row>
-);
+import LoginInput from './LoginInput';
 
 const Login = () => {
   const [show, setShow] = useState(false);
