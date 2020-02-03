@@ -3,7 +3,7 @@ const express = require('express');
 
 const router = express.Router();
 // const auth = require('../controllers/authController');
-// const user = require('../controllers/userController');
+const user = require('../controllers/user');
 
 
 //require('../middlewares/passport')(passport);
@@ -29,8 +29,9 @@ router.get('/', (req, res) => {
 
 // ** User **
 // router.get('/user', passport.authenticate('jwt', {session:false}), user.get);         //R
-//router.put('/user', passport.authenticate('jwt', {session:false}), user.update);    //U
+//router.put('/user', passport.authenticate('jwt', {session:false}), user.update);       //U
 // router.delete('/user', passport.authenticate('jwt', {session:false}), user.delete);   //D
+
 
 // ** Services **
 // router.post('/user/google', passport.authenticate('jwt', {session:false}), user.google);       //C
@@ -39,5 +40,9 @@ router.get('/', (req, res) => {
 // router.post('/user/microsoft', passport.authenticate('jwt', {session:false}), user.microsoft); //C
 // router.get('/user/services', passport.authenticate('jwt', {session:false}), user.services)     //R
 
+router.post('/user', user.post);
+router.get('/user/:id', user.get);
+router.put('/user/:id', user.put);
+router.get('/users', user.getAll);
 
 module.exports = router;
