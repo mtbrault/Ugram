@@ -15,6 +15,6 @@ mongoose.set('useCreateIndex', true);
 
 
 module.exports = {
-	// User: require("./models/userModel"),
+	User: require("./models/userModel"),
 	db: mongoose.connection
 }
