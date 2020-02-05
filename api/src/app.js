@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const logger = require('morgan');
-//const passport = require('passport');
+const passport = require('passport');
 
 const app = express();
 const config = require("./config");
@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
-//app.use(passport.initialize());
+app.use(passport.initialize());
 
 console.log("Environnement:", config.app.env || "dev");
 
@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 
 //error sink
 app.use((err, req, res, next) => {
-    console.error(err);
+    if(!err.status) console.error(err);
     const json = config.app.env === "dev" ? {error: err} : {};
     json.message = err.message || "Something Broke...";
     res.status(err.status || 500).json(json);

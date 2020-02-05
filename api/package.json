@@ -25,13 +25,17 @@
     },
     "homepage": "https://github.com/GLO3112-classrooms/ugram-h2020-team-08#readme",
     "dependencies": {
+        "bcryptjs": "^2.4.3",
         "body-parser": "^1.19.0",
         "cors": "^2.8.5",
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
-        "mongoose": "^5.8.9",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^5.8.11",
         "morgan": "^1.9.1",
-        "parse-error": "^0.2.0"
+        "parse-error": "^0.2.0",
+        "passport": "^0.4.1",
+        "passport-jwt": "^4.0.0"
     },
     "devDependencies": {
         "jest": "^25.1.0",
