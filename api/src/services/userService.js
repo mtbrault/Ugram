@@ -28,6 +28,13 @@ const create = async ({ username, password, firstname, lastname, email, profile_
     return user;
 }
 
+const getById = async id => {
+	const user = await User.findById(id);
+	if(!user)
+		throw new Error(`user with id ${id} doesn't exist`);
+	return user;
+}
+
 // module.exports.update = async (user, data) => {
 //     if(data._id)
 //         delete data._id;
@@ -48,6 +55,7 @@ const removeById = async (id) => {
 module.exports = {
 	authenticate,
 	create,
+	getById,
 	remove,
 	removeById
 };
