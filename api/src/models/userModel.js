@@ -71,6 +71,8 @@ UserSchema.methods.toWeb = function () {
 	const ret =  {
 		username: this.displayname,
 		id: this._id,
+		createdAt: this.createdAt,
+		updatedAt: this.updatedAt
 	};
 	if (this.firstname) ret.firstname = this.firstname;
 	if (this.lastname) ret.lastname = this.lastname;
