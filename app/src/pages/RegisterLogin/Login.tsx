@@ -50,7 +50,7 @@ const Login: React.FC<LoginProps> = ({ history }) => {
             <LoginInput id="email" title="Email" type="text" onChange={setEmail} />
             <LoginInput
               id="password"
-              title="Mot de passe"
+              title="Password"
               type={show ? 'text' : 'password'}
               suffix={<Button type="ghost" icon={show ? 'eye-invisible' : 'eye'} onClick={() => setShow(!show)} />}
               onChange={setPassword}
@@ -58,7 +58,7 @@ const Login: React.FC<LoginProps> = ({ history }) => {
             <Row type="flex" justify="center">
               <Col span={20} className="btn-center">
                 <Button type="primary" onClick={submitForm}>
-                  Connexion
+                  Login
                 </Button>
               </Col>
             </Row>
@@ -69,9 +69,9 @@ const Login: React.FC<LoginProps> = ({ history }) => {
         <Col lg={7} md={10} sm={16} xs={24} className="text-center">
           <Card bordered>
             <Row type="flex" align="middle" justify="start">
-              <Col span={12}>Vous n’avez pas de compte  ?</Col>
+              <Col span={12}>Yout don't have an account ?</Col>
               <Col span={12}>
-                <Button type="link" onClick={() => history.push('/register')}>Inscrivez-vous</Button>
+                <Button type="link" onClick={() => history.push('/register')}>Register yourself</Button>
               </Col>
             </Row>
           </Card>

@@ -32,18 +32,21 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
   const [error, setError] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
 
   const submitForm = () => {
     const regMail = new RegExp('([A-Za-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3})$');
+    const regTel = new RegExp('^([0-9]{10})');
 
-    if (username === '' || email === '' || password === '' || confirmPassword === '')
+    if (username === '' || email === '' || password === '' || phone === '' || name === '')
       setError('You need to fill each field');
-    if (password !== confirmPassword)
-      setError('Your password doesnt match');
     if (!regMail.test(email))
       setError('Bad email format');
+    if (!regTel.test(phone))
+      setError('Bad phone number format');
+    console.log(email);
   }
 
   return (
@@ -54,6 +57,8 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
             <h1 className="text-center">Ugram</h1>
             <RegisterInput id="email" title="EMail" type="text" onChange={setEmail} />
             <RegisterInput id="username" title="Username" type="text" onChange={setUsername} />
+            <RegisterInput id="name" title="Fullname" type="text" onChange={setName} />
+            <RegisterInput id="phone" title="Phone number" type="tel" onChange={setPhone} />
             <RegisterInput
               id="password"
               title="Password"
@@ -61,17 +66,10 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
               suffix={<Button type="ghost" icon={show ? 'eye-invisible' : 'eye'} onClick={() => setShow(!show)} />}
               onChange={setPassword}
             />
-            <RegisterInput
-              id="confirmPassword"
-              title="Confirm Password"
-              type={show ? 'text' : 'password'}
-              suffix={<Button type="ghost" icon={show ? 'eye-invisible' : 'eye'} onClick={() => setShow(!show)} />}
-              onChange={setConfirmPassword}
-            />
             <Row type="flex" justify="center">
               <Col span={20} className="btn-center">
                 <Button type="primary" onClick={submitForm}>
-                  S'inscrire
+                  Register
                 </Button>
               </Col>
             </Row>
@@ -82,9 +80,9 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
         <Col lg={7} md={10} sm={16} xs={24} className="text-center">
           <Card bordered>
             <Row type="flex" align="middle" justify="start">
-              <Col span={12}>Vous avez un compte ?</Col>
+              <Col span={12}>You already have an account ?</Col>
               <Col span={12}>
-                <Button type="link" onClick={() => history.push('/login')}>Connectez-vous</Button>
+                <Button type="link" onClick={() => history.push('/login')}>Login yourself</Button>
               </Col>
             </Row>
           </Card>

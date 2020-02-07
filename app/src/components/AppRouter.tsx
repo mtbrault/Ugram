@@ -6,7 +6,7 @@ import Header from './Header';
 import Home from '../pages/Home';
 import Profile from '../pages/Profile';
 
-const AppRouter = () => (
+const AppRouter: React.SFC = () => (
 	<>
 		<Header />
 		<Divider />
