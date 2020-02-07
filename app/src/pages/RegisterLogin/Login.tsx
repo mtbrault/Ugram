@@ -3,6 +3,9 @@ import { History } from 'history';
 import {
   Card, Row, Col, Button,
 } from 'antd/es';
+import { useDispatch } from 'react-redux';
+import Cookies from 'js-cookie';
+import { loginUser } from '../../store/actions';
 
 import LoginInput from './LoginInput';
 
@@ -10,15 +13,32 @@ interface LoginProps {
   history: History
 }
 
-const Login = ({ history }: LoginProps) => {
-  const [username, setUsername] = useState('');
+const Login: React.FC<LoginProps> = ({ history }) => {
+  const dispatch = useDispatch();
+  const [error, setError] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [show, setShow] = useState(false);
 
   const submitForm = (): void => {
-    console.log("lol")
-    console.log('test' + username);
-    console.log(password);
+    const regMail = new RegExp('([A-Za-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3})$');
+    setError('');
+    if (email === '' || password === '') {
+      setError('You need fill all the field');
+      return;
+    }
+    if (!regMail.test(email)) {
+      setError('Bad email format');
+      return;
+    }
+    dispatch(loginUser(email, password))
+      .then((res) => {
+        Cookies.set('token', res.data.token);
+        history.push('/');
+      })
+      .catch(() => {
+        setError('Connexion failed');
+      });
   }
 
   return (
@@ -27,7 +47,7 @@ const Login = ({ history }: LoginProps) => {
         <Col lg={7} md={10} sm={16} xs={24}>
           <Card bordered>
             <h1 className="text-center">Ugram</h1>
-            <LoginInput id="username" title="Nom d'utilisateur" type="text" onChange={setUsername} />
+            <LoginInput id="email" title="Email" type="text" onChange={setEmail} />
             <LoginInput
               id="password"
               title="Mot de passe"

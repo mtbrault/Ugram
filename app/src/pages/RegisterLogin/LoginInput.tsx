@@ -9,7 +9,7 @@ interface LoginInputProps {
   onChange(e: string): void;
 }
 
-const LoginInput = ({ title, id, type, suffix, onChange }: LoginInputProps) => (
+const LoginInput: React.FC<LoginInputProps> = ({ title, id, type, suffix, onChange }) => (
   <Row type="flex" justify="center" className="input-container">
     <Col span={20}>
       <b>{title}</b>

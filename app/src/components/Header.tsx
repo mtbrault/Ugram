@@ -1,9 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Header = () => {
-	useEffect(() => {
-		//Rediriger au login si pas de token
-	}, []);
 
 	return (
 		<p>Header</p>

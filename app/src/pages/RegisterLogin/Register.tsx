@@ -17,7 +17,7 @@ interface RegisterProps {
   history: History
 }
 
-const RegisterInput = ({ title, id, type, suffix, onChange }: RegisterInputProps) => (
+const RegisterInput: React.SFC<RegisterInputProps> = ({ title, id, type, suffix, onChange }) => (
   <Row type="flex" justify="center" className="input-container">
     <Col span={20}>
       <b>{title}</b>
@@ -26,7 +26,7 @@ const RegisterInput = ({ title, id, type, suffix, onChange }: RegisterInputProps
   </Row>
 );
 
-const Register = ({ history }: RegisterProps) => {
+const Register: React.FC<RegisterProps> = ({ history }) => {
 
   const [show, setShow] = useState(false);
   const [error, setError] = useState('');
