@@ -1,5 +1,5 @@
-import testReducers from './testReducers';
+import authReducers from './authReducers';
 
 export default {
-	testReducers,
+	authReducers,
 }

@@ -1,5 +1,5 @@
 import React, { ReactNode, useState } from 'react';
-
+import { History } from 'history';
 import {
   Card, Row, Col, Input, Button,
 } from 'antd/es';
@@ -10,38 +10,67 @@ interface RegisterInputProps {
   id: string;
   type: string;
   suffix?: ReactNode;
+  onChange(e: string): void;
 }
 
-const RegisterInput = ({
-  title, id, type, suffix,
-} : RegisterInputProps) => (
+interface RegisterProps {
+  history: History
+}
+
+const RegisterInput = ({ title, id, type, suffix, onChange }: RegisterInputProps) => (
   <Row type="flex" justify="center" className="input-container">
     <Col span={20}>
       <b>{title}</b>
-      <Input id={id} type={type} suffix={suffix} />
+      <Input id={id} type={type} suffix={suffix} onChange={(e) => onChange(e.target.value)} />
     </Col>
   </Row>
 );
 
-const Register = () => {
+const Register = ({ history }: RegisterProps) => {
+
   const [show, setShow] = useState(false);
+  const [error, setError] = useState('');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const submitForm = () => {
+    const regMail = new RegExp('([A-Za-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3})$');
+
+    if (username === '' || email === '' || password === '' || confirmPassword === '')
+      setError('You need to fill each field');
+    if (password !== confirmPassword)
+      setError('Your password doesnt match');
+    if (!regMail.test(email))
+      setError('Bad email format');
+  }
+
   return (
     <>
       <Row type="flex" justify="center">
         <Col lg={7} md={10} sm={16} xs={24}>
           <Card bordered>
             <h1 className="text-center">Ugram</h1>
-            <RegisterInput id="username" title="Nom d'utilisateur" type="text" />
-            <RegisterInput id="name" title="Nom complet" type="text" />
+            <RegisterInput id="email" title="EMail" type="text" onChange={setEmail} />
+            <RegisterInput id="username" title="Username" type="text" onChange={setUsername} />
             <RegisterInput
               id="password"
-              title="Mot de passe"
+              title="Password"
               type={show ? 'text' : 'password'}
               suffix={<Button type="ghost" icon={show ? 'eye-invisible' : 'eye'} onClick={() => setShow(!show)} />}
+              onChange={setPassword}
+            />
+            <RegisterInput
+              id="confirmPassword"
+              title="Confirm Password"
+              type={show ? 'text' : 'password'}
+              suffix={<Button type="ghost" icon={show ? 'eye-invisible' : 'eye'} onClick={() => setShow(!show)} />}
+              onChange={setConfirmPassword}
             />
             <Row type="flex" justify="center">
               <Col span={20} className="btn-center">
-                <Button type="primary" onClick={() => console.log('S\'inscrire')}>
+                <Button type="primary" onClick={submitForm}>
                   S'inscrire
                 </Button>
               </Col>
@@ -55,7 +84,7 @@ const Register = () => {
             <Row type="flex" align="middle" justify="start">
               <Col span={12}>Vous avez un compte ?</Col>
               <Col span={12}>
-                <Button type="link" href="/login">Connectez-vous</Button>
+                <Button type="link" onClick={() => history.push('/login')}>Connectez-vous</Button>
               </Col>
             </Row>
           </Card>

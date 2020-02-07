@@ -13,7 +13,19 @@ API.interceptors.request.use(({ headers, ...config }) => ({
 }));
 
 export default class APIManager {
-	static test(value: string) {
-		return value;
+	static registerUser(username: String, email: String, password: String) {
+		return API.post('/auth/register', { email, username, password });
+	}
+
+	static loginUser(email: String, password: String) {
+		return API.post('/auth/login', { email, password })
+	}
+
+	static tokenInfo(token: String) {
+		return API.get('/tokeninfo', { headers: { Authorization: token } });
+	}
+
+	static logoutUser() {
+		return API.post('/auth/logout');
 	}
 }

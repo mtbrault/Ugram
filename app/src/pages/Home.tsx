@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-const Home: React.FC = () => (
-  <>
-    <p>Home page</p>
-  </>
-);
+const Home: React.FC = () => {
+
+  return (
+    <>
+      <p>Home page</p>
+    </>
+  )
+};
 
 export default Home;
