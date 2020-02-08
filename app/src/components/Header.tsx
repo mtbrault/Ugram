@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { Col, Input, Row } from 'antd/es';
 import { Button } from 'antd';
 
-import { History} from 'history';
+import { History } from 'history';
 
 interface HeaderProps {
   history: History;
@@ -20,9 +20,14 @@ const Header: React.FC<HeaderProps> = ({ history }) => (
         onSearch={(value) => console.log(value)}
       />
     </Col>
-    <Col span={6}>
+    <Col span={3}>
       <Button type="ghost" icon="user" onClick={() => history.push('/profile')}>
         Profil
+      </Button>
+    </Col>
+    <Col span={3}>
+      <Button type="danger" icon="logout" onClick={() => history.push('/home')}>
+        Logout
       </Button>
     </Col>
   </Row>
