@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { History } from 'history';
 import {
   Card, Row, Col, Button,
 } from 'antd/es';
 import { useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
-import { loginUser } from '../../store/actions';
+import { loginUser, tokenInfo } from '../../store/actions';
 
 import LoginInput from './LoginInput';
 
@@ -20,6 +20,15 @@ const Login: React.FC<LoginProps> = ({ history }) => {
   const [password, setPassword] = useState('');
   const [show, setShow] = useState(false);
 
+  useEffect(() => {
+    const token = Cookies.get('token');
+    if (token) {
+      dispatch(tokenInfo(token))
+        .then(() => history.push('/'))
+        .catch(() => Cookies.remove('token'));
+    }
+  }, [])
+
   const submitForm = (): void => {
     const regMail = new RegExp('([A-Za-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3})$');
     setError('');
@@ -33,7 +42,7 @@ const Login: React.FC<LoginProps> = ({ history }) => {
     }
     dispatch(loginUser({ email, password }))
       .then((res) => {
-        Cookies.set('token', res.data.token);
+        Cookies.set('token', res.token);
         history.push('/');
       })
       .catch((err) => {

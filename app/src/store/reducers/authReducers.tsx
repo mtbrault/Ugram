@@ -2,7 +2,7 @@ import { handleActions } from 'redux-actions';
 
 const initialState = {
 	email: '',
-	name: '',
+	id: '',
 	token: '',
 	error: '',
 }
@@ -17,8 +17,9 @@ const FAILED = 'FAILED';
 
 export default handleActions(
 	{
-		[`${LOGIN_USER}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, value: 'Succès' }),
+		[`${LOGIN_USER}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, ...payload, error: '' }),
 		[`${LOGIN_USER}_${FAILED}`]: (state) => ({ ...state, error: 'Connexion failed' }),
+		[`${REGISTER_USER}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, ...payload, error: '' }),
 		[`${LOGOUT_USER}_${SUCCEEDED}`]: () => (initialState),
 	},
 	initialState,

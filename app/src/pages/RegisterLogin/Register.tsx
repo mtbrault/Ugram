@@ -1,10 +1,11 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useState, useEffect } from 'react';
 import { History } from 'history';
 import {
   Card, Row, Col, Input, Button,
 } from 'antd/es';
+import Cookies from 'js-cookie';
 import { useDispatch } from 'react-redux';
-import { registerUser } from '../../store/actions';
+import { registerUser, tokenInfo } from '../../store/actions';
 
 
 interface RegisterInputProps {
@@ -36,9 +37,18 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
   const [success, setSuccess] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [phone_number, setPhone] = useState('');
+  const [phoneNumber, setPhone] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    const token = Cookies.get('token');
+    if (token) {
+      dispatch(tokenInfo(token))
+        .then(() => history.push('/'))
+        .catch(() => Cookies.remove('token'));
+    }
+  }, [])
 
   const submitForm = (): void => {
     const regMail = new RegExp('([A-Za-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3})$');
@@ -46,15 +56,18 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
 
     setError('');
     setSuccess('');
-    if (username === '' || email === '' || password === '' || phone_number === '' || name === '')
+    if (username === '' || email === '' || password === '' || phoneNumber === '' || name === '')
       setError('You need to fill each field');
     else if (!regMail.test(email))
       setError('Bad email format');
-    else if (!regTel.test(phone_number))
+    else if (!regTel.test(phoneNumber))
       setError('Bad phone number format');
     else {
-      dispatch(registerUser({ email, username, name, phone_number, password }))
-        .then(() => setSuccess('Account well created, you can login yourself'))
+      dispatch(registerUser({ email, username, name, phoneNumber, password }))
+        .then((res) => {
+          Cookies.set('token', res.token);
+          history.push('/');
+        })
         .catch((error) => console.log(error))
     }
   }

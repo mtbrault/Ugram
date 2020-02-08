@@ -16,13 +16,18 @@ API.interceptors.request.use(({ headers, ...config }) => ({
 }));
 
 export default class APIManager {
-	static registerUser(param: registerParam) {
-		console.log(param);
-		return API.post('/auth/register', param);
+	static async registerUser(param: registerParam) {
+		const res = await API.post('/auth/register', param);
+		if (res.data)
+			return res.data;
+		return res;
 	}
 
-	static loginUser(param: loginParam) {
-		return API.post('/auth/login', param)
+	static async loginUser(param: loginParam) {
+		const res = await API.post('/auth/login', param);
+		if (res.data)
+			return res.data;
+		return res;
 	}
 
 	static tokenInfo(token: String) {

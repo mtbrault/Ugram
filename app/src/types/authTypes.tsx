@@ -7,6 +7,6 @@ export interface registerParam {
 	username: String;
 	name: String;
 	email: String;
-	phone_number: String;
+	phoneNumber: String;
 	password: String;
 }
