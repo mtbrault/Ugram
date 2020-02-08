@@ -14,7 +14,7 @@ app.use(cors());
 
 app.use(passport.initialize());
 
-console.log("Environnement:", config.app.env || "dev");
+console.log("Environnement:", config.app.env || "dev");
 
 
 const router = require('./routes/v1');
@@ -29,8 +29,8 @@ app.use((req, res, next) => {
 
 //error sink
 app.use((err, req, res, next) => {
-    if(!err.status) console.error(err);
-    const json = config.app.env === "dev" ? {error: err} : {};
+    if (!err.status) console.error(err);
+    const json = config.app.env === "dev" ? { error: err } : {};
     json.message = err.message || "Something Broke...";
     res.status(err.status || 500).json(json);
 });

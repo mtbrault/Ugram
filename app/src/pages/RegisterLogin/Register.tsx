@@ -3,6 +3,8 @@ import { History } from 'history';
 import {
   Card, Row, Col, Input, Button,
 } from 'antd/es';
+import { useDispatch } from 'react-redux';
+import { registerUser } from '../../store/actions';
 
 
 interface RegisterInputProps {
@@ -28,25 +30,33 @@ const RegisterInput: React.SFC<RegisterInputProps> = ({ title, id, type, suffix,
 
 const Register: React.FC<RegisterProps> = ({ history }) => {
 
+  const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const [phone_number, setPhone] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
 
-  const submitForm = () => {
+  const submitForm = (): void => {
     const regMail = new RegExp('([A-Za-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3})$');
     const regTel = new RegExp('^([0-9]{10})');
 
-    if (username === '' || email === '' || password === '' || phone === '' || name === '')
+    setError('');
+    setSuccess('');
+    if (username === '' || email === '' || password === '' || phone_number === '' || name === '')
       setError('You need to fill each field');
-    if (!regMail.test(email))
+    else if (!regMail.test(email))
       setError('Bad email format');
-    if (!regTel.test(phone))
+    else if (!regTel.test(phone_number))
       setError('Bad phone number format');
-    console.log(email);
+    else {
+      dispatch(registerUser({ email, username, name, phone_number, password }))
+        .then(() => setSuccess('Account well created, you can login yourself'))
+        .catch((error) => console.log(error))
+    }
   }
 
   return (
@@ -66,6 +76,8 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
               suffix={<Button type="ghost" icon={show ? 'eye-invisible' : 'eye'} onClick={() => setShow(!show)} />}
               onChange={setPassword}
             />
+            <p style={{ color: 'red' }}>{error}</p>
+            <p style={{ color: 'green' }}>{success}</p>
             <Row type="flex" justify="center">
               <Col span={20} className="btn-center">
                 <Button type="primary" onClick={submitForm}>

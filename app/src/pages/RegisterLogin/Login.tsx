@@ -31,12 +31,13 @@ const Login: React.FC<LoginProps> = ({ history }) => {
       setError('Bad email format');
       return;
     }
-    dispatch(loginUser(email, password))
+    dispatch(loginUser({ email, password }))
       .then((res) => {
         Cookies.set('token', res.data.token);
         history.push('/');
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err);
         setError('Connexion failed');
       });
   }

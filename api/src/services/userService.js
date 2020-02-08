@@ -10,29 +10,29 @@ const authenticate = async ({ username, password }) => {
     return user;
 };
 
-const create = async ({ username, password, firstname, lastname, email, profile_pic_url }) => {
-    if(!username || !password)
-        throw new Error("missing username or password");
+const create = async ({ username, password, phone_number, name, email }) => {
+    if (!username || !password || !phone_number || !name || !email)
+        throw new Error("Missing one argument");
     let user = await User.findOne({ username: username.toLowerCase() });
-    if(user)
-        throw new Error("username already taken");
-	const data = {
-		username, password, displayname: username
-	};
-	if(firstname) data.firstname = firstname;
-	if(lastname) data.lastname = lastname;
-	if(email) data.email = email;
-	if(profile_pic_url) data.profile_pic_url = profile_pic_url;
+    if (user)
+        throw new Error("Username already taken");
+    const data = {
+        username, password, phone_number, name, email
+    };
     user = new User(data);
-    user = await user.save();
+    user.save(function (err, user) {
+        if (err) {
+            console.log(err);
+        }
+    });
     return user;
 }
 
 const getById = async id => {
-	const user = await User.findById(id);
-	if(!user)
-		throw new Error(`user with id ${id} doesn't exist`);
-	return user;
+    const user = await User.findById(id);
+    if (!user)
+        throw new Error(`user with id ${id} doesn't exist`);
+    return user;
 }
 
 // module.exports.update = async (user, data) => {
@@ -53,9 +53,9 @@ const removeById = async (id) => {
 };
 
 module.exports = {
-	authenticate,
-	create,
-	getById,
-	remove,
-	removeById
+    authenticate,
+    create,
+    getById,
+    remove,
+    removeById
 };
