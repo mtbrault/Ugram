@@ -41,3 +41,22 @@ code {
 .input-container .ant-input-suffix {
     right: 0;
 }
+
+.header-container {
+    background: white;
+    border: 1px solid #000000;
+    text-align: center;
+    padding: 10px;
+}
+
+.title-h1 {
+    margin-bottom: auto;
+}
+
+.title-header {
+    cursor: pointer;
+}
+
+.span-icon {
+    margin-left: 10px;
+}

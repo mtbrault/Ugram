@@ -7,15 +7,15 @@ import Home from '../pages/Home';
 import Profile from '../pages/Profile';
 
 const AppRouter: React.SFC = () => (
-	<>
-		<Header />
-		<Divider />
-		<Switch>
-			<Route exact path="/home" component={Home} />
-			<Route exact path="/profile" component={Profile} />
-			<Route exact path="/" render={() => <Redirect to="/home" />} />
-		</Switch>
-	</>
-)
+  <>
+    <Header />
+    <Divider />
+    <Switch>
+      <Route exact path="/home" component={Home} />
+      <Route exact path="/profile" component={Profile} />
+      <Route exact path="/" render={() => <Redirect to="/home" />} />
+    </Switch>
+  </>
+);
 
 export default AppRouter;
