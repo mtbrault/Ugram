@@ -60,3 +60,7 @@ code {
 .span-icon {
     margin-left: 10px;
 }
+
+.ant-upload-picture-card-wrapper {
+    width: initial;
+}
