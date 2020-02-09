@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Button, Avatar, Col, Row, Card, Icon, Modal, message, Upload,
 } from 'antd/es';
+
 import { UploadFile } from 'antd/es/upload/interface';
 
 import InputComponent from '../components/InputComponent';
@@ -36,12 +37,11 @@ const Profile = () => {
   const handleChange = (info: any) => {
     if (info.file.status === 'uploading') {
       setUploading(true);
-      return;
     }
     if (info.file.status === 'done') {
       getBase64(info.file.originFileObj, (imageUrl: any) => {
-        setImage(imageUrl);
         setUploading(false);
+        setImage(imageUrl);
       });
     }
   };
@@ -66,7 +66,7 @@ const Profile = () => {
             onChange={handleChange}
             style={{ width: 0 }}
           >
-            {image ? <Avatar src={image} size={100} /> : <Avatar size={100} icon="user" />}
+            {image ? <Avatar src={image} size={100} /> : <Avatar size={100} icon={uploading ? 'loading' : 'user'} />}
           </Upload>
         </Col>
       </Row>
@@ -78,7 +78,7 @@ const Profile = () => {
 
   return (
     <>
-      <EditProfil />
+      { editModal && <EditProfil /> }
       <Row type="flex" align="middle" justify="center">
         <Col span={14}>
           <Card bordered>
