@@ -28,7 +28,7 @@ const get = async (req, res, next) => {
 };
 
 const getById = async (req, res, next) => {
-	let [err, searched] = await userService.getById(req.params.id);
+	let [err, searched] = await to(userService.getById(req.params.id));
 	if(err)
 		return rerr(next, err, 400);
 	return res.status(200).json(searched.toWeb());
