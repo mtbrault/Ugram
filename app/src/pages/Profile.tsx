@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Button, Avatar, Col, Row, Card, Icon, Modal, message, Upload,
 } from 'antd/es';
+import { UploadFile } from 'antd/es/upload/interface';
 
 import InputComponent from '../components/InputComponent';
 
@@ -11,16 +12,16 @@ const Profile = () => {
   const [name, setName] = useState('Mehdi Makhloufi');
   const [phoneNumber, setPhone] = useState('+33786579690');
   const [uploading, setUploading] = useState(false);
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState();
 
 
-  const getBase64 = (img: Blob, callback: (arg0: string | ArrayBuffer | null) => any) => {
+  const getBase64 = (img: Blob, callback: (imageUrl: string | ArrayBuffer | null) => void) => {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
   };
 
-  const beforeUpload = (file: any) => {
+  const beforeUpload = (file: UploadFile) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
       message.error('You can only upload JPG/PNG file!');
@@ -38,8 +39,8 @@ const Profile = () => {
       return;
     }
     if (info.file.status === 'done') {
-      getBase64(info.file.originFileObj, (imageUrl) => {
-        // setImage(imageUrl);
+      getBase64(info.file.originFileObj, (imageUrl: any) => {
+        setImage(imageUrl);
         setUploading(false);
       });
     }
@@ -59,7 +60,6 @@ const Profile = () => {
           <Upload
             name="avatar"
             listType="picture-card"
-            className="avatar-uploader"
             showUploadList={false}
             action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
             beforeUpload={beforeUpload}
