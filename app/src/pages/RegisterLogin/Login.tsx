@@ -23,11 +23,11 @@ const Login: React.FC<LoginProps> = ({ history }) => {
   useEffect(() => {
     const token = Cookies.get('token');
     if (token) {
-      dispatch(tokenInfo(token))
+      dispatch(tokenInfo())
         .then(() => history.push('/'))
         .catch(() => Cookies.remove('token'));
     }
-  }, [])
+  }, [dispatch, history])
 
   const submitForm = (): void => {
     const regMail = new RegExp('([A-Za-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3})$');
@@ -46,7 +46,7 @@ const Login: React.FC<LoginProps> = ({ history }) => {
         history.push('/');
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.message);
         setError('Connexion failed');
       });
   }
@@ -65,6 +65,7 @@ const Login: React.FC<LoginProps> = ({ history }) => {
               suffix={<Button type="ghost" icon={show ? 'eye-invisible' : 'eye'} onClick={() => setShow(!show)} />}
               onChange={setPassword}
             />
+            <p style={{ color: 'red' }}>{error}</p>
             <Row type="flex" justify="center">
               <Col span={20} className="btn-center">
                 <Button type="primary" onClick={submitForm}>

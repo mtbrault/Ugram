@@ -1,6 +1,6 @@
 import { createActionThunk } from 'redux-thunk-actions';
 import APIManager from '../../services/Api';
-import { REGISTER_USER, LOGIN_USER, TOKEN_INFO, LOGOUT_USER } from '../reducers/authReducers';
+import { REGISTER_USER, LOGIN_USER, TOKEN_INFO } from '../reducers/authReducers';
 import { loginParam, registerParam } from '../../types/authTypes';
 
 export const loginUser = createActionThunk(LOGIN_USER, async (param: loginParam) => {
@@ -13,11 +13,7 @@ export const registerUser = createActionThunk(REGISTER_USER, async (param: regis
 	return res;
 });
 
-export const tokenInfo = createActionThunk(TOKEN_INFO, async (token: String) => {
-	const res = await APIManager.tokenInfo(token);
+export const tokenInfo = createActionThunk(TOKEN_INFO, async () => {
+	const res = await APIManager.tokenInfo();
 	return res;
-})
-
-export const logoutUser = createActionThunk(LOGOUT_USER, () => {
-	return APIManager.logoutUser();
 });

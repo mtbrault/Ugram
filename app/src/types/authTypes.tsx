@@ -1,12 +1,19 @@
 export interface loginParam {
-	email: String;
-	password: String;
+	email: string;
+	password: string;
 }
 
 export interface registerParam {
-	username: String;
-	name: String;
-	email: String;
-	phoneNumber: String;
-	password: String;
+	username: string;
+	name: string;
+	email: string;
+	phoneNumber: string;
+	password: string;
+}
+
+export interface initialAuth {
+	email: string;
+	id: string;
+	token: string;
+	error: string;
 }

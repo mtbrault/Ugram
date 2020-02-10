@@ -34,7 +34,6 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhone] = useState('');
@@ -44,18 +43,17 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
   useEffect(() => {
     const token = Cookies.get('token');
     if (token) {
-      dispatch(tokenInfo(token))
+      dispatch(tokenInfo())
         .then(() => history.push('/'))
         .catch(() => Cookies.remove('token'));
     }
-  }, [])
+  }, [dispatch, history])
 
   const submitForm = (): void => {
     const regMail = new RegExp('([A-Za-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3})$');
     const regTel = new RegExp('^([0-9]{10})');
 
     setError('');
-    setSuccess('');
     if (username === '' || email === '' || password === '' || phoneNumber === '' || name === '')
       setError('You need to fill each field');
     else if (!regMail.test(email))
@@ -90,7 +88,6 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
               onChange={setPassword}
             />
             <p style={{ color: 'red' }}>{error}</p>
-            <p style={{ color: 'green' }}>{success}</p>
             <Row type="flex" justify="center">
               <Col span={20} className="btn-center">
                 <Button type="primary" onClick={submitForm}>
