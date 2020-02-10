@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
 // router.post('/auth/twitter', auth.twitter);
 // router.post('/auth/reddit', auth.reddit);
 // router.post('/auth/microsoft', auth.microsoft);
-router.get('/tokeninfo', passport.authenticate('jwt', {session:false}), auth.tokeninfo);
+router.get('/auth/tokeninfo', passport.authenticate('jwt', {session:false}), auth.tokeninfo);
 
 // ** Auth and User **
 router.post('/auth/login', user.login);

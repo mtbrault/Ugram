@@ -13,7 +13,7 @@ const login = async (req, res, next) => {
 const register = async (req, res, next) => {
 	let [err, user] = await to(userService.create(req.body));
 	if (err)
-		return rerr(next, err, 400);
+		return rerr(next, err);
 	return res.status(201).json({ token: user.getJWT(), ...user.toWeb() });
 }
 

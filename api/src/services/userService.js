@@ -1,8 +1,9 @@
 const { User } = require("../db");
+const { terr } = require("../middlewares/utils");
 
 const authenticate = async ({ username, password }) => {
 	if (!username || !password)
-		throw new Error("missing username or password field");
+		terr("missing username or password field", 400);
 	let key = "username";
 	if (username.includes("@")){
 		key = "email";
@@ -21,7 +22,7 @@ const create = async ({
 	email, profilePic, phoneNumber,
 	}) => {
 	for (let [key, value] of Object.entries({ username, password, email, phoneNumber}))
-		if(!value) throw new Error(`${key} field is required`);
+		if(!value) terr(`${key} field is required`, 400);
 
 	let user = await User.findOne({ $or: [
 		{ username: username.toLowerCase() },
@@ -35,7 +36,7 @@ const create = async ({
 		} else if(phoneNumber === user.phoneNumber) {
 			reason = "phone number";
 		}
-		throw new Error(`${reason} already taken`);
+		terr(`${reason} already taken`, 400);
 	}
 	const data = {
 		username, password, displayname: username,
