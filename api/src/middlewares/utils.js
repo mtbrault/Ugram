@@ -16,7 +16,8 @@ const asyncForEach = async (array, callback) => {
 const rerr = (next, err, code=500) => {
 	if(typeof err == 'string')
 		err = new Error(err);
-	err.status = code;
+	if(!err.status)
+		err.status = code;
 	next(err);
 };
 
