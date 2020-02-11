@@ -1,11 +1,12 @@
 export interface loginParam {
-	email: string;
+	username: string;
 	password: string;
 }
 
 export interface registerParam {
 	username: string;
-	name: string;
+	firstname: string;
+	lastname: string;
 	email: string;
 	phoneNumber: string;
 	password: string;

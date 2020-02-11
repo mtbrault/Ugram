@@ -1,14 +1,16 @@
 export interface initialProfile {
 	username: string;
-	name: string;
+	firstname: string;
+	lastname: string;
 	email: string;
 	phoneNumber: string;
-	registerDate: string;
-	profilePicture: string;
+	createdAt: string;
+	profilePic: string;
 }
 
 export interface updateProfileParam {
-	name: string;
+	firstname: string;
+	lastname: string;
 	email: string;
 	phoneNumber: string;
 	profilePicture: string;

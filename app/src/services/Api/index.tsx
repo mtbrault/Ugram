@@ -32,19 +32,18 @@ export default class APIManager {
 	}
 
 	static tokenInfo() {
-		return API.get('/tokeninfo');
+		return API.get('/auth/tokeninfo');
 	}
 
 	static async getMyProfile() {
-		return {
+		/*return {
 			username: 'test',
 			email: 'test@test.fr',
 			profilePicture: 'monimage.png',
 			name: 'Matthieu BRAULT',
 			phoneNumber: '0000000000',
 			registerDate: '01/01/2020',
-		}
-		console.log(Cookies.get('token'))
+		}*/
 		const res = await API.get('/user');
 		if (res.data)
 			return res.data;

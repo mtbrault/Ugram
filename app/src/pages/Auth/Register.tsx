@@ -37,7 +37,8 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhone] = useState('');
-  const [name, setName] = useState('');
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
   const [password, setPassword] = useState('');
 
   useEffect(() => {
@@ -51,22 +52,25 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
 
   const submitForm = (): void => {
     const regMail = new RegExp('([A-Za-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3})$');
-    const regTel = new RegExp('^([0-9]{10})');
+    const regTel = new RegExp('(^[0-9]*)$');
 
     setError('');
-    if (username === '' || email === '' || password === '' || phoneNumber === '' || name === '')
+    if (username === '' || email === '' || password === '' || phoneNumber === '' || firstname === '' || lastname === '')
       setError('You need to fill each field');
     else if (!regMail.test(email))
       setError('Bad email format');
     else if (!regTel.test(phoneNumber))
       setError('Bad phone number format');
     else {
-      dispatch(registerUser({ email, username, name, phoneNumber, password }))
+      dispatch(registerUser({ email, username, firstname, lastname, phoneNumber, password }))
         .then((res) => {
           Cookies.set('token', res.token);
           history.push('/');
         })
-        .catch((error) => console.log(error))
+        .catch((error) => {
+          console.log(error.message);
+          setError(error.message);
+        })
     }
   }
 
@@ -78,7 +82,8 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
             <h1 className="text-center">Ugram</h1>
             <RegisterInput id="email" title="EMail" type="text" onChange={setEmail} />
             <RegisterInput id="username" title="Username" type="text" onChange={setUsername} />
-            <RegisterInput id="name" title="Fullname" type="text" onChange={setName} />
+            <RegisterInput id="firstname" title="Firstname" type="text" onChange={setFirstname} />
+            <RegisterInput id="firstname" title="Lastname" type="text" onChange={setLastname} />
             <RegisterInput id="phone" title="Phone number" type="tel" onChange={setPhone} />
             <RegisterInput
               id="password"

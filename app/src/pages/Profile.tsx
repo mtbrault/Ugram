@@ -14,7 +14,8 @@ import InputComponent from '../components/InputComponent';
 const Profile = () => {
   const [editModal, setEditModal] = useState(false);
   const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
   const [phoneNumber, setPhone] = useState('');
   const [uploading, setUploading] = useState(false);
   const [image, setImage] = useState('');
@@ -30,9 +31,10 @@ const Profile = () => {
 
   useEffect(() => {
     setEmail(data.email);
-    setName(data.name);
+    setFirstname(data.firstname);
+    setLastname(data.lastname);
     setPhone(data.phoneNumber);
-    setImage(data.profilePicture);
+    setImage(data.profilePic);
   }, [data])
 
   if (!data) {
@@ -70,7 +72,7 @@ const Profile = () => {
   };
 
   const updateProfil = () => {
-    dispatch(updateProfile({ name, email, phoneNumber, profilePicture: image }))
+    dispatch(updateProfile({ firstname, lastname, email, phoneNumber, profilePicture: image }))
       .then(() => {
         setSuccess('Profile well updated');
         setEditModal(false)
@@ -103,7 +105,8 @@ const Profile = () => {
         </Col>
       </Row>
       <InputComponent id="email" title="EMail" type="text" value={email} onChange={setEmail} />
-      <InputComponent id="name" title="Fullname" type="text" value={name} onChange={setName} />
+      <InputComponent id="firstname" title="Firstname" type="text" value={firstname} onChange={setFirstname} />
+      <InputComponent id="lastname" title="Lastname" type="text" value={lastname} onChange={setLastname} />
       <InputComponent id="phone" title="Phone number" type="tel" value={phoneNumber} onChange={setPhone} />
       <p style={{ color: 'red' }}>{modalError}</p>
     </Modal>
@@ -121,8 +124,9 @@ const Profile = () => {
                 <span className="span-icon">{data.username}</span>
                 <span className="span-icon">{data.email}</span>
                 <span className="span-icon">{data.phoneNumber}</span>
-                <span className="span-icon">{data.name}</span>
-                <span className="span-icon">{data.registerDate}</span>
+                <span className="span-icon">{data.firstname}</span>
+                <span className="span-icon">{data.lastname}</span>
+                <span className="span-icon">{data.createdAt}</span>
               </Col>
               <Col span={12} className="text-center">
                 <Button type="ghost" icon="setting" onClick={() => setEditModal(true)}>

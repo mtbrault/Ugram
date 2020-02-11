@@ -3,11 +3,12 @@ import { initialProfile } from '../../types/profileTypes';
 
 const initialState: initialProfile = {
 	username: '',
-	name: '',
+	firstname: '',
+	lastname: '',
 	email: '',
 	phoneNumber: '',
-	registerDate: '',
-	profilePicture: '',
+	createdAt: '',
+	profilePic: '',
 }
 
 export const GET_PROFILE = 'GET_PROFILE_BY_ID';

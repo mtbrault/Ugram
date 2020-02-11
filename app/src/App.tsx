@@ -5,8 +5,8 @@ import { createBrowserHistory } from 'history';
 import store from './store';
 
 import AppRouter from './components/AppRouter';
-import Login from './pages/RegisterLogin/Login';
-import Register from './pages/RegisterLogin/Register';
+import Login from './pages/Auth/Login';
+import Register from './pages/Auth/Register';
 
 const history = createBrowserHistory();
 

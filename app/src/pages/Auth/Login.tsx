@@ -16,7 +16,7 @@ interface LoginProps {
 const Login: React.FC<LoginProps> = ({ history }) => {
   const dispatch = useDispatch();
   const [error, setError] = useState('');
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [show, setShow] = useState(false);
 
@@ -30,17 +30,12 @@ const Login: React.FC<LoginProps> = ({ history }) => {
   }, [dispatch, history])
 
   const submitForm = (): void => {
-    const regMail = new RegExp('([A-Za-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3})$');
     setError('');
-    if (email === '' || password === '') {
+    if (username === '' || password === '') {
       setError('You need fill all the field');
       return;
     }
-    if (!regMail.test(email)) {
-      setError('Bad email format');
-      return;
-    }
-    dispatch(loginUser({ email, password }))
+    dispatch(loginUser({ username, password }))
       .then((res) => {
         Cookies.set('token', res.token);
         history.push('/');
@@ -57,7 +52,7 @@ const Login: React.FC<LoginProps> = ({ history }) => {
         <Col lg={7} md={10} sm={16} xs={24}>
           <Card bordered>
             <h1 className="text-center">Ugram</h1>
-            <LoginInput id="email" title="Email" type="text" onChange={setEmail} />
+            <LoginInput id="email" title="Email / Username / Phone" type="text" onChange={setUsername} />
             <LoginInput
               id="password"
               title="Password"
