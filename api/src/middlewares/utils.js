@@ -11,17 +11,25 @@ const asyncForEach = async (array, callback) => {
 	for (let i = 0; i < array.length; i++) {
 		await callback(array[i], i, array);
 	}
-}
+};
 
 const rerr = (next, err, code=500) => {
 	if(typeof err == 'string')
 		err = new Error(err);
-	err.status = code;
+	if(!err.status)
+		err.status = code;
 	next(err);
+};
+
+const terr = (message, code=500) => {
+	const err = new Error(message);
+	err.status = code;
+	throw err;
 };
 
 module.exports = {
 	to,
 	asyncForEach,
-	rerr
+	rerr,
+	terr
 };

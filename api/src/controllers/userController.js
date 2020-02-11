@@ -13,7 +13,7 @@ const login = async (req, res, next) => {
 const register = async (req, res, next) => {
 	let [err, user] = await to(userService.create(req.body));
 	if (err)
-		return rerr(next, err, 400);
+		return rerr(next, err);
 	return res.status(201).json({ token: user.getJWT(), ...user.toWeb() });
 }
 
@@ -64,14 +64,10 @@ const remove = async (req, res, next) => {
 const removeById = async (req, res, next) => {
 	let err, user;
 	user = req.user;
-	if(!user)
-		return rerr(next, "no user given by passport");
 	const id = req.params.id;
-	if(user.id != id && !user.isadmin)
-		return rerr(next, "Forbidden", 403);
 	[err, user] = await to(userService.removeById(id));
 	if(err)
-		return rerr(next, err, 400);
+		return rerr(next, err, 500);
 	return res.status(204).send();
 };
 

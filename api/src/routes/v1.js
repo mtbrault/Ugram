@@ -5,6 +5,7 @@ const router = express.Router();
 const auth = require('../controllers/authController');
 const user = require('../controllers/userController');
 
+const { isAdminOrLoggedUser } = require("../middlewares/validation");
 
 require('../middlewares/passport')(passport);
 
@@ -22,7 +23,7 @@ router.get('/', (req, res) => {
 // router.post('/auth/twitter', auth.twitter);
 // router.post('/auth/reddit', auth.reddit);
 // router.post('/auth/microsoft', auth.microsoft);
-router.get('/tokeninfo', passport.authenticate('jwt', {session:false}), auth.tokeninfo);
+router.get('/auth/tokeninfo', passport.authenticate('jwt', {session:false}), auth.tokeninfo);
 
 // ** Auth and User **
 router.post('/auth/login', user.login);
@@ -33,7 +34,7 @@ router.get('/user', passport.authenticate('jwt', {session:false}), user.get);   
 router.get('/user/:id', passport.authenticate('jwt', {session:false}), user.getById);         //R
 //router.put('/user', passport.authenticate('jwt', {session:false}), user.update);    //U
 router.delete('/user', passport.authenticate('jwt', {session:false}), user.remove);   //D
-router.delete('/user/:id', passport.authenticate('jwt', {session:false}), user.removeById);   //D
+router.delete('/user/:id', passport.authenticate('jwt', {session:false}), isAdminOrLoggedUser, user.removeById);   //D
 
 // ** Services **
 // router.post('/user/google', passport.authenticate('jwt', {session:false}), user.google);       //C

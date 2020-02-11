@@ -20,7 +20,7 @@ const UserSchema = mongoose.Schema({
 	},
 	password: {
 		type: String,
-		required: function() { return this.username ? true : false }
+		required: true
 	},
 	isadmin: {
 		type: Boolean,
@@ -35,11 +35,22 @@ const UserSchema = mongoose.Schema({
 		type: String,
 		trim: true
 	},
+	phoneNumber: {
+		type: String,
+		required: true,
+		trim: true,
+		unique: true,
+		match: [/^\+?\d(?:\d-?)+$/, "Invalid phone number"]
+	},
 	email: {
 		type: String,
-		trim: true
+		required : true,
+		trim: true,
+		unique: true,
+		lowercase: true,
+		match: [/^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/, "Invalid e-mail address"]
 	},
-	profile_pic_url: {
+	profilePic: {
 		type: String,
 		trim: true
 	}
@@ -59,7 +70,7 @@ UserSchema.methods.comparePassword = async function (pw) {
 		throw new Error('password not set');
 	const res = await bcrypt.compare(pw, this.password);
 	if(!res)
-		throw new Error('invalid password');
+		throw new Error('Bad Credentials');
 	return this;
 };
 
@@ -69,15 +80,17 @@ UserSchema.methods.getJWT = function () {
 
 UserSchema.methods.toWeb = function () {
 	const ret =  {
-		username: this.displayname,
 		id: this._id,
+		username: this.displayname,
+		email: this.email,
+		phoneNumber: this.phoneNumber,
 		createdAt: this.createdAt,
 		updatedAt: this.updatedAt
 	};
-	if (this.firstname) ret.firstname = this.firstname;
-	if (this.lastname) ret.lastname = this.lastname;
-	if (this.email) ret.email = this.email;
-	if (this.profile_pic_url) ret.profile_pic_url = this.profile_pic_url;
+
+	for (key of ["firstname", "lastname", "profilePic"])
+		if(this[key]) ret[key] = this[key];
+
 	return ret;
 };
 
