@@ -1,17 +1,17 @@
 import { createActionThunk } from 'redux-thunk-actions';
 import APIManager from '../../services/Api';
 import { updateProfileParam } from '../../types/profileTypes';
-import { GET_MY_PROFILE, UPDATE_PROFILE } from '../reducers/profileReducers';
+import { GET_MY_PROFILE, UPDATE_PROFILE, GET_USER_LIST } from '../reducers/profileReducers';
 
 export const getMyProfile = createActionThunk(GET_MY_PROFILE, async () => {
 	const res = await APIManager.getMyProfile();
 	return res;
 });
 
-/*export const getProfileById = createActionThunk(GET_PROFILE, async (id: Number) => {
-	const res = await APIManager.getProfile(id);
+export const getAllUsers = createActionThunk(GET_USER_LIST, async () => {
+	const res = await APIManager.getListUsers();
 	return res;
-});*/
+});
 
 export const updateProfile = createActionThunk(UPDATE_PROFILE, async (param: updateProfileParam) => {
 	const res = await APIManager.updateProfile(param);

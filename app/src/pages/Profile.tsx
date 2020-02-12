@@ -24,7 +24,7 @@ const Profile: React.FC<ProfileProps> = ({ history }) => {
       .catch(() => history.goBack());
   }, [dispatch, history])
 
-  const data = useSelector<storeTypes, profileType>((store) => store.profileReducers);
+  const data = useSelector<storeTypes, profileType>((store) => store.profileReducers.myProfile);
 
   if (!data.username) {
     return <LoaderLottie />

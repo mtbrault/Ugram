@@ -1,7 +1,7 @@
 import { handleActions } from 'redux-actions';
 import { initialProfile, profileType } from '../../types/profileTypes';
 
-/*const initialState: initialProfile = {
+const initialState: initialProfile = {
 	myProfile: {
 		username: '',
 		firstname: '',
@@ -12,16 +12,6 @@ import { initialProfile, profileType } from '../../types/profileTypes';
 		profilePic: '',
 	},
 	listUser: [],
-}*/
-
-const initialState: initialProfile = {
-	username: '',
-	firstname: '',
-	lastname: '',
-	email: '',
-	phoneNumber: '',
-	createdAt: '',
-	profilePic: '',
 }
 
 export const GET_MY_PROFILE = 'GET_MY_PROFILE';
@@ -30,10 +20,11 @@ export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 
 const SUCCEEDED = 'SUCCEEDED';
 
-export default handleActions(
+export default handleActions<initialProfile, profileType[]>(
 	{
-		[`${GET_MY_PROFILE}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, ...payload }),
-		[`${UPDATE_PROFILE}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, ...payload }),
+		[`${GET_MY_PROFILE}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, myProfile: payload[0] }),
+		[`${UPDATE_PROFILE}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, myProfile: payload[0] }),
+		[`${GET_USER_LIST}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, listUser: payload }),
 	},
 	initialState,
 )

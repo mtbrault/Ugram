@@ -7,19 +7,9 @@ export interface profileType {
 	createdAt: string;
 	profilePic: string;
 }
-/*export interface initialProfile {
+export interface initialProfile {
 	myProfile: profileType;
 	listUser: profileType[];
-}*/
-
-export interface initialProfile {
-	username: string;
-	firstname: string;
-	lastname: string;
-	email: string;
-	phoneNumber: string;
-	createdAt: string;
-	profilePic: string;
 }
 
 export interface updateProfileParam {

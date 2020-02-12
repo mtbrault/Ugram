@@ -36,44 +36,43 @@ export default class APIManager {
 	}
 
 	static async getListUsers() {
-		return {
-			page: 1,
-			limit: 20,
-			count: 18,
-			users: [
-				{
-					username: 'test',
-					email: 'test@test.fr',
-					profilePicture: 'monimage.png',
-					name: 'Matthieu BRAULT',
-					phoneNumber: '0000000000',
-					registerDate: '01/01/2020',
-				},
-				{
-					username: 'test',
-					email: 'test@test.fr',
-					profilePicture: 'monimage.png',
-					name: 'Matthieu BRAULT',
-					phoneNumber: '0000000000',
-					registerDate: '01/01/2020',
-				},
-				{
-					username: 'test',
-					email: 'test@test.fr',
-					profilePicture: 'monimage.png',
-					name: 'Matthieu BRAULT',
-					phoneNumber: '0000000000',
-					registerDate: '01/01/2020',
-				}
-			]
-		}
+		const tmp = [
+			{
+				username: 'test',
+				email: 'test@test.fr',
+				profilePicture: 'monimage.png',
+				firstname: 'Matthieu',
+				lastname: 'BRAULT',
+				phoneNumber: '0000000000',
+				createdAt: '01/01/2020',
+			},
+			{
+				username: 'test2',
+				email: 'test@test.fr',
+				profilePicture: 'monimage.png',
+				firstname: 'Mehdi',
+				lastname: 'BRAULT',
+				phoneNumber: '0000000000',
+				createdAt: '01/01/2020',
+			},
+			{
+				username: 'test3',
+				email: 'test@test.fr',
+				profilePicture: 'monimage.png',
+				firstname: 'Angelo',
+				lastname: 'BRAULT',
+				phoneNumber: '0000000000',
+				createdAt: '01/01/2020',
+			}
+		]
+		return tmp;
 	}
 
 	static async getMyProfile() {
 		const res = await API.get('/user');
-		if (res.data)
-			return res.data;
-		return res;
+		if (!res.data)
+			return res;
+		return [res.data];
 	}
 
 	static async getProfile(id: Number) {
@@ -85,8 +84,8 @@ export default class APIManager {
 
 	static async updateProfile(param: updateProfileParam) {
 		const res = await API.put('/user', param);
-		if (res.data)
-			return res.data;
-		return res;
+		if (!res.data)
+			return res;
+		return [res.data];
 	}
 }
