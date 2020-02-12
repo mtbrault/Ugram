@@ -2,16 +2,21 @@ import React, { useState, useEffect } from 'react';
 import {
   Button, Avatar, Col, Row, Card, Icon, Modal, message, Upload,
 } from 'antd/es';
-import { getMyProfile, updateProfile } from '../store/actions';
+import { updateProfile, getMyProfile } from '../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { UploadFile } from 'antd/es/upload/interface';
 import { storeTypes } from '../types/storeTypes';
-import { initialProfile } from '../types/profileTypes';
+import { profileType } from '../types/profileTypes';
 import LoaderLottie from '../components/LoaderLottie';
+import { History } from 'history';
 
 import InputComponent from '../components/InputComponent';
 
-const Profile = () => {
+interface ProfileProps {
+  history: History
+}
+
+const Profile: React.FC<ProfileProps> = ({ history }) => {
   const [editModal, setEditModal] = useState(false);
   const [email, setEmail] = useState('');
   const [firstname, setFirstname] = useState('');
@@ -24,10 +29,11 @@ const Profile = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getMyProfile());
-  }, [dispatch]);
+    dispatch(getMyProfile())
+      .catch(() => history.goBack());
+  }, [dispatch, history])
 
-  const data = useSelector<storeTypes, initialProfile>((store) => store.profileReducers);
+  const data = useSelector<storeTypes, profileType>((store) => store.profileReducers);
 
   useEffect(() => {
     setEmail(data.email);
@@ -37,7 +43,7 @@ const Profile = () => {
     setImage(data.profilePic);
   }, [data])
 
-  if (!data) {
+  if (!data.username) {
     return <LoaderLottie />
   }
 
@@ -72,12 +78,15 @@ const Profile = () => {
   };
 
   const updateProfil = () => {
+    setModalError('');
+    if (firstname === '' || lastname === '' || email === '' || phoneNumber === '')
+      setModalError('Please fill all the fields');
     dispatch(updateProfile({ firstname, lastname, email, phoneNumber, profilePicture: image }))
       .then(() => {
         setSuccess('Profile well updated');
         setEditModal(false)
       })
-      .catch(() => setModalError('Error during update'));
+      .catch((err) => console.log(err));
   }
 
   const EditProfil: React.FC = () => (

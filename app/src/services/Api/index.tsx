@@ -35,15 +35,41 @@ export default class APIManager {
 		return API.get('/auth/tokeninfo');
 	}
 
+	static async getListUsers() {
+		return {
+			page: 1,
+			limit: 20,
+			count: 18,
+			users: [
+				{
+					username: 'test',
+					email: 'test@test.fr',
+					profilePicture: 'monimage.png',
+					name: 'Matthieu BRAULT',
+					phoneNumber: '0000000000',
+					registerDate: '01/01/2020',
+				},
+				{
+					username: 'test',
+					email: 'test@test.fr',
+					profilePicture: 'monimage.png',
+					name: 'Matthieu BRAULT',
+					phoneNumber: '0000000000',
+					registerDate: '01/01/2020',
+				},
+				{
+					username: 'test',
+					email: 'test@test.fr',
+					profilePicture: 'monimage.png',
+					name: 'Matthieu BRAULT',
+					phoneNumber: '0000000000',
+					registerDate: '01/01/2020',
+				}
+			]
+		}
+	}
+
 	static async getMyProfile() {
-		/*return {
-			username: 'test',
-			email: 'test@test.fr',
-			profilePicture: 'monimage.png',
-			name: 'Matthieu BRAULT',
-			phoneNumber: '0000000000',
-			registerDate: '01/01/2020',
-		}*/
 		const res = await API.get('/user');
 		if (res.data)
 			return res.data;
@@ -58,6 +84,9 @@ export default class APIManager {
 	}
 
 	static async updateProfile(param: updateProfileParam) {
-		return API.put('/user', param);
+		const res = await API.put('/user', param);
+		if (res.data)
+			return res.data;
+		return res;
 	}
 }

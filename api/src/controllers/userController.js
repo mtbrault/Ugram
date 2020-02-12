@@ -45,16 +45,12 @@ const getById = async (req, res, next) => {
 
 
 const update = async (req, res, next) => {
-	console.log('Je suis là');
 	let user = req.user;
 	if (!user)
 		return rerr(res, "no user given by passport", 500);
-	console.log('toujours');
-	console.log(req.body);
 	[err, user] = await to(userService.update(user, req.body));
 	if (err)
 		return rerr(next, err);
-	console.log('nonon');
 	return res.status(200).json(user.toWeb());
 };
 

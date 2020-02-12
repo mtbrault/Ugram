@@ -5,7 +5,8 @@ import {
 } from 'antd/es';
 import { useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
-import { loginUser, tokenInfo } from '../../store/actions';
+import { loginUser, getMyProfile } from '../../store/actions';
+
 
 import LoginInput from './LoginInput';
 
@@ -23,7 +24,7 @@ const Login: React.FC<LoginProps> = ({ history }) => {
   useEffect(() => {
     const token = Cookies.get('token');
     if (token) {
-      dispatch(tokenInfo())
+      dispatch(getMyProfile())
         .then(() => history.push('/'))
         .catch(() => Cookies.remove('token'));
     }
@@ -38,6 +39,7 @@ const Login: React.FC<LoginProps> = ({ history }) => {
     dispatch(loginUser({ username, password }))
       .then((res) => {
         Cookies.set('token', res.token);
+        dispatch(getMyProfile());
         history.push('/');
       })
       .catch((err) => {

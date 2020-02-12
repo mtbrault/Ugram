@@ -5,7 +5,7 @@ import {
 } from 'antd/es';
 import Cookies from 'js-cookie';
 import { useDispatch } from 'react-redux';
-import { registerUser, tokenInfo } from '../../store/actions';
+import { registerUser, getMyProfile } from '../../store/actions';
 
 
 interface RegisterInputProps {
@@ -44,7 +44,7 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
   useEffect(() => {
     const token = Cookies.get('token');
     if (token) {
-      dispatch(tokenInfo())
+      dispatch(getMyProfile())
         .then(() => history.push('/'))
         .catch(() => Cookies.remove('token'));
     }
@@ -65,6 +65,7 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
       dispatch(registerUser({ email, username, firstname, lastname, phoneNumber, password }))
         .then((res) => {
           Cookies.set('token', res.token);
+          dispatch(getMyProfile());
           history.push('/');
         })
         .catch((error) => {
