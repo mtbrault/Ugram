@@ -67,8 +67,7 @@ const update = async (user, { username, email, profilePic, phoneNumber }) => {
 
 	if (query.length) {
 		let existingUser = await User.findOne({ $or: query });
-		if (existingUser == user)
-			console.log("C'est patch héhé");
+
 		if (existingUser) {
 			let reason = "username";
 			if (email === existingUser.email) {
