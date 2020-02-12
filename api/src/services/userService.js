@@ -57,9 +57,8 @@ const getById = async id => {
 	return user;
 }
 
-const update = async (user, {username, email, profilePic, phoneNumber}) => {
+const update = async (user, {firstname, lastname, email, profilePic, phoneNumber}) => {
 	let query = [];
-	if (username && username !== user.username) query.push({ username: username.toLowerCase() });
 	if (email && email !== user.email) query.push({ email: email.toLowerCase()});
 	if (phoneNumber && phoneNumber !== user.phone_number) query.push({phoneNumber});
 
@@ -67,17 +66,15 @@ const update = async (user, {username, email, profilePic, phoneNumber}) => {
 		let existingUser = await User.findOne({ $or: query});
 
 		if(existingUser) {
-			let reason = "username";
-			if(email === existingUser.email) {
-				reason = "email address";
-			} else if(phoneNumber === existingUser.phoneNumber) {
+			let reason = "email address";
+			if(phoneNumber === existingUser.phoneNumber) {
 				reason = "phone number";
 			}
 			terr(`${reason} already taken`, 400);
 		}
 	}
 
-	for (let [key, value] of Object.entries({ username, email, profilePic, phoneNumber }))
+	for (let [key, value] of Object.entries({firstname, lastname, email, profilePic, phoneNumber }))
 		if(!!value) user[key] = value;
 
 	user = await user.save();
