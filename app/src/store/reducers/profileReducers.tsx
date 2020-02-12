@@ -1,5 +1,6 @@
 import { handleActions } from 'redux-actions';
 import { initialProfile, profileType } from '../../types/profileTypes';
+import { listenerCount } from 'cluster';
 
 const initialState: initialProfile = {
 	myProfile: {
@@ -24,7 +25,7 @@ export default handleActions<initialProfile, profileType[]>(
 	{
 		[`${GET_MY_PROFILE}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, myProfile: payload[0] }),
 		[`${UPDATE_PROFILE}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, myProfile: payload[0] }),
-		[`${GET_USER_LIST}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, listUser: payload }),
+		[`${GET_USER_LIST}_${SUCCEEDED}`]: ({ listUser, ...state }, { payload }) => ({ ...state, listUser: [...listUser, ...payload] }),
 	},
 	initialState,
 )

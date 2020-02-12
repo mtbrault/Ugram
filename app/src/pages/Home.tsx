@@ -14,22 +14,18 @@ const Home: React.FC<HomeProps> = ({ history }) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getAllUsers());
-  }, [dispatch]);
-
   // eslint-disable-next-line max-len
   const usersList = useSelector<storeTypes, profileType[]>((store) => store.profileReducers.listUser);
-  const [data, setData] = useState(usersList);
 
   useEffect(() => {
-    console.log(data);
-  }, [data]);
+    if (!usersList[0])
+      dispatch(getAllUsers());
+  }, [dispatch, usersList]);
 
   const onLoadMore = () => {
     setLoading(true);
     setTimeout(() => {
-      setData(data.concat(usersList));
+      dispatch(getAllUsers());
       setLoading(false);
       window.dispatchEvent(new Event('resize'));
     }, 3000);
@@ -47,7 +43,7 @@ const Home: React.FC<HomeProps> = ({ history }) => {
       header={<h3 className="title-h1">List of users</h3>}
       footer={<h3 className="title-h1">{`Total: ${usersList.length}`}</h3>}
       itemLayout="horizontal"
-      dataSource={data}
+      dataSource={usersList}
       loadMore={loadMore}
       renderItem={(user) => (
         <List.Item onClick={() => history.push('/profile', user)} className="list-item">
