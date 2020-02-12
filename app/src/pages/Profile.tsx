@@ -4,17 +4,20 @@ import {
 } from 'antd/es';
 import { getMyProfile } from '../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { History } from 'history';
+import { History, Location } from 'history';
 import { storeTypes } from '../types/storeTypes';
 import { profileType } from '../types/profileTypes';
 import LoaderLottie from '../components/LoaderLottie';
 import ProfilModal from '../components/ProfilModal';
 
 interface ProfileProps {
-  history: History
+  history: History;
+  location: {
+    state: profileType;
+  };
 }
 
-const Profile: React.FC<ProfileProps> = ({ history }) => {
+const Profile: React.FC<ProfileProps> = ({ history, location }) => {
   const [modalVisible, setVisible] = useState(false);
   const [success, setSuccess] = useState<string>('');
   const dispatch = useDispatch();
@@ -24,7 +27,8 @@ const Profile: React.FC<ProfileProps> = ({ history }) => {
       .catch(() => history.goBack());
   }, [dispatch, history])
 
-  const data = useSelector<storeTypes, profileType>((store) => store.profileReducers.myProfile);
+  const me = useSelector<storeTypes, profileType>((store) => store.profileReducers.myProfile);
+  const data = (location.state) ? location.state : me;
 
   if (!data.username) {
     return <LoaderLottie />

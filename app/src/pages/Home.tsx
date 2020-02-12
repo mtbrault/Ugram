@@ -1,9 +1,14 @@
 import React, { useEffect } from 'react';
 import { getAllUsers } from '../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import { History } from 'history';
 import { storeTypes, profileType } from '../types'
 
-const Home: React.FC = () => {
+interface HomeProps {
+  history: History;
+}
+
+const Home: React.FC<HomeProps> = ({ history }) => {
 
   const dispatch = useDispatch();
 
