@@ -5,7 +5,7 @@ const authenticate = async ({ username, password }) => {
 	if (!username || !password)
 		terr("missing username or password field", 400);
 	let key = "username";
-	if (username.includes("@")){
+	if (username.includes("@")) {
 		key = "email";
 	} else if ("+0123456789".includes(username[0])) {
 		key = "phoneNumber";
@@ -20,20 +20,22 @@ const authenticate = async ({ username, password }) => {
 const create = async ({
 	username, password, firstname, lastname,
 	email, profilePic, phoneNumber,
-	}) => {
-	for (let [key, value] of Object.entries({ username, password, email, phoneNumber}))
-		if(!value) terr(`${key} field is required`, 400);
+}) => {
+	for (let [key, value] of Object.entries({ username, password, email, phoneNumber }))
+		if (!value) terr(`${key} field is required`, 400);
 
-	let user = await User.findOne({ $or: [
-		{ username: username.toLowerCase() },
-		{ email: email.toLowerCase() },
-		{ phoneNumber }
-	]});
-	if(user) {
+	let user = await User.findOne({
+		$or: [
+			{ username: username.toLowerCase() },
+			{ email: email.toLowerCase() },
+			{ phoneNumber }
+		]
+	});
+	if (user) {
 		let reason = "username";
-		if(email === user.email) {
+		if (email === user.email) {
 			reason = "email address";
-		} else if(phoneNumber === user.phoneNumber) {
+		} else if (phoneNumber === user.phoneNumber) {
 			reason = "phone number";
 		}
 		terr(`${reason} already taken`, 400);
@@ -43,7 +45,7 @@ const create = async ({
 		email, phoneNumber
 	};
 	for (let [key, value] of Object.entries({ firstname, lastname, profilePic }))
-		if(!!value) data[key] = value;
+		if (!!value) data[key] = value;
 
 	user = new User(data);
 	user = await user.save();
@@ -52,17 +54,38 @@ const create = async ({
 
 const getById = async id => {
 	const user = await User.findById(id);
-	if(!user)
+	if (!user)
 		throw new Error(`user with id ${id} doesn't exist`);
 	return user;
 }
 
-// module.exports.update = async (user, data) => {
-//	 if(data._id)
-//		 delete data._id;
-//
-//
-// }
+const update = async (user, { username, email, profilePic, phoneNumber }) => {
+	let query = [];
+	if (username) query.push({ username: username.toLowerCase() });
+	if (email) query.push({ email: email.toLowerCase() });
+	if (phoneNumber) query.push({ phoneNumber });
+
+	if (query.length) {
+		let existingUser = await User.findOne({ $or: query });
+		if (existingUser == user)
+			console.log("C'est patch héhé");
+		if (existingUser) {
+			let reason = "username";
+			if (email === existingUser.email) {
+				reason = "email address";
+			} else if (phoneNumber === existingUser.phoneNumber) {
+				reason = "phone number";
+			}
+			terr(`${reason} already taken`, 400);
+		}
+	}
+
+	for (let [key, value] of Object.entries({ username, email, profilePic, phoneNumber }))
+		if (!!value) user[key] = value;
+
+	user = await user.save();
+	return user;
+}
 
 const remove = async (user) => {
 	const res = await User.findByIdAndDelete(user._id);
@@ -79,5 +102,6 @@ module.exports = {
 	create,
 	getById,
 	remove,
-	removeById
+	removeById,
+	update
 };

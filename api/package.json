@@ -4,7 +4,7 @@
     "description": "backend API for the ugram project",
     "main": "server.js",
     "scripts": {
-        "start": "node src/server.js",
+        "start": "nodemon src/server.js",
         "dev": "nodemon src/server.js",
         "debug": "nodemon inspect src/server.js",
         "test": "jest"

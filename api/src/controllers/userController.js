@@ -22,14 +22,14 @@ const register = async (req, res, next) => {
 
 const get = async (req, res, next) => {
 	let user = req.user;
-	if(!user)
+	if (!user)
 		return rerr(next, "no user given by passport");
 	return res.status(200).json(user.toWeb());
 };
 
 const getById = async (req, res, next) => {
 	let [err, searched] = await to(userService.getById(req.params.id));
-	if(err)
+	if (err)
 		return rerr(next, err, 400);
 	return res.status(200).json(searched.toWeb());
 };
@@ -43,20 +43,28 @@ const getById = async (req, res, next) => {
 // }
 
 
-// TODO: Update function
-// const update = async (req, res, next) => {
-// 	let user = req.user;
-// 	if(!user)
-// 			return rerr(res, "no user given by passport", 500);
-// };
+
+const update = async (req, res, next) => {
+	console.log('Je suis là');
+	let user = req.user;
+	if (!user)
+		return rerr(res, "no user given by passport", 500);
+	console.log('toujours');
+	console.log(req.body);
+	[err, user] = await to(userService.update(user, req.body));
+	if (err)
+		return rerr(next, err);
+	console.log('nonon');
+	return res.status(200).json(user.toWeb());
+};
 
 const remove = async (req, res, next) => {
 	let err, user;
 	user = req.user;
-	if(!user)
+	if (!user)
 		return rerr(next, "no user given by passport");
 	[err, user] = await to(userService.remove(user));
-	if(err)
+	if (err)
 		return rerr(next, err);
 	return res.status(204).send();
 };
@@ -66,7 +74,7 @@ const removeById = async (req, res, next) => {
 	user = req.user;
 	const id = req.params.id;
 	[err, user] = await to(userService.removeById(id));
-	if(err)
+	if (err)
 		return rerr(next, err, 500);
 	return res.status(204).send();
 };
@@ -78,5 +86,6 @@ module.exports = {
 	getById,
 	// getAll,
 	remove,
-	removeById
+	removeById,
+	update
 };
