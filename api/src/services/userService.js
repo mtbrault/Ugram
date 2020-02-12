@@ -57,12 +57,32 @@ const getById = async id => {
 	return user;
 }
 
-// module.exports.update = async (user, data) => {
-//	 if(data._id)
-//		 delete data._id;
-//
-//
-// }
+const update = async (user, {username, email, profilePic, phoneNumber}) => {
+	let query = [];
+	if (username) query.push({ username: username.toLowerCase() });
+	if (email) query.push({ email: email.toLowerCase()});
+	if (phoneNumber) query.push({phoneNumber});
+
+	if (query.length) {
+		let existingUser = await User.findOne({ $or: query});
+
+		if(existingUser) {
+			let reason = "username";
+			if(email === existingUser.email) {
+				reason = "email address";
+			} else if(phoneNumber === existingUser.phoneNumber) {
+				reason = "phone number";
+			}
+			terr(`${reason} already taken`, 400);
+		}
+	}
+
+	for (let [key, value] of Object.entries({ username, email, profilePic, phoneNumber }))
+		if(!!value) user[key] = value;
+
+	user = await user.save();
+	return user;
+}
 
 const remove = async (user) => {
 	const res = await User.findByIdAndDelete(user._id);
@@ -79,5 +99,6 @@ module.exports = {
 	create,
 	getById,
 	remove,
-	removeById
+	removeById,
+	update
 };

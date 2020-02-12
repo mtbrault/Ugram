@@ -32,7 +32,7 @@ router.post('/auth/register', user.register);                                   
 // ** User **
 router.get('/user', passport.authenticate('jwt', {session:false}), user.get);         //R
 router.get('/user/:id', passport.authenticate('jwt', {session:false}), user.getById);         //R
-//router.put('/user', passport.authenticate('jwt', {session:false}), user.update);    //U
+router.put('/user', passport.authenticate('jwt', {session:false}), user.update);    //U
 router.delete('/user', passport.authenticate('jwt', {session:false}), user.remove);   //D
 router.delete('/user/:id', passport.authenticate('jwt', {session:false}), isAdminOrLoggedUser, user.removeById);   //D
 
