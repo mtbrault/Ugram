@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { History } from 'history';
-import { List, Avatar, Button } from 'antd/es';
+import {
+  List, Avatar, Button, Tag,
+} from 'antd/es';
 import { getAllUsers } from '../store/actions';
 import { storeTypes, profileType } from '../types';
 
@@ -10,16 +12,12 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ history }) => {
-  // eslint-disable-next-line max-len
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-
-  // eslint-disable-next-line max-len
   const usersList = useSelector<storeTypes, profileType[]>((store) => store.profileReducers.listUser);
 
   useEffect(() => {
-    if (!usersList[0])
-      dispatch(getAllUsers());
+    if (!usersList[0]) dispatch(getAllUsers());
   }, [dispatch, usersList]);
 
   const onLoadMore = () => {
@@ -31,17 +29,23 @@ const Home: React.FC<HomeProps> = ({ history }) => {
     }, 3000);
   };
 
-  const loadMore = !loading ? (
-    <Button onClick={onLoadMore} className="text-list">loading more</Button>
-  ) : null;
+  const loadMore = (
+    <div className="text-center load-more">
+      <Button onClick={onLoadMore} icon={loading ? 'loading' : 'plus'}>Loading more</Button>
+    </div>
+  );
 
   return (
     <List
       bordered
       size="small"
       className="users-list"
-      header={<h3 className="title-h1">List of users</h3>}
-      footer={<h3 className="title-h1">{`Total: ${usersList.length}`}</h3>}
+      header={(
+        <h3 className="title-h1">
+          List of users&nbsp;
+          <Tag>{usersList.length}</Tag>
+        </h3>
+      )}
       itemLayout="horizontal"
       dataSource={usersList}
       loadMore={loadMore}

@@ -51,22 +51,33 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
         <Col span={16}>
           <Card bordered>
             <Row type="flex" align="middle" justify="center">
-              <Col span={12}>
-                <Row type="flex" align="middle">
-                  <Col span={12} className="text-center">
+              <Col span={14}>
+                <Row type="flex" justify="space-between">
+                  <Col span={10} className="text-center">
                     <Avatar size={100} icon="user" className="profil-pic" />
                     <h3>{`${data.firstname} ${data.lastname}`}</h3>
                   </Col>
-                  <Col span={12}>
-                    <Row type="flex" align="middle">
-                      <p>{data.username}</p>
-                      <p>{data.email}</p>
-                      <p>{data.phoneNumber}</p>
-                    </Row>
+                  <Col span={13}>
+                    <p>
+                      <Icon type="user" className="p-icon" />
+                      {data.username}
+                    </p>
+                    <p>
+                      <Icon type="mail" className="p-icon" />
+                      {data.email}
+                    </p>
+                    <p>
+                      <Icon type="phone" className="p-icon" />
+                      {data.phoneNumber}
+                    </p>
+                    <p>
+                      <Icon type="calendar" className="p-icon" />
+                      {data.createdAt}
+                    </p>
                   </Col>
                 </Row>
               </Col>
-              <Col span={12} className="text-center">
+              <Col span={10} className="text-center">
                 <Button type="ghost" icon="setting" onClick={() => setVisible(true)}>
                   Edit account
                 </Button>
