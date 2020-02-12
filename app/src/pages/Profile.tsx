@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import {
   Button, Avatar, Col, Row, Card, Icon,
 } from 'antd/es';
-import { getMyProfile } from '../store/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { History, Location } from 'history';
+import { History } from 'history';
+import { getMyProfile } from '../store/actions';
+
 import { storeTypes } from '../types/storeTypes';
 import { profileType } from '../types/profileTypes';
 import LoaderLottie from '../components/LoaderLottie';
@@ -19,44 +20,51 @@ interface ProfileProps {
 
 const Profile: React.FC<ProfileProps> = ({ history, location }) => {
   const [modalVisible, setVisible] = useState(false);
-  const [success, setSuccess] = useState<string>('');
+  const [success, setSuccess] = useState('');
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getMyProfile())
       .catch(() => history.goBack());
-  }, [dispatch, history])
+  }, [dispatch, history]);
 
   const me = useSelector<storeTypes, profileType>((store) => store.profileReducers.myProfile);
   const data = (location.state) ? location.state : me;
 
-  if (!data.username) {
-    return <LoaderLottie />
-  }
 
   const toggleModal = () => {
     setVisible(!modalVisible);
-  }
+  };
 
   const editResult = (message: string) => {
     setSuccess(message);
+  };
+
+  if (!data.username) {
+    return <LoaderLottie />;
   }
 
   return (
     <>
       <ProfilModal toggleModal={toggleModal} visible={modalVisible} onSuccess={editResult} data={data} />
       <Row type="flex" align="middle" justify="center">
-        <Col span={14}>
+        <Col span={16}>
           <Card bordered>
             <Row type="flex" align="middle" justify="center">
-              <Col span={12} className="text-center">
-                <Avatar size={100} icon="user" />
-                <span className="span-icon">{data.username}</span>
-                <span className="span-icon">{data.email}</span>
-                <span className="span-icon">{data.phoneNumber}</span>
-                <span className="span-icon">{data.firstname}</span>
-                <span className="span-icon">{data.lastname}</span>
-                <span className="span-icon">{data.createdAt}</span>
+              <Col span={12}>
+                <Row type="flex" align="middle">
+                  <Col span={12} className="text-center">
+                    <Avatar size={100} icon="user" className="profil-pic" />
+                    <h3>{`${data.firstname} ${data.lastname}`}</h3>
+                  </Col>
+                  <Col span={12}>
+                    <Row type="flex" align="middle">
+                      <p>{data.username}</p>
+                      <p>{data.email}</p>
+                      <p>{data.phoneNumber}</p>
+                    </Row>
+                  </Col>
+                </Row>
               </Col>
               <Col span={12} className="text-center">
                 <Button type="ghost" icon="setting" onClick={() => setVisible(true)}>
