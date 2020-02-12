@@ -8,7 +8,7 @@ import Cookies from 'js-cookie';
 import { loginUser, getMyProfile } from '../../store/actions';
 
 
-import LoginInput from './LoginInput';
+import InputComponennt from '../../components/InputComponent';
 
 interface LoginProps {
   history: History
@@ -54,13 +54,14 @@ const Login: React.FC<LoginProps> = ({ history }) => {
         <Col lg={7} md={10} sm={16} xs={24}>
           <Card bordered>
             <h1 className="text-center">Ugram</h1>
-            <LoginInput id="email" title="Email / Username / Phone" type="text" onChange={setUsername} />
-            <LoginInput
+            <InputComponennt id="email" title="Email / Username / Phone" type="text" onChange={setUsername} value={username} />
+            <InputComponennt
               id="password"
               title="Password"
               type={show ? 'text' : 'password'}
               suffix={<Button type="ghost" icon={show ? 'eye-invisible' : 'eye'} onClick={() => setShow(!show)} />}
               onChange={setPassword}
+              value={password}
             />
             <p style={{ color: 'red' }}>{error}</p>
             <Row type="flex" justify="center">

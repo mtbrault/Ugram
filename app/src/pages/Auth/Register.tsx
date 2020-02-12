@@ -1,33 +1,17 @@
-import React, { ReactNode, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { History } from 'history';
 import {
-  Card, Row, Col, Input, Button,
+  Card, Row, Col, Button,
 } from 'antd/es';
 import Cookies from 'js-cookie';
 import { useDispatch } from 'react-redux';
 import { registerUser, getMyProfile } from '../../store/actions';
+import InputComponent from '../../components/InputComponent';
 
-
-interface RegisterInputProps {
-  title: string;
-  id: string;
-  type: string;
-  suffix?: ReactNode;
-  onChange(e: string): void;
-}
 
 interface RegisterProps {
   history: History
 }
-
-const RegisterInput: React.SFC<RegisterInputProps> = ({ title, id, type, suffix, onChange }) => (
-  <Row type="flex" justify="center" className="input-container">
-    <Col span={20}>
-      <b>{title}</b>
-      <Input id={id} type={type} suffix={suffix} onChange={(e) => onChange(e.target.value)} />
-    </Col>
-  </Row>
-);
 
 const Register: React.FC<RegisterProps> = ({ history }) => {
 
@@ -81,17 +65,18 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
         <Col lg={7} md={10} sm={16} xs={24}>
           <Card bordered>
             <h1 className="text-center">Ugram</h1>
-            <RegisterInput id="email" title="EMail" type="text" onChange={setEmail} />
-            <RegisterInput id="username" title="Username" type="text" onChange={setUsername} />
-            <RegisterInput id="firstname" title="Firstname" type="text" onChange={setFirstname} />
-            <RegisterInput id="firstname" title="Lastname" type="text" onChange={setLastname} />
-            <RegisterInput id="phone" title="Phone number" type="tel" onChange={setPhone} />
-            <RegisterInput
+            <InputComponent id="email" title="EMail" type="text" onChange={setEmail} value={email} />
+            <InputComponent id="username" title="Username" type="text" onChange={setUsername} value={username} />
+            <InputComponent id="firstname" title="Firstname" type="text" onChange={setFirstname} value={firstname} />
+            <InputComponent id="lastname" title="Lastname" type="text" onChange={setLastname} value={lastname} />
+            <InputComponent id="phone" title="Phone number" type="tel" onChange={setPhone} value={phoneNumber} />
+            <InputComponent
               id="password"
               title="Password"
               type={show ? 'text' : 'password'}
               suffix={<Button type="ghost" icon={show ? 'eye-invisible' : 'eye'} onClick={() => setShow(!show)} />}
               onChange={setPassword}
+              value={password}
             />
             <p style={{ color: 'red' }}>{error}</p>
             <Row type="flex" justify="center">
