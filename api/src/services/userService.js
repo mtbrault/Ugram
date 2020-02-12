@@ -60,7 +60,7 @@ const getById = async id => {
 const update = async (user, {firstname, lastname, email, profilePic, phoneNumber}) => {
 	let query = [];
 	if (email && email !== user.email) query.push({ email: email.toLowerCase()});
-	if (phoneNumber && phoneNumber !== user.phone_number) query.push({phoneNumber});
+	if (phoneNumber && phoneNumber !== user.phoneNumber) query.push({phoneNumber});
 
 	if (query.length) {
 		let existingUser = await User.findOne({ $or: query});
