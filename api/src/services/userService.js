@@ -19,7 +19,7 @@ const authenticate = async ({ username, password }) => {
 
 const create = async ({
 	username, password, firstname, lastname,
-	email, profilePic, phoneNumber,
+	email, profilePic, phoneNumber
 	}) => {
 	for (let [key, value] of Object.entries({ username, password, email, phoneNumber}))
 		if(!value) terr(`${key} field is required`, 400);
@@ -30,11 +30,11 @@ const create = async ({
 		{ phoneNumber }
 	]});
 	if(user) {
-		let reason = "username";
-		if(email === user.email) {
+		let reason = "phone number";
+		if (username === username) {
+			reason = "username";
+		} else if (email === user.email) {
 			reason = "email address";
-		} else if(phoneNumber === user.phoneNumber) {
-			reason = "phone number";
 		}
 		terr(`${reason} already taken`, 400);
 	}
@@ -43,7 +43,7 @@ const create = async ({
 		email, phoneNumber
 	};
 	for (let [key, value] of Object.entries({ firstname, lastname, profilePic }))
-		if(!!value) data[key] = value;
+		if(value) data[key] = value;
 
 	user = new User(data);
 	user = await user.save();
@@ -57,25 +57,33 @@ const getById = async id => {
 	return user;
 }
 
-const update = async (user, {firstname, lastname, email, profilePic, phoneNumber}) => {
+const update = async (user, {
+	username, password, firstname, lastname,
+	email, profilePic, phoneNumber
+	}) => {
 	let query = [];
-	if (email && email !== user.email) query.push({ email: email.toLowerCase()});
-	if (phoneNumber && phoneNumber !== user.phoneNumber) query.push({phoneNumber});
-
+	for (let [key, value] of Object.entries({ username, email, phoneNumber })) {
+		if(value && user[key] != value) {
+			query.push({ [key]: value.toLowerCase() });
+			user[key] = value.toLowerCase();
+		}
+	}
 	if (query.length) {
-		let existingUser = await User.findOne({ $or: query});
+		let existingUser = await User.findOne({ $or: query });
 
 		if(existingUser) {
-			let reason = "email address";
-			if(phoneNumber === existingUser.phoneNumber) {
-				reason = "phone number";
+			let reason = "phone number";
+			if (username.toLowerCase() === existingUser.username) {
+				reason = "username";
+			} else if (email.toLowerCase() === existingUser.email) {
+				reason = "email address";
 			}
 			terr(`${reason} already taken`, 400);
 		}
 	}
 
-	for (let [key, value] of Object.entries({firstname, lastname, email, profilePic, phoneNumber }))
-		if(!!value) user[key] = value;
+	for (let [key, value] of Object.entries({ password, firstname, lastname, profilePic }))
+		if(value && user[key] != value) user[key] = value;
 
 	user = await user.save();
 	return user;
@@ -95,7 +103,7 @@ module.exports = {
 	authenticate,
 	create,
 	getById,
+	update,
 	remove,
-	removeById,
-	update
+	removeById
 };
