@@ -17,21 +17,10 @@ const register = async (req, res, next) => {
 	return res.status(201).json({ token: user.getJWT(), ...user.toWeb() });
 }
 
-
-// Authenticated calls
+// *** From here Authenticated calls, use only after Passport middleware ***
 
 const get = async (req, res, next) => {
-	let user = req.user;
-	if(!user)
-		return rerr(next, "no user given by passport");
-	return res.status(200).json(user.toWeb());
-};
-
-const getById = async (req, res, next) => {
-	let [err, searched] = await to(userService.getById(req.params.id));
-	if(err)
-		return rerr(next, err, 400);
-	return res.status(200).json(searched.toWeb());
+	return res.status(200).json(req.user.toWeb());
 };
 
 // const getAll = async (req, res, next) => {
@@ -42,34 +31,34 @@ const getById = async (req, res, next) => {
 // 		rerr(next, err, 400);
 // }
 
-
-
 const update = async (req, res, next) => {
-	let user = req.user;
-	if(!user)
-			return rerr(res, "no user given by passport", 500);
-	[err, user] = await to(userService.update(user, req.body));
+	const [err, user] = await to(userService.update(req.user, req.body));
 	if (err)
 		return rerr(next, err);
 	return res.status(200).json(user.toWeb());
 };
 
 const remove = async (req, res, next) => {
-	let err, user;
-	user = req.user;
-	if(!user)
-		return rerr(next, "no user given by passport");
-	[err, user] = await to(userService.remove(user));
+	const [err, user] = await to(userService.remove(req.user));
 	if(err)
 		return rerr(next, err);
 	return res.status(204).send();
 };
 
+// *** Only use after isValidUserId middleware ***
+const getById = async (req, res, next) => {
+	return res.status(200).json(req.refUser.toWeb());
+};
+
+const updateById = async (req, res, next) => {
+	const [err, user] = await to(userService.update(req.refUser, req.body));
+	if (err)
+		return rerr(next, err);
+	return res.status(200).json(user.toWeb());
+};
+
 const removeById = async (req, res, next) => {
-	let err, user;
-	user = req.user;
-	const id = req.params.id;
-	[err, user] = await to(userService.removeById(id));
+	const [err, user] = await to(userService.remove(req.refUser));
 	if(err)
 		return rerr(next, err, 500);
 	return res.status(204).send();
@@ -81,7 +70,8 @@ module.exports = {
 	get,
 	getById,
 	// getAll,
+	update,
+	updateById,
 	remove,
 	removeById,
-	update
 };
