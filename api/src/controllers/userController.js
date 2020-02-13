@@ -43,12 +43,16 @@ const getById = async (req, res, next) => {
 // }
 
 
-// TODO: Update function
-// const update = async (req, res, next) => {
-// 	let user = req.user;
-// 	if(!user)
-// 			return rerr(res, "no user given by passport", 500);
-// };
+
+const update = async (req, res, next) => {
+	let user = req.user;
+	if(!user)
+			return rerr(res, "no user given by passport", 500);
+	[err, user] = await to(userService.update(user, req.body));
+	if (err)
+		return rerr(next, err);
+	return res.status(200).json(user.toWeb());
+};
 
 const remove = async (req, res, next) => {
 	let err, user;
@@ -78,5 +82,6 @@ module.exports = {
 	getById,
 	// getAll,
 	remove,
-	removeById
+	removeById,
+	update
 };
