@@ -6,6 +6,7 @@ const auth = require('../controllers/authController');
 const user = require('../controllers/userController');
 
 const { isValidUserId, isAdminOrLoggedUser } = require("../middlewares/validation");
+const { extractParams } = require("../middlewares/query");
 
 require('../middlewares/passport')(passport);
 
@@ -30,6 +31,7 @@ router.post('/auth/login', user.login);
 router.post('/auth/register', user.register);                                         //C
 
 // ** User **
+router.get('/user', passport.authenticate('jwt', {session:false}), extractParams, user.getAll);      //R
 router.get('/self', passport.authenticate('jwt', {session:false}), user.get);         //R
 router.get('/user/:id', passport.authenticate('jwt', {session:false}), isValidUserId("id"), user.getById);         //R
 router.patch('/self', passport.authenticate('jwt', {session:false}), user.update);    //U

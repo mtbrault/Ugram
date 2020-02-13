@@ -23,13 +23,21 @@ const get = async (req, res, next) => {
 	return res.status(200).json(req.user.toWeb());
 };
 
-// const getAll = async (req, res, next) => {
-// 	const page = req.query.page ? req.query.page : 0;
-// 	const limit = req.query.limit ? req.query.limit : 20;
-// 	const [err, res] = await to(userService.getAll(page, limit));
-// 	if(err)
-// 		rerr(next, err, 400);
-// }
+const getAll = async (req, res, next) => {
+	const [err, ret] = await to(userService.getAll(req.skip, req.limit));
+	if(err)
+		return rerr(next, err);
+	const {last, users} = ret;
+	const chunk = {
+		page: req.page,
+		limit: req.limit,
+		count: users.length,
+		users
+	};
+	if(!last)
+		chunk.next = `/user?page=${req.page + 1}&limit=${req.limit}`;
+	return res.status(200).json(chunk);
+}
 
 const update = async (req, res, next) => {
 	const [err, user] = await to(userService.update(req.user, req.body));
@@ -69,7 +77,7 @@ module.exports = {
 	register,
 	get,
 	getById,
-	// getAll,
+	getAll,
 	update,
 	updateById,
 	remove,

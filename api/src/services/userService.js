@@ -48,14 +48,37 @@ const create = async ({
 	user = new User(data);
 	user = await user.save();
 	return user;
-}
+};
 
 const getById = async id => {
 	const user = await User.findById(id);
 	if(!user)
 		throw new Error(`user with id ${id} doesn't exist`);
 	return user;
-}
+};
+
+const getAll = async (skip, limit) => {
+	const users = await User.find().skip(skip).limit(limit + 1).lean();
+
+	const last = users.length != limit + 1;
+	if(!last)
+		users.pop();
+	return {
+		last,
+		users: users.map(x => {
+			const {
+				_id, displayName, email,
+				phoneNumber, firstname, lastname,
+				profilePic, createdAt, updatedAt
+			} = x;
+			return {
+				id: _id, username: displayName, email,
+				phoneNumber, firstname, lastname,
+				profilePic, createdAt, updatedAt
+			};
+		})
+	};
+};
 
 const update = async (user, {
 	username, password, firstname, lastname,
@@ -103,6 +126,7 @@ module.exports = {
 	authenticate,
 	create,
 	getById,
+	getAll,
 	update,
 	remove,
 	removeById
