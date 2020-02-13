@@ -127,7 +127,7 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
                 onPreview={() => console.log('preview')}
                 onChange={handleChange}
               >
-                {uploadButton}
+                {isMe && uploadButton}
               </Upload>
               {/* <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
                 <img alt="example" style={{ width: '100%' }} src={previewImage} />
