@@ -28,12 +28,11 @@ export const configS3 = () => ({
 interface ModalProps {
   toggleModal(): void;
   visible: boolean;
-  onSuccess(e: string): void;
   data: profileType;
 }
 
 const ProfilModal: React.FC<ModalProps> = ({
-  toggleModal, visible, onSuccess, data,
+  toggleModal, visible, data,
 }) => {
   const [uploading, setUploading] = useState(false);
   const [image, setImage] = useState(data.profilePic);
@@ -41,7 +40,6 @@ const ProfilModal: React.FC<ModalProps> = ({
   const [firstname, setFirstname] = useState(data.firstname);
   const [lastname, setLastname] = useState(data.lastname);
   const [phoneNumber, setPhone] = useState(data.phoneNumber);
-  const [error, setError] = useState('');
   const dispatch = useDispatch();
 
   const syncProfilPic = (file: RcFile) => {
@@ -87,16 +85,18 @@ const ProfilModal: React.FC<ModalProps> = ({
   };
 
   const updateProfil = () => {
-    setError('');
-    if (firstname === '' || lastname === '' || email === '' || phoneNumber === '') setError('Please fill all the fields');
-    dispatch(updateProfile({
-      firstname, lastname, email, phoneNumber, profilePicture: image,
-    }))
-      .then(() => {
-        onSuccess('Profile well updated');
-        toggleModal();
-      })
-      .catch((err) => setError(err.message));
+    if (firstname === '' || lastname === '' || email === '' || phoneNumber === '') {
+      message.error('Please fill all the fields');
+    } else {
+      dispatch(updateProfile({
+        firstname, lastname, email, phoneNumber, profilePicture: image,
+      }))
+        .then(() => {
+          message.success('Profile well updated');
+          toggleModal();
+        })
+        .catch((err) => message.error(err.message));
+    }
   };
 
   return (
@@ -127,7 +127,6 @@ const ProfilModal: React.FC<ModalProps> = ({
       <InputComponent id="firstname" title="Firstname" type="text" value={firstname} onChange={setFirstname} />
       <InputComponent id="lastname" title="Lastname" type="text" value={lastname} onChange={setLastname} />
       <InputComponent id="phone" title="Phone number" type="tel" value={phoneNumber} onChange={setPhone} />
-      <p style={{ color: 'red' }}>{error}</p>
     </Modal>
   );
 };

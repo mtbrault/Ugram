@@ -1,23 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { History } from 'history';
 import {
-  Card, Row, Col, Button,
+  Card, Row, Col, Button, message,
 } from 'antd/es';
 import Cookies from 'js-cookie';
 import { useDispatch } from 'react-redux';
 import { registerUser, getMyProfile } from '../../store/actions';
 import InputComponent from '../../components/InputComponent';
 
-
 interface RegisterProps {
   history: History
 }
 
 const Register: React.FC<RegisterProps> = ({ history }) => {
-
   const dispatch = useDispatch();
   const [show, setShow] = useState(false);
-  const [error, setError] = useState('');
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [phoneNumber, setPhone] = useState('');
@@ -32,21 +29,22 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
         .then(() => history.push('/'))
         .catch(() => Cookies.remove('token'));
     }
-  }, [dispatch, history])
+  }, [dispatch, history]);
 
   const submitForm = (): void => {
     const regMail = new RegExp('([A-Za-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,3})$');
     const regTel = new RegExp('(^[0-9]*)$');
 
-    setError('');
     if (username === '' || email === '' || password === '' || phoneNumber === '' || firstname === '' || lastname === '')
-      setError('You need to fill each field');
+      message.error('You need to fill each field');
     else if (!regMail.test(email))
-      setError('Bad email format');
+      message.error('Bad email format');
     else if (!regTel.test(phoneNumber))
-      setError('Bad phone number format');
+      message.error('Bad phone number format');
     else {
-      dispatch(registerUser({ email, username, firstname, lastname, phoneNumber, password }))
+      dispatch(registerUser({
+        email, username, firstname, lastname, phoneNumber, password,
+      }))
         .then((res) => {
           Cookies.set('token', res.token);
           dispatch(getMyProfile());
@@ -54,10 +52,10 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
         })
         .catch((error) => {
           console.log(error.message);
-          setError(error.message);
-        })
+          message.error(error.message);
+        });
     }
-  }
+  };
 
   return (
     <>
@@ -78,7 +76,6 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
               onChange={setPassword}
               value={password}
             />
-            <p style={{ color: 'red' }}>{error}</p>
             <Row type="flex" justify="center">
               <Col span={20} className="btn-center">
                 <Button type="primary" onClick={submitForm}>

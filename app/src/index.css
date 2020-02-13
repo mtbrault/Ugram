@@ -88,5 +88,6 @@ code {
 }
 
 .load-more {
-    background: transparent;
+    background: ghostwhite;
+    padding: 10px;
 }
