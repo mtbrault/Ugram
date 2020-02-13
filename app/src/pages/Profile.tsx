@@ -125,6 +125,7 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
                 listType="picture-card"
                 fileList={fileList}
                 onPreview={() => console.log('preview')}
+                onRemove={() => console.log('remove')}
                 onChange={handleChange}
               >
                 {isMe && uploadButton}
