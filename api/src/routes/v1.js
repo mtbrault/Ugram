@@ -5,7 +5,8 @@ const router = express.Router();
 const auth = require('../controllers/authController');
 const user = require('../controllers/userController');
 
-const { isAdminOrLoggedUser } = require("../middlewares/validation");
+const { isValidUserId, isAdminOrLoggedUser } = require("../middlewares/validation");
+const { extractParams } = require("../middlewares/query");
 
 require('../middlewares/passport')(passport);
 
@@ -30,11 +31,13 @@ router.post('/auth/login', user.login);
 router.post('/auth/register', user.register);                                         //C
 
 // ** User **
-router.get('/user', passport.authenticate('jwt', {session:false}), user.get);         //R
-router.get('/user/:id', passport.authenticate('jwt', {session:false}), user.getById);         //R
-router.put('/user', passport.authenticate('jwt', {session:false}), user.update);    //U
-router.delete('/user', passport.authenticate('jwt', {session:false}), user.remove);   //D
-router.delete('/user/:id', passport.authenticate('jwt', {session:false}), isAdminOrLoggedUser, user.removeById);   //D
+router.get('/user', passport.authenticate('jwt', {session:false}), extractParams, user.getAll);      //R
+router.get('/self', passport.authenticate('jwt', {session:false}), user.get);         //R
+router.get('/user/:id', passport.authenticate('jwt', {session:false}), isValidUserId("id"), user.getById);         //R
+router.patch('/self', passport.authenticate('jwt', {session:false}), user.update);    //U
+router.patch('/user/:id', passport.authenticate('jwt', {session:false}), isValidUserId("id"), isAdminOrLoggedUser, user.updateById);    //U
+router.delete('/self', passport.authenticate('jwt', {session:false}), user.remove);   //D
+router.delete('/user/:id', passport.authenticate('jwt', {session:false}), isValidUserId("id"), isAdminOrLoggedUser, user.removeById);   //D
 
 // ** Services **
 // router.post('/user/google', passport.authenticate('jwt', {session:false}), user.google);       //C
