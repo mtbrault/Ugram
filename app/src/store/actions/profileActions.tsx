@@ -8,8 +8,8 @@ export const getMyProfile = createActionThunk(GET_MY_PROFILE, async () => {
 	return res;
 });
 
-export const getAllUsers = createActionThunk(GET_USER_LIST, async () => {
-	const res = await APIManager.getListUsers();
+export const getAllUsers = createActionThunk(GET_USER_LIST, async (next: string) => {
+	const res = await APIManager.getListUsers(next);
 	return res;
 });
 

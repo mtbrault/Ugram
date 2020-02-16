@@ -1,6 +1,5 @@
 import { handleActions } from 'redux-actions';
-import { initialProfile, profileType } from '../../types/profileTypes';
-import { listenerCount } from 'cluster';
+import { initialProfile } from '../../types/profileTypes';
 
 const initialState: initialProfile = {
 	myProfile: {
@@ -12,7 +11,8 @@ const initialState: initialProfile = {
 		createdAt: '',
 		profilePic: '',
 	},
-	listUser: [],
+	users: [],
+	next: '/user?page=0&limit=5',
 }
 
 export const GET_MY_PROFILE = 'GET_MY_PROFILE';
@@ -21,11 +21,11 @@ export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 
 const SUCCEEDED = 'SUCCEEDED';
 
-export default handleActions<initialProfile, profileType[]>(
+export default handleActions<initialProfile>(
 	{
-		[`${GET_MY_PROFILE}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, myProfile: payload[0] }),
-		[`${UPDATE_PROFILE}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, myProfile: payload[0] }),
-		[`${GET_USER_LIST}_${SUCCEEDED}`]: ({ listUser, ...state }, { payload }) => ({ ...state, listUser: [...listUser, ...payload] }),
+		[`${GET_MY_PROFILE}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, myProfile: payload.users[0] }),
+		[`${UPDATE_PROFILE}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, myProfile: payload.users[0] }),
+		[`${GET_USER_LIST}_${SUCCEEDED}`]: ({ users, ...state }, { payload }) => ({ ...state, users: [...users, ...payload.users], next: payload.next }),
 	},
 	initialState,
 )

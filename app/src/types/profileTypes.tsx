@@ -1,6 +1,7 @@
 export interface initialProfile {
   myProfile: profileType;
-  listUser: profileType[];
+  users: profileType[];
+  next: string;
 }
 
 export interface profileType {

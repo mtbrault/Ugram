@@ -5,7 +5,7 @@ import {
   List, Avatar, Button, Tag,
 } from 'antd/es';
 import { getAllUsers } from '../store/actions';
-import { storeTypes, profileType } from '../types';
+import { storeTypes, profileType, initialProfile } from '../types';
 
 interface HomeProps {
   history: History;
@@ -14,16 +14,16 @@ interface HomeProps {
 const Home: React.FC<HomeProps> = ({ history }) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-  const usersList = useSelector<storeTypes, profileType[]>((store) => store.profileReducers.listUser);
+  const data = useSelector<storeTypes, initialProfile>((store) => store.profileReducers);
 
   useEffect(() => {
-    if (!usersList[0]) dispatch(getAllUsers());
-  }, [dispatch, usersList]);
+    if (!data.users[0]) dispatch(getAllUsers(data.next));
+  }, [dispatch, data]);
 
   const onLoadMore = () => {
     setLoading(true);
     setTimeout(() => {
-      dispatch(getAllUsers());
+      dispatch(getAllUsers(data.next));
       setLoading(false);
       window.dispatchEvent(new Event('resize'));
     }, 3000);
@@ -43,13 +43,13 @@ const Home: React.FC<HomeProps> = ({ history }) => {
       header={(
         <h3 className="title-h1">
           List of users&nbsp;
-          <Tag>{usersList.length}</Tag>
+          <Tag>{data.users.length}</Tag>
         </h3>
       )}
       itemLayout="horizontal"
-      dataSource={usersList}
+      dataSource={data.users}
       loadMore={loadMore}
-      renderItem={(user) => (
+      renderItem={(user: profileType) => (
         <List.Item onClick={() => history.push('/profile', user)} className="list-item">
           <List.Item.Meta
             avatar={<Avatar className="user-avatar-list" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}

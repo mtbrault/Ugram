@@ -4,6 +4,8 @@ import { Col, Input, Row } from 'antd/es';
 import { Button } from 'antd';
 import Cookies from 'js-cookie';
 import { History } from 'history';
+import { useDispatch } from 'react-redux';
+import { tokenInfo } from '../store/actions';
 
 interface HeaderProps {
 	history: History;
@@ -11,15 +13,17 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ history }) => {
 
-	useEffect(() => {
-		const token = Cookies.get('token');
-		if (!token) history.push('/login');
-	}, [history]);
+	const dispatch = useDispatch();
 
 	const logout = () => {
 		Cookies.remove('token');
 		history.push('/login');
 	}
+
+	useEffect(() => {
+		dispatch(tokenInfo())
+			.catch(() => logout());
+	}, [dispatch, logout]);
 
 	return (
 		<Row type="flex" align="middle" justify="center" className="header-container">

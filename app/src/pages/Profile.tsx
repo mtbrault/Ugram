@@ -19,7 +19,7 @@ interface ProfileProps {
 
 const Profile: React.FC<ProfileProps> = ({ history, location }) => {
   const [modalVisible, setVisible] = useState(false);
-  const [isMe, setMe] = useState(!location.state);
+  const [isMe] = useState(!location.state);
   const dispatch = useDispatch();
 
   const [fileList, setFileList] = useState([{
@@ -47,6 +47,8 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
 
   const me = useSelector<storeTypes, profileType>((store) => store.profileReducers.myProfile);
   const data = (isMe) ? me : location.state;
+
+  console.log(data);
 
   const toggleModal = () => {
     setVisible(!modalVisible);

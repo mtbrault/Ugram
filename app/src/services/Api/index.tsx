@@ -35,55 +35,32 @@ export default class APIManager {
 		return API.get('/auth/tokeninfo');
 	}
 
-	static async getListUsers() {
-		const tmp = [
-			{
-				username: 'test',
-				email: 'test@test.fr',
-				profilePicture: 'monimage.png',
-				firstname: 'Matthieu',
-				lastname: 'BRAULT',
-				phoneNumber: '0000000000',
-				createdAt: '01/01/2020',
-			},
-			{
-				username: 'test2',
-				email: 'test@test.fr',
-				profilePicture: 'monimage.png',
-				firstname: 'Mehdi',
-				lastname: 'BRAULT',
-				phoneNumber: '0000000000',
-				createdAt: '01/01/2020',
-			},
-			{
-				username: 'test3',
-				email: 'test@test.fr',
-				profilePicture: 'monimage.png',
-				firstname: 'Angelo',
-				lastname: 'BRAULT',
-				phoneNumber: '0000000000',
-				createdAt: '01/01/2020',
-			}
-		]
-		return tmp;
+	static async getListUsers(next: string) {
+		const res = await API.get(next);
+		console.log(res.data);
+		return res.data;
 	}
 
 	static async getMyProfile() {
-		const res = await API.get('/user');
+		const res = await API.get('/self');
 		if (!res.data)
 			return res;
-		return [res.data];
+		return {
+			users: [res.data]
+		};
 	}
 
 	static async getProfile(id: Number) {
 		const res = await API.get(`/user/${id}`);
 		if (res.data)
 			return res.data;
-		return res;
+		return {
+			users: [res.data]
+		};
 	}
 
 	static async updateProfile(param: updateProfileParam) {
-		const res = await API.put('/user', param);
+		const res = await API.patch('/self', param);
 		if (!res.data)
 			return res;
 		return [res.data];
