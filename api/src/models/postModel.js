@@ -20,16 +20,14 @@ const PostSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],
-    reactions: {
-        likes: {
-            type: Number,
-            min: 0
-        },
-        dislikes: {
-            type: Number,
-            min: 0
-        },
-    },
+    reactions: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        liked: {
+            type: Boolean,
+            // default: false
+        }
+    }],
     comments: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
