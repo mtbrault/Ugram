@@ -2,11 +2,9 @@ const mongoose = require('mongoose');
 
 const PostSchema = mongoose.Schema({
     userId : {
-        type: {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
-        },
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        // required: true
     },
     imageUrl : {
         type: String,
@@ -16,9 +14,10 @@ const PostSchema = mongoose.Schema({
     hashtags: [{
         type: String,
         trim: true,
+        // TODO: regexp
     }],
     mentions: [{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],
     reactions: {
@@ -30,13 +29,11 @@ const PostSchema = mongoose.Schema({
             type: Number,
             min: 0
         },
-        stars: {
-           type: Number,
-           min: 0
-        }
     },
     comments: [{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }]
 }, { timestamps: true });
+
+module.exports = mongoose.model('Post', PostSchema);
