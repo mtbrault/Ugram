@@ -67,12 +67,12 @@ const getAll = async (skip, limit) => {
 		last,
 		users: users.map(x => {
 			const {
-				_id, displayName, email,
+				_id, displayname, email,
 				phoneNumber, firstname, lastname,
 				profilePic, createdAt, updatedAt
 			} = x;
 			return {
-				id: _id, username: displayName, email,
+				id: _id, username: displayname, email,
 				phoneNumber, firstname, lastname,
 				profilePic, createdAt, updatedAt
 			};
