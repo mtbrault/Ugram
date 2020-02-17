@@ -16,5 +16,7 @@ mongoose.set('useCreateIndex', true);
 
 module.exports = {
 	User: require("./models/userModel"),
+	Post: require("./models/postModel"),
+	Comment: require("./models/commentModel"),
 	db: mongoose.connection
 }
