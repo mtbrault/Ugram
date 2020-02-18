@@ -4,6 +4,7 @@ const passport = require('passport');
 const router = express.Router();
 const auth = require('../controllers/authController');
 const user = require('../controllers/userController');
+const post = require('../controllers/postController');
 
 const { isValidUserId, isAdminOrLoggedUser } = require("../middlewares/validation");
 const { extractParams } = require("../middlewares/query");
@@ -46,5 +47,8 @@ router.delete('/user/:id', passport.authenticate('jwt', {session:false}), isVali
 // router.post('/user/microsoft', passport.authenticate('jwt', {session:false}), user.microsoft); //C
 // router.get('/user/services', passport.authenticate('jwt', {session:false}), user.services)     //R
 
+// ** Post **
+
+router.post('/post', passport.authenticate('jwt', {session:false}), post.upload);
 
 module.exports = router;

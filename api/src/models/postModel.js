@@ -29,4 +29,18 @@ const PostSchema = mongoose.Schema({
 
 PostSchema.plugin(votingPlugin);
 
+PostSchema.methods.toWeb = function() {
+	return {
+		id: this._id,
+		votes: this.votes,
+		hashtags: this.hashtags,
+		mentions: this.mentions,
+		author: this.author,
+		imageUrl: this.imageUrl,
+		description: this.description,
+		createdAt: this.createdAt,
+		updatedAt: this.updatedAt
+	}
+}
+
 module.exports = mongoose.model('Post', PostSchema);
