@@ -64,11 +64,11 @@ const ProfilModal: React.FC<ModalProps> = ({
   const beforeUpload = (file: UploadFile) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!');
+      message.error('You can only upload JPG/PNG file!', 5);
     }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      message.error('Image must smaller than 2MB!');
+      message.error('Image must smaller than 2MB!', 5);
     }
     return isJpgOrPng && isLt2M;
   };
@@ -86,16 +86,16 @@ const ProfilModal: React.FC<ModalProps> = ({
 
   const updateProfil = () => {
     if (firstname === '' || lastname === '' || email === '' || phoneNumber === '') {
-      message.error('Please fill all the fields');
+      message.error('Please fill all the fields', 5);
     } else {
       dispatch(updateProfile({
         firstname, lastname, email, phoneNumber, profilePicture: image,
       }))
         .then(() => {
-          message.success('Profile well updated');
+          message.success('Profile well updated', 5);
           toggleModal();
         })
-        .catch((err) => message.error(err.message));
+        .catch((err) => message.error(err.message, 5));
     }
   };
 

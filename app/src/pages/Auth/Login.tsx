@@ -31,7 +31,7 @@ const Login: React.FC<LoginProps> = ({ history }) => {
 
   const submitForm = (): void => {
     if (username === '' || password === '') {
-      message.error('You need fill all the field');
+      message.error('You need fill all the field', 5);
       return;
     }
     dispatch(loginUser({ username, password }))
@@ -42,7 +42,7 @@ const Login: React.FC<LoginProps> = ({ history }) => {
       })
       .catch((err) => {
         console.log(err.message);
-        message.error('Connexion failed');
+        message.error('Connexion failed', 5);
       });
   }
 

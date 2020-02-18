@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Avatar, Button, Card, Col, Icon, Row, Upload, Spin,
+  Avatar, Button, Card, Col, Icon, Row, Upload, Spin, List,
 } from 'antd/es';
 import { useDispatch, useSelector } from 'react-redux';
 import { History } from 'history';
 import { getMyProfile } from '../store/actions';
+import Loader from "../components/Loader";
 
 import { storeTypes } from '../types/storeTypes';
-import { profileType } from '../types/profileTypes';
+import { profileType, publicationType } from '../types/profileTypes';
 import ProfilModal from '../components/ProfilModal';
+import PreviewPubs from '../components/PreviewPubs';
 
 interface ProfileProps {
   history: History;
@@ -19,26 +21,10 @@ interface ProfileProps {
 
 const Profile: React.FC<ProfileProps> = ({ history, location }) => {
   const [modalVisible, setVisible] = useState(false);
-  const [isMe] = useState(!location.state);
+  const [isMe] = useState(!(location.state && location.state.username));
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewPubs, setPreviewPubs] = useState<publicationType>();
   const dispatch = useDispatch();
-
-  const [fileList, setFileList] = useState([{
-    uid: '-1',
-    name: 'image.png',
-    status: undefined,
-    url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    size: 1000,
-    type: 'image/jpeg',
-  }, {
-    uid: '-2',
-    name: 'image.png',
-    status: undefined,
-    url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    size: 1000,
-    type: 'image/jpeg',
-  }]);
-
-  const handleChange = (picList: any) => setFileList(picList);
 
   useEffect(() => {
     dispatch(getMyProfile())
@@ -57,6 +43,11 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
     return `${(newDate.getDay()).toString()}/${(newDate.getMonth()).toString()}/${(newDate.getFullYear()).toString()}`;
   };
 
+  const openPreview = (item: publicationType) => {
+    setPreviewVisible(!previewVisible);
+    setPreviewPubs(item);
+  };
+
   const uploadButton = (
     <div>
       <Icon type="plus" />
@@ -66,9 +57,7 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
 
   if (!data.username) {
     return (
-      <Row type="flex" align="middle" justify="center">
-        <Spin size="large" className="text-center spin" />
-      </Row>
+      <Loader />
     );
   }
 
@@ -119,21 +108,27 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
               <Icon type="save" />
               <span className="span-icon">Publications</span>
             </h2>
-            <Row type="flex">
-              <Upload
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                listType="picture-card"
-                fileList={fileList}
-                onPreview={() => console.log('preview')}
-                onRemove={() => console.log('remove')}
-                onChange={handleChange}
-              >
-                {isMe && uploadButton}
-              </Upload>
-              {/* <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-                <img alt="example" style={{ width: '100%' }} src={previewImage} />
-              </Modal> */}
-            </Row>
+            <List
+              grid={{ gutter: 16, column: 3 }}
+              dataSource={data.publication}
+              renderItem={(item) => (
+                <List.Item>
+                  <Card className="card-pubs" onClick={() => openPreview(item)}>
+                    <img src={item.url} alt="" />
+                  </Card>
+                </List.Item>
+              )}
+            />
+            {previewPubs && previewVisible
+            && (
+            <PreviewPubs
+              previewPubs={previewPubs}
+              previewVisible={previewVisible}
+              onCancel={() => setPreviewVisible(false)}
+              isMe={isMe}
+            />
+            ) }
+            {/* {isMe && uploadButton} */}
           </Col>
         </Col>
       </Row>

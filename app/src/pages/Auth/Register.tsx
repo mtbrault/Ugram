@@ -36,11 +36,11 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
     const regTel = new RegExp('(^[0-9]*)$');
 
     if (username === '' || email === '' || password === '' || phoneNumber === '' || firstname === '' || lastname === '')
-      message.error('You need to fill each field');
+      message.error('You need to fill each field', 5);
     else if (!regMail.test(email))
-      message.error('Bad email format');
+      message.error('Bad email format', 5);
     else if (!regTel.test(phoneNumber))
-      message.error('Bad phone number format');
+      message.error('Bad phone number format', 5);
     else {
       dispatch(registerUser({
         email, username, firstname, lastname, phoneNumber, password,
@@ -52,7 +52,7 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
         })
         .catch((error) => {
           console.log(error.message);
-          message.error(error.message);
+          message.error(error.message, 5);
         });
     }
   };
