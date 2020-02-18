@@ -38,7 +38,7 @@ export default class APIManager {
 	static async getListUsers(next: string) {
 		const res = await API.get(next);
 		res.data.users.map((user: profileType) => {
-			user.publication = [
+			user.publications = [
 				{
 					url: 'https://avatars3.githubusercontent.com/u/29895484?s=400&v=4',
 					description: 'Zack c\'est un petit marocain',
@@ -61,7 +61,7 @@ export default class APIManager {
 		if (!res.data)
 			return res;
 		const users = [res.data];
-		users[0].publication = [
+		users[0].publications = [
 			{
 				url: 'https://avatars3.githubusercontent.com/u/29895484?s=400&v=4',
 				description: 'Zack c\'est un petit marocain',

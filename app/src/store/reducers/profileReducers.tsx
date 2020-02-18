@@ -10,7 +10,7 @@ const initialState: initialProfile = {
 		phoneNumber: '',
 		createdAt: '',
 		profilePic: '',
-		publication: [],
+		publications: [],
 	},
 	users: [],
 	next: '/user?page=0&limit=5',

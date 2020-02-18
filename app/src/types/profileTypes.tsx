@@ -12,7 +12,7 @@ export interface profileType {
   phoneNumber: string;
   createdAt: string;
   profilePic: string;
-  publication: publicationType[];
+  publications: publicationType[];
 }
 
 export interface updateProfileParam {
