@@ -91,3 +91,8 @@ code {
     background: ghostwhite;
     padding: 10px;
 }
+
+.card-pubs > .ant-card-body {
+    padding: 0;
+    cursor: pointer;
+}

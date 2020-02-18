@@ -21,8 +21,7 @@ const Home: React.FC<HomeProps> = ({ history }) => {
   }, [dispatch, data]);
 
   const onLoadMore = () => {
-    if (!data.next)
-      return;
+    if (!data.next) return;
     setLoading(true);
     setTimeout(() => {
       dispatch(getAllUsers(data.next));
@@ -32,9 +31,9 @@ const Home: React.FC<HomeProps> = ({ history }) => {
   };
 
   const loadMore = (
-    <div className="text-center load-more" >
+    <div className="text-center load-more">
       <Button onClick={onLoadMore} icon={loading ? 'loading' : 'plus'}>Loading more</Button>
-    </div >
+    </div>
   );
 
   return (
