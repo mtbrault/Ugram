@@ -1,9 +1,26 @@
 const { rerr, to } = require('../middlewares/utils');
 const userService = require('../services/userService');
+const postService = require('../services/postService');
 
 const funcStore = {
 	isValidUserId: {},
 	isValidPostId: {}
+};
+
+const isValidPostId = (key="id") => {
+	let func = funcStore.isValidPostId[key];
+	if (!func) {
+		func = async (req, res, next) => {
+			const [err, post] = await to(postService.getById(req.params[key]));
+
+			if (err || !post)
+				return rerr(next, "Bad post id", 400);
+			req.post = post;
+			next();
+		};
+		funcStore.isValidPostId[key] = func;
+	}
+	return func;
 };
 
 const isValidUserId = (key="id") => {
@@ -21,7 +38,7 @@ const isValidUserId = (key="id") => {
 		funcStore.isValidUserId[key] = func;
 	}
 	return func;
-}
+};
 
 // Should be used only after isValidUserId
 const isAdminOrLoggedUser = async (req, res, next) => {
@@ -36,10 +53,11 @@ const isAdmin = async (req, res, next) => {
 	if(!req.user.isadmin)
 		return rerr(next, "Forbidden", 403);
 	next();
-}
+};
 
 module.exports = {
 	isValidUserId,
 	isAdminOrLoggedUser,
+	isValidPostId,
 	isAdmin
 };
