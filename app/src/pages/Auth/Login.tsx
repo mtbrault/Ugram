@@ -41,8 +41,7 @@ const Login: React.FC<LoginProps> = ({ history }) => {
         history.push('/');
       })
       .catch((err) => {
-        console.log(err.message);
-        message.error('Connexion failed');
+        message.error(err.response.data.message);
       });
   }
 

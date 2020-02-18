@@ -51,8 +51,7 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
           history.push('/');
         })
         .catch((error) => {
-          console.log(error.message);
-          message.error(error.message);
+          message.error(error.response.data.message);
         });
     }
   };

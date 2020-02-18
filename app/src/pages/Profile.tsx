@@ -19,8 +19,15 @@ interface ProfileProps {
 
 const Profile: React.FC<ProfileProps> = ({ history, location }) => {
   const [modalVisible, setVisible] = useState(false);
-  const [isMe] = useState(!location.state);
+  const [isMe, setIsMe] = useState();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (location.state && location.state.username)
+      setIsMe(false);
+    else
+      setIsMe(true);
+  }, [location])
 
   const [fileList, setFileList] = useState([{
     uid: '-1',
@@ -46,8 +53,7 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
   }, [dispatch, history]);
 
   const me = useSelector<storeTypes, profileType>((store) => store.profileReducers.myProfile);
-  const data = (isMe) ? me : location.state;
-
+  const data = (location.state && location.state.username) ? location.state : me;
   const toggleModal = () => {
     setVisible(!modalVisible);
   };

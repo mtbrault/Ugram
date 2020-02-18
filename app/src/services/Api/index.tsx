@@ -19,6 +19,7 @@ API.interceptors.request.use(({ headers, ...config }) => ({
 export default class APIManager {
 	static async registerUser(param: registerParam) {
 		const res = await API.post('/auth/register', param);
+		console.log(res);
 		if (res.data)
 			return res.data;
 		return res;
