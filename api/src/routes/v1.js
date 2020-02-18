@@ -52,4 +52,6 @@ router.delete('/user/:id', passport.authenticate('jwt', {session:false}), isVali
 router.post('/post', passport.authenticate('jwt', {session:false}), post.upload);
 router.get('/post/:id', passport.authenticate('jwt', {session:false}), isValidPostId("id"), post.getById);
 router.delete('/post/:id', passport.authenticate('jwt', {session:false}), isValidPostId("id"), post.remove);
+router.patch('/post/:id', passport.authenticate('jwt', {session:false}), isValidPostId("id"), post.update);
+
 module.exports = router;

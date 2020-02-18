@@ -1,6 +1,9 @@
 const { User, Post } = require("../db");
 const { terr } = require("../middlewares/utils");
-const ObjectId = require('mongoose').Types.ObjectId;
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
+
+mongoose.set('useFindAndModify', false);
 
 const create = async (user, {
     author, imageUrl, description = "", hashtags = [], mentions = []
@@ -40,17 +43,36 @@ const getById = async id => {
 };
 
 const remove = async (user, post) => {
-    console.log(user._id, post.author)
     if (user._id.toString() !== post.author.toString())
         terr("the post author is not the same as the logged user", 400);
-    const res = await User.update({_id: ObjectId(post.author)}, {$pull : { posts: new ObjectId(post._id)}});
+    const res = await User.update({_id: ObjectId(post.author)}, {$pull: {posts: new ObjectId(post._id)}});
     post.remove();
 
     return res;
 };
 
+const update = async  (user, postId, {
+    description, hashtags, mentions
+}) => {
+    let update = {};
+    if (description) update.description = description;
+    if (hashtags) update.hashtags = hashtags;
+    if (mentions) {
+        for (let item of mentions) {
+            if (!ObjectId.isValid(String(item)))
+                terr(`'${item}' is not a valid mongo objectId string`);
+            item = ObjectId(String(item));
+        }
+        update.mentions = mentions;
+    }
+    return await Post.findOneAndUpdate({_id: postId}, update, {
+        new: true
+    });
+};
+
 module.exports = {
     create,
     getById,
-    remove
+    remove,
+    update
 };
