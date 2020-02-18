@@ -12,6 +12,7 @@ export interface profileType {
   phoneNumber: string;
   createdAt: string;
   profilePic: string;
+  publication: publicationType[];
 }
 
 export interface updateProfileParam {
@@ -20,4 +21,11 @@ export interface updateProfileParam {
   email: string;
   phoneNumber: string;
   profilePicture: string;
+}
+
+export interface publicationType {
+  url: string;
+  description: string;
+  hashtag: string[];
+  users: string[],
 }

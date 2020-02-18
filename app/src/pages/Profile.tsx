@@ -48,8 +48,6 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
   const me = useSelector<storeTypes, profileType>((store) => store.profileReducers.myProfile);
   const data = (isMe) ? me : location.state;
 
-  console.log(data);
-
   const toggleModal = () => {
     setVisible(!modalVisible);
   };

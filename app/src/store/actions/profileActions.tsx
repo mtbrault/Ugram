@@ -5,6 +5,7 @@ import { GET_MY_PROFILE, UPDATE_PROFILE, GET_USER_LIST } from '../reducers/profi
 
 export const getMyProfile = createActionThunk(GET_MY_PROFILE, async () => {
 	const res = await APIManager.getMyProfile();
+	console.log(res);
 	return res;
 });
 

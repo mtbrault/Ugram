@@ -10,6 +10,7 @@ const initialState: initialProfile = {
 		phoneNumber: '',
 		createdAt: '',
 		profilePic: '',
+		publication: [],
 	},
 	users: [],
 	next: '/user?page=0&limit=5',
@@ -18,6 +19,7 @@ const initialState: initialProfile = {
 export const GET_MY_PROFILE = 'GET_MY_PROFILE';
 export const GET_USER_LIST = 'GET_USER_LIST';
 export const UPDATE_PROFILE = 'UPDATE_PROFILE';
+
 
 const SUCCEEDED = 'SUCCEEDED';
 

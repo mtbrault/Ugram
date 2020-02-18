@@ -17,10 +17,12 @@ const Home: React.FC<HomeProps> = ({ history }) => {
   const data = useSelector<storeTypes, initialProfile>((store) => store.profileReducers);
 
   useEffect(() => {
-    if (!data.users[0]) dispatch(getAllUsers(data.next));
+    if (!data.users[0] && data.next) dispatch(getAllUsers(data.next));
   }, [dispatch, data]);
 
   const onLoadMore = () => {
+    if (!data.next)
+      return;
     setLoading(true);
     setTimeout(() => {
       dispatch(getAllUsers(data.next));
@@ -30,9 +32,9 @@ const Home: React.FC<HomeProps> = ({ history }) => {
   };
 
   const loadMore = (
-    <div className="text-center load-more">
+    <div className="text-center load-more" >
       <Button onClick={onLoadMore} icon={loading ? 'loading' : 'plus'}>Loading more</Button>
-    </div>
+    </div >
   );
 
   return (
@@ -48,7 +50,7 @@ const Home: React.FC<HomeProps> = ({ history }) => {
       )}
       itemLayout="horizontal"
       dataSource={data.users}
-      loadMore={loadMore}
+      loadMore={(data.next) ? loadMore : ''}
       renderItem={(user: profileType) => (
         <List.Item onClick={() => history.push('/profile', user)} className="list-item">
           <List.Item.Meta
