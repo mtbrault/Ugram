@@ -3,8 +3,6 @@ const { terr } = require("../middlewares/utils");
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
-mongoose.set('useFindAndModify', false);
-
 const create = async (user, {
     author, imageUrl, description = "", hashtags = [], mentions = []
 }) => {
