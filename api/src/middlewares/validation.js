@@ -11,8 +11,9 @@ const isValidPostId = (key="id") => {
 	let func = funcStore.isValidPostId[key];
 	if (!func) {
 		func = async (req, res, next) => {
+			if(!req.params[key])
+				return rerr(next, "isValidPostId should be used on a route with the given key");
 			const [err, post] = await to(postService.getById(req.params[key]));
-
 			if (err || !post)
 				return rerr(next, "Bad post id", 400);
 			req.post = post;
@@ -28,7 +29,7 @@ const isValidUserId = (key="id") => {
 	if (!func) {
 		func = async (req, res, next) => {
 			if(!req.params[key])
-				return rerr(next, "isAdminOrLoggedUser should be used on a route with the given key");
+				return rerr(next, "isValidUserId should be used on a route with the given key");
 			const [err, user] = await to(userService.getById(req.params[key]));
 			if(err || !user)
 				return rerr(next, "Bad user id", 400);
