@@ -21,7 +21,7 @@ const create = async ({
 	username, password, firstname, lastname,
 	email, profilePic, phoneNumber
 	}) => {
-	for (let [key, value] of Object.entries({ username, password, email, phoneNumber}))
+	for (let [key, value] of Object.entries({ username, password, email, phoneNumber }))
 		if(!value) terr(`${key} field is required`, 400);
 
 	let user = await User.findOne({ $or: [
@@ -57,8 +57,11 @@ const getById = async id => {
 	return user;
 };
 
-const getAll = async (skip, limit) => {
-	const users = await User.find().skip(skip).limit(limit + 1).lean();
+const getAll = async (skip, limit, id=false) => {
+	const query = {};
+	if(id)
+		query._id = { $ne: id };
+	const users = await User.find(query).skip(skip).limit(limit + 1).lean();
 
 	const last = users.length != limit + 1;
 	if(!last)

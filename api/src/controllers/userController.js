@@ -24,7 +24,8 @@ const get = async (req, res, next) => {
 };
 
 const getAll = async (req, res, next) => {
-	const [err, ret] = await to(userService.getAll(req.skip, req.limit));
+	const noself = req.query.noself ? req.user._id : false;
+	const [err, ret] = await to(userService.getAll(req.skip, req.limit, noself));
 	if(err)
 		return rerr(next, err);
 	const {last, users} = ret;
