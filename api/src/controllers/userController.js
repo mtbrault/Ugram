@@ -24,7 +24,7 @@ const get = async (req, res, next) => {
 };
 
 const getAll = async (req, res, next) => {
-	const noself = req.query.noself ? req.user._id : false;
+	const noself = parseInt(req.query.noself, 10) ? req.user._id : false;
 	const [err, ret] = await to(userService.getAll(req.skip, req.limit, noself));
 	if(err)
 		return rerr(next, err);
@@ -36,7 +36,7 @@ const getAll = async (req, res, next) => {
 		users
 	};
 	if(!last)
-		chunk.next = `/user?page=${req.page + 1}&limit=${req.limit}`;
+		chunk.next = `/user?page=${req.page + 1}&limit=${req.limit}${req.query.noself ? "&noself=" + req.query.noself : ""}`;
 	return res.status(200).json(chunk);
 }
 
