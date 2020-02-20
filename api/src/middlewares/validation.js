@@ -16,7 +16,7 @@ const isValidPostId = (key="id") => {
 			const [err, post] = await to(postService.getById(req.params[key]));
 			if (err || !post)
 				return rerr(next, "Bad post id", 400);
-			req.post = post;
+			req.refPost = post;
 			next();
 		};
 		funcStore.isValidPostId[key] = func;
@@ -48,6 +48,14 @@ const isAdminOrLoggedUser = async (req, res, next) => {
 	next();
 };
 
+// Should be used only after isValidPostId
+const isAdminOrPostAuthor = async (req, res, next) => {
+	const author = req.refPost.author._id || req.refPost.author;
+	if(!req.user._id.equals(author) && !req.user.isadmin)
+		return rerr(next, "Forbidden", 403);
+	next();
+};
+
 const isAdmin = async (req, res, next) => {
 	if(!req.user)
 		return rerr(next, "no user given by passport");
@@ -60,5 +68,6 @@ module.exports = {
 	isValidUserId,
 	isAdminOrLoggedUser,
 	isValidPostId,
+	isAdminOrPostAuthor,
 	isAdmin
 };
