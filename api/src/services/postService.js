@@ -17,7 +17,7 @@ const create = async (author, { imageUrl, description, hashtags, mentions }) => 
 
 	!!description || (description = "");
 
-	let post = new Post({ author, imageUrl, description, hashtags, mentions });
+	let post = new Post({ author: author._id, imageUrl, description, hashtags, mentions });
 	post = await post.save();
 	return post;
 };
