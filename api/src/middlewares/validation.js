@@ -15,7 +15,7 @@ const isValidPostId = (key="id") => {
 				return rerr(next, "isValidPostId should be used on a route with the given key");
 			const [err, post] = await to(postService.getById(req.params[key]));
 			if (err || !post)
-				return rerr(next, "Bad post id", 400);
+				return rerr(next, "Post not found", 404);
 			req.refPost = post;
 			next();
 		};
@@ -32,7 +32,7 @@ const isValidUserId = (key="id") => {
 				return rerr(next, "isValidUserId should be used on a route with the given key");
 			const [err, user] = await to(userService.getById(req.params[key]));
 			if(err || !user)
-				return rerr(next, "Bad user id", 400);
+				return rerr(next, "User not found", 404);
 			req.refUser = user;
 			next();
 		};
