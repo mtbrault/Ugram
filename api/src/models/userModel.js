@@ -54,10 +54,6 @@ const UserSchema = mongoose.Schema({
 		type: String,
 		trim: true
 	},
-	posts: [{
-		type: mongoose.Schema.Types.ObjectId,
-		ref: 'Post'
-	}]
 }, { timestamps: true });
 
 UserSchema.pre('save', async function () {
