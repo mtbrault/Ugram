@@ -78,7 +78,7 @@ const getById = async (req, res, next) => {
 
 // use only after isValidPostId
 const update = async (req, res, next) => {
-	const [err, post] = await to(postService.update(req.refPost ,req.body, !!req.query.merge));
+	const [err, post] = await to(postService.update(req.refPost ,req.body, !!parseInt(req.query.merge, 10)));
 	if (err)
 		return rerr(next, err);
 	return res.status(200).json(post.toWeb());

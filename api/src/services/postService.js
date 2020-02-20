@@ -1,13 +1,13 @@
 const { User, Post } = require("../db");
-const { terr, notEmpty } = require("../middlewares/utils");
+const { to, terr, notEmpty } = require("../middlewares/utils");
 
 const create = async (author, { imageUrl, description, hashtags, mentions }) => {
 	if (!imageUrl)
 		terr("imageUrl field is required", 400);
 
 	if (notEmpty(mentions)) {
-		const count = await User.countDocuments({ _id: { $in: mentions } })
-		if (count !== mentions.length)
+		const [err, count] = await to(User.countDocuments({ _id: { $in: mentions } }));
+		if (err || count !== mentions.length)
 			terr("Bad User Id in mentions", 400);
 	} else {
 		mentions = [];
@@ -49,8 +49,8 @@ const getById = async id => {
 const update = async (post, { imageUrl, description, hashtags, mentions }, merge=false) => {
 	if (Array.isArray(mentions)) {
 		if (mentions.length > 0) {
-			const count = await User.countDocuments({ _id: { $in: mentions } })
-			if (count !== mentions.length)
+			const [err, count] = await to(User.countDocuments({ _id: { $in: mentions } }));
+			if (err || count !== mentions.length)
 				terr("Bad User Id in mentions", 400);
 		}
 		if (!merge) {
@@ -64,8 +64,8 @@ const update = async (post, { imageUrl, description, hashtags, mentions }, merge
 	if (Array.isArray(hashtags)) {
 		if(!merge) {
 			post.hashtags = hashtags;
-		} else if (hashtag.length > 0) {
-			post.hashtags.addToSet(...hashtag);
+		} else if (hashtags.length > 0) {
+			post.hashtags.addToSet(...hashtags);
 		}
 	}
 	post = await post.save();
