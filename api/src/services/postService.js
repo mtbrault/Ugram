@@ -1,76 +1,86 @@
 const { User, Post } = require("../db");
-const { terr } = require("../middlewares/utils");
-const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId;
+const { terr, notEmpty } = require("../middlewares/utils");
 
-const create = async (user, {
-    author, imageUrl, description = "", hashtags = [], mentions = []
-}) => {
-    for (let [key, value] of Object.entries({author, imageUrl} ))
-        if (!value) terr(`${key} field is required`, 400);
+const create = async (author, { imageUrl, description, hashtags, mentions }) => {
+	if (!imageUrl)
+		terr("imageUrl field is required", 400);
 
-    if (!ObjectId.isValid(String(author)))
-        terr("author should be a valid mongo objectId string", 400);
-    if (author !== user._id.toString())
-        terr("author is not the logged used", 400);
-    author = ObjectId(String(author));
+	if (notEmpty(mentions)) {
+		const count = await User.countDocuments({ _id: { $in: mentions } })
+		if (count !== mentions.length)
+			terr("Bad User Id in mentions", 400);
+	} else {
+		mentions = [];
+	}
 
-    for (let item of mentions) {
-        if (!ObjectId.isValid(String(item)))
-            terr(`'${item}' is not a valid mongo objectId string`, 400);
-        item = ObjectId(String(item));
-    }
+	notEmpty(hashtags) || (hashtags = []);
 
-    const data = {author, imageUrl, description, hashtags, mentions};
-    for (let [key, value] of Object.entries(data))
-        data[key] = value;
+	!!description || (description = "");
 
-    let post = new Post(data);
-    post = await post.save();
-    user.posts.push(post._id);
-    await user.save();
+	let post = new Post({ author, imageUrl, description, hashtags, mentions });
+	post = await post.save();
+	return post;
+};
 
-    return post;
+const getAll = (skip, limit, query = {}) => {
+	const posts = await Post.find(query).skip(skip).limit(limit + 1); // TODO: make request lean with mongoose-lean-virtuals
+	const last = posts.length != limit + 1;
+	if(!last)
+		posts.pop();
+	return {
+		last,
+		posts: posts.map(x => {
+			return x.toWeb();
+		})
+	};
+};
+
+const getByUser = (user, skip, limit) => {
+	return getAll(skip, limit, { _id: user._id || user });
 };
 
 const getById = async id => {
-    const post = await Post.findById(id);
-    if (!post)
-        throw new Error(`post with id ${id} doesn't exist`);
-    return post;
+	const post = await Post.findById(id);
+	if (!post)
+		throw new Error(`post with id ${id} doesn't exist`);
+	return post;
 };
 
-const remove = async (user, post) => {
-    if (user._id.toString() !== post.author.toString())
-        terr("the post author is not the same as the logged user", 400);
-    const res = await User.update({_id: ObjectId(post.author)}, {$pull: {posts: new ObjectId(post._id)}});
-    post.remove();
-
-    return res;
+const update = async  (post, { imageUrl, description, hashtags, mentions }, merge=false) => {
+	if (Array.isArray(mentions)) {
+		if (mentions.length > 0) {
+			const count = await User.countDocuments({ _id: { $in: mentions } })
+			if (count !== mentions.length)
+				terr("Bad User Id in mentions", 400);
+		}
+		if (!merge) {
+			post.mentions = mentions;
+		} else if (mentions.length > 0) {
+			post.mentions.addToSet(...mentions);
+		}
+	}
+	if (imageUrl) post.imageUrl = imageUrl;
+	if (description) post.description = description;
+	if (Array.isArray(hashtags)) {
+		if(!merge) {
+			post.hashtags = hashtags;
+		} else if (hashtag.length > 0) {
+			post.hashtags.addToSet(...hashtag);
+		}
+	}
+	post = await post.save();
+	return post;
 };
 
-const update = async  (user, postId, {
-    description, hashtags, mentions
-}) => {
-    let update = {};
-    if (description) update.description = description;
-    if (hashtags) update.hashtags = hashtags;
-    if (mentions) {
-        for (let item of mentions) {
-            if (!ObjectId.isValid(String(item)))
-                terr(`'${item}' is not a valid mongo objectId string`);
-            item = ObjectId(String(item));
-        }
-        update.mentions = mentions;
-    }
-    return await Post.findOneAndUpdate({_id: postId}, update, {
-        new: true
-    });
+const remove = async post => {
+	return Post.findByIdAndDelete(post._id);
 };
 
 module.exports = {
-    create,
-    getById,
-    remove,
-    update
+	create,
+	getAll,
+	getByUser,
+	getById,
+	update,
+	remove
 };
