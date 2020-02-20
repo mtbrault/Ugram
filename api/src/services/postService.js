@@ -23,7 +23,7 @@ const create = async (author, { imageUrl, description, hashtags, mentions }) => 
 };
 
 const getAll = async (skip, limit, query = {}) => {
-	const posts = await Post.find(query).skip(skip).limit(limit + 1); // TODO: make request lean with mongoose-lean-virtuals
+	const posts = await Post.find(query).sort("-createdAt").skip(skip).limit(limit + 1); // TODO: make request lean with mongoose-lean-virtuals
 	const last = posts.length != limit + 1;
 	if(!last)
 		posts.pop();
@@ -36,7 +36,7 @@ const getAll = async (skip, limit, query = {}) => {
 };
 
 const getByUser = (user, skip, limit) => {
-	return getAll(skip, limit, { _id: user._id || user });
+	return getAll(skip, limit, { author: user._id || user });
 };
 
 const getById = async id => {
