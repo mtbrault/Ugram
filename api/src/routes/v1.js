@@ -4,8 +4,9 @@ const passport = require('passport');
 const router = express.Router();
 const auth = require('../controllers/authController');
 const user = require('../controllers/userController');
+const post = require('../controllers/postController');
 
-const { isValidUserId, isAdminOrLoggedUser } = require("../middlewares/validation");
+const { isValidUserId, isAdminOrLoggedUser, isValidPostId, isAdminOrPostAuthor } = require("../middlewares/validation");
 const { extractParams } = require("../middlewares/query");
 
 require('../middlewares/passport')(passport);
@@ -46,5 +47,14 @@ router.delete('/user/:id', passport.authenticate('jwt', {session:false}), isVali
 // router.post('/user/microsoft', passport.authenticate('jwt', {session:false}), user.microsoft); //C
 // router.get('/user/services', passport.authenticate('jwt', {session:false}), user.services)     //R
 
+// ** Post **
+router.post('/post', passport.authenticate('jwt', {session:false}), post.upload); //C
+router.post('/user/:id/post', passport.authenticate('jwt', {session:false}), isValidUserId("id"), isAdminOrLoggedUser, post.uploadForUser); //C
+router.get('/post', passport.authenticate('jwt', {session:false}), extractParams, post.getAll); //R
+router.get('/self/post', passport.authenticate('jwt', {session:false}), extractParams, post.getSelf); //R
+router.get('/user/:id/post', passport.authenticate('jwt', {session:false}), isValidUserId("id"), extractParams, post.getByUser); //R
+router.get('/post/:id', passport.authenticate('jwt', {session:false}), isValidPostId("id"), post.getById); //R
+router.patch('/post/:id', passport.authenticate('jwt', {session:false}), isValidPostId("id"), isAdminOrPostAuthor, post.update); //U
+router.delete('/post/:id', passport.authenticate('jwt', {session:false}), isValidPostId("id"), isAdminOrPostAuthor, post.remove); //D
 
 module.exports = router;

@@ -59,8 +59,11 @@ const getById = async id => {
 	return user;
 };
 
-const getAll = async (skip, limit) => {
-	const users = await User.find().skip(skip).limit(limit + 1).lean();
+const getAll = async (skip, limit, id = false) => {
+	const query = {};
+	if (id)
+		query._id = { $ne: id };
+	const users = await User.find(query).skip(skip).limit(limit + 1).lean();
 
 	const last = users.length != limit + 1;
 	if (!last)
@@ -116,13 +119,7 @@ const update = async (user, {
 }
 
 const remove = async (user) => {
-	const res = await User.findByIdAndDelete(user._id);
-	return res;
-};
-
-const removeById = async (id) => {
-	const res = await User.findByIdAndDelete(id);
-	return res;
+	return User.findByIdAndDelete(user._id);
 };
 
 module.exports = {
@@ -131,6 +128,5 @@ module.exports = {
 	getById,
 	getAll,
 	update,
-	remove,
-	removeById
+	remove
 };

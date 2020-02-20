@@ -27,9 +27,14 @@ const terr = (message, code=500) => {
 	throw err;
 };
 
+const notEmpty = x => {
+	return Array.isArray(x) && x.length > 0;
+};
+
 module.exports = {
 	to,
 	asyncForEach,
 	rerr,
-	terr
+	terr,
+	notEmpty
 };
