@@ -116,13 +116,7 @@ const update = async (user, {
 }
 
 const remove = async (user) => {
-	const res = await User.findByIdAndDelete(user._id);
-	return res;
-};
-
-const removeById = async (id) => {
-	const res = await User.findByIdAndDelete(id);
-	return res;
+	return User.findByIdAndDelete(user._id);
 };
 
 module.exports = {
@@ -131,6 +125,5 @@ module.exports = {
 	getById,
 	getAll,
 	update,
-	remove,
-	removeById
+	remove
 };
