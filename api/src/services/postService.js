@@ -22,7 +22,7 @@ const create = async (author, { imageUrl, description, hashtags, mentions }) => 
 	return post;
 };
 
-const getAll = (skip, limit, query = {}) => {
+const getAll = async (skip, limit, query = {}) => {
 	const posts = await Post.find(query).skip(skip).limit(limit + 1); // TODO: make request lean with mongoose-lean-virtuals
 	const last = posts.length != limit + 1;
 	if(!last)
@@ -46,7 +46,7 @@ const getById = async id => {
 	return post;
 };
 
-const update = async  (post, { imageUrl, description, hashtags, mentions }, merge=false) => {
+const update = async (post, { imageUrl, description, hashtags, mentions }, merge=false) => {
 	if (Array.isArray(mentions)) {
 		if (mentions.length > 0) {
 			const count = await User.countDocuments({ _id: { $in: mentions } })

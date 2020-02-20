@@ -97,7 +97,7 @@ module.exports = {
 	uploadForUser,
 	getAll,
 	getSelf,
-	getByUser
+	getByUser,
 	getById,
 	remove,
 	update
