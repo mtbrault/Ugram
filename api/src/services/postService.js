@@ -6,9 +6,21 @@ const create = async (author, { imageUrl, description, hashtags, mentions }) => 
 		terr("imageUrl field is required", 400);
 
 	if (notEmpty(mentions)) {
-		const [err, count] = await to(User.countDocuments({ _id: { $in: mentions } }));
-		if (err || count !== mentions.length)
-			terr("Bad User Id in mentions", 400);
+		mentions = mentions.map(x => {
+			const username = x.toLowerCase();
+			if(username === author.username)
+				terr("User cannot mention himself", 400);
+			return username;
+		});
+		const [err, users] = await to(User.find({ username: { $in: mentions } }).lean());
+		if (err || users.length !== mentions.length)
+			terr("Unknown Username in mentions", 400);
+		mentions = users.map(x => {
+			return {
+				id: x._id,
+				username: x.username
+			};
+		});
 	} else {
 		mentions = [];
 	}
@@ -49,9 +61,19 @@ const getById = async id => {
 const update = async (post, { imageUrl, description, hashtags, mentions }, merge=false) => {
 	if (Array.isArray(mentions)) {
 		if (mentions.length > 0) {
-			const [err, count] = await to(User.countDocuments({ _id: { $in: mentions } }));
-			if (err || count !== mentions.length)
-				terr("Bad User Id in mentions", 400);
+			mentions = mentions.map(x => x.toLowerCase());
+			const [err, users] = await to(User.find({ username: { $in: mentions } }).lean());
+			if (err || users.length !== mentions.length)
+				terr("Unknown Username in mentions", 400);
+			const author = post.author.toString();
+			mentions = users.map(x => {
+				if (post.author.equals(x._id))
+					terr("User cannot mention himself", 400);
+				return {
+					id: x._id,
+					username: x.username
+				};
+			});
 		}
 		if (!merge) {
 			post.mentions = mentions;
