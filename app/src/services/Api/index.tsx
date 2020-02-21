@@ -80,4 +80,9 @@ export default class APIManager {
 		const res = await API.get('/post?limit=0');
 		return res.data;
 	}
+
+	static async deletePost(id: Number) {
+		const res = await API.delete(`/post/${id}`);
+		return res.data;
+	}
 }

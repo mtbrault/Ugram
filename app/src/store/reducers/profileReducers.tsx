@@ -22,6 +22,7 @@ export const GET_USER_LIST = 'GET_USER_LIST';
 export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 export const UPLOAD_POST = 'UPLOAD_POST';
 export const UPDATE_POST = 'UPDATE_POST';
+export const DELETE_POST = 'DELETE_POST';
 
 const SUCCEEDED = 'SUCCEEDED';
 
@@ -32,6 +33,7 @@ export default handleActions<initialProfile>(
 		[`${GET_USER_LIST}_${SUCCEEDED}`]: ({ users, ...state }, { payload }) => ({ ...state, users: [...users, ...payload.users], next: payload.next }),
 		[`${UPLOAD_POST}_${SUCCEEDED}`]: (state) => ({ ...state }),
 		[`${UPDATE_POST}_${SUCCEEDED}`]: (state) => ({ ...state }),
+		[`${DELETE_POST}_${SUCCEEDED}`]: (state) => ({ ...state }),
 	},
 	initialState,
 )

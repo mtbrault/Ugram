@@ -1,11 +1,10 @@
 import { createActionThunk } from 'redux-thunk-actions';
 import APIManager from '../../services/Api';
 import { updateProfileParam, publicationType } from '../../types/profileTypes';
-import { GET_MY_PROFILE, UPDATE_PROFILE, GET_USER_LIST, UPLOAD_POST, UPDATE_POST } from '../reducers/profileReducers';
+import { GET_MY_PROFILE, UPDATE_PROFILE, GET_USER_LIST, UPLOAD_POST, UPDATE_POST, DELETE_POST } from '../reducers/profileReducers';
 
 export const getMyProfile = createActionThunk(GET_MY_PROFILE, async () => {
 	const res = await APIManager.getMyProfile();
-	console.log(res);
 	return res;
 });
 
@@ -28,3 +27,8 @@ export const updatePost = createActionThunk(UPDATE_POST, async (id: Number, para
 	const res = await APIManager.updatePost(id, param);
 	return res;
 });
+
+export const deletePost = createActionThunk(DELETE_POST, async (id: Number) => {
+	const res = await APIManager.deletePost(id);
+	return res;
+})
