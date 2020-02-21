@@ -5,6 +5,7 @@ export interface initialProfile {
 }
 
 export interface profileType {
+  id: string;
   username: string;
   firstname: string;
   lastname: string;
