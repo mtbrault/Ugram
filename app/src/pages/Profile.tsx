@@ -11,6 +11,7 @@ import { storeTypes } from '../types/storeTypes';
 import { profileType, publicationType } from '../types/profileTypes';
 import ProfilModal from '../components/ProfilModal';
 import PreviewPubs from '../components/PreviewPubs';
+import UploadModal from '../components/UploadModal';
 
 interface ProfileProps {
   history: History;
@@ -21,6 +22,7 @@ interface ProfileProps {
 
 const Profile: React.FC<ProfileProps> = ({ history, location }) => {
   const [modalVisible, setVisible] = useState(false);
+  const [upload, setUpload] = useState(false);
   const [isMe] = useState(!(location.state && location.state.username));
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewPubs, setPreviewPubs] = useState<publicationType>();
@@ -36,6 +38,10 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
   const toggleModal = () => {
     setVisible(!modalVisible);
   };
+
+  const toggleUpload = () => {
+    setUpload(!upload);
+  }
 
   const formatDate = (createdAtDate: string): string => {
     const newDate = new Date(createdAtDate);
@@ -63,6 +69,7 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
   return (
     <>
       {modalVisible && <ProfilModal toggleModal={toggleModal} visible={modalVisible} data={data} />}
+      {upload && <UploadModal toggleModal={toggleUpload} visible={upload} />}
       <Row type="flex" align="middle" justify="center">
         <Col span={16}>
           <Card bordered>
@@ -95,6 +102,7 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
               </Col>
               <Col span={10} className="text-center">
                 {isMe && <Button type="ghost" icon="setting" onClick={() => setVisible(true)}>Edit account</Button>}
+                {isMe && <Button type="ghost" icon="setting" onClick={() => setUpload(true)}>Upload a picture</Button>}
               </Col>
             </Row>
           </Card>

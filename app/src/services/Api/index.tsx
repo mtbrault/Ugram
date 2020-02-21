@@ -64,7 +64,7 @@ export default class APIManager {
 		return [res.data];
 	}
 
-	static async updatePost(id: Number, param: publicationType) {
+	static async updatePost(id: string, param: publicationType) {
 		const res = await API.patch(`/post/${id}`, param);
 		return res.data;
 	}
@@ -81,7 +81,7 @@ export default class APIManager {
 		return res.data;
 	}
 
-	static async deletePost(id: Number) {
+	static async deletePost(id: string) {
 		const res = await API.delete(`/post/${id}`);
 		return res.data;
 	}

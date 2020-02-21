@@ -25,8 +25,9 @@ export interface updateProfileParam {
 }
 
 export interface publicationType {
-  url: string;
+  imageUrl: string;
   description: string;
-  hashtag: string[];
-  users: string[],
+  hashtags: string[];
+  mentions: string[],
+  id?: string;
 }

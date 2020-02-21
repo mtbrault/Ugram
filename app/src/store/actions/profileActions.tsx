@@ -23,12 +23,12 @@ export const uploadPost = createActionThunk(UPLOAD_POST, async (param: publicati
 	return res;
 });
 
-export const updatePost = createActionThunk(UPDATE_POST, async (id: Number, param: publicationType) => {
+export const updatePost = createActionThunk(UPDATE_POST, async (id: string = '', param: publicationType) => {
 	const res = await APIManager.updatePost(id, param);
 	return res;
 });
 
-export const deletePost = createActionThunk(DELETE_POST, async (id: Number) => {
+export const deletePost = createActionThunk(DELETE_POST, async (id: string = '') => {
 	const res = await APIManager.deletePost(id);
 	return res;
 })
