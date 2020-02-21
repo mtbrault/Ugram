@@ -43,6 +43,10 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
     setUpload(!upload);
   }
 
+  const togglePreview = () => {
+    setPreviewVisible(!previewVisible);
+  }
+
   const formatDate = (createdAtDate: string): string => {
     const newDate = new Date(createdAtDate);
     return `${(newDate.getDay()).toString()}/${(newDate.getMonth()).toString()}/${(newDate.getFullYear()).toString()}`;
@@ -121,7 +125,7 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
               renderItem={(item) => (
                 <List.Item>
                   <Card className="card-pubs" onClick={() => openPreview(item)}>
-                    <img src={item.url} alt="" />
+                    <img src={item.imageUrl} alt="" />
                   </Card>
                 </List.Item>
               )}
@@ -131,6 +135,7 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
                 <PreviewPubs
                   previewPubs={previewPubs}
                   previewVisible={previewVisible}
+                  toggle={togglePreview}
                   onCancel={() => setPreviewVisible(false)}
                   isMe={isMe}
                 />

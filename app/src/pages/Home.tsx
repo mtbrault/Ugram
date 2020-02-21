@@ -4,8 +4,8 @@ import { History } from 'history';
 import {
   List, Avatar, Button, Tag,
 } from 'antd/es';
-import { getAllUsers } from '../store/actions';
-import { storeTypes, profileType, initialProfile } from '../types';
+import { getAllUsers, getAllPost } from '../store/actions';
+import { storeTypes, profileType, initialProfile, postList } from '../types';
 
 interface HomeProps {
   history: History;
@@ -15,10 +15,15 @@ const Home: React.FC<HomeProps> = ({ history }) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const data = useSelector<storeTypes, initialProfile>((store) => store.profileReducers);
+  const postsList = useSelector<storeTypes, postList>((store) => store.postReducers);
 
   useEffect(() => {
     if (!data.users[0] && data.next) dispatch(getAllUsers(data.next));
   }, [dispatch, data]);
+
+  useEffect(() => {
+    dispatch(getAllPost());
+  }, [dispatch]);
 
   const onLoadMore = () => {
     if (!data.next) return;

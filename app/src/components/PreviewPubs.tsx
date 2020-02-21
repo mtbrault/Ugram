@@ -8,11 +8,12 @@ import { deletePost, getMyProfile, updatePost } from '../store/actions';
 interface PreviewPubs {
   previewPubs: publicationType;
   previewVisible: boolean;
+  toggle(): void;
   onCancel(): void;
   isMe: boolean;
 }
 
-const PreviewPubs: React.FC<PreviewPubs> = ({ previewPubs, previewVisible, onCancel, isMe }) => {
+const PreviewPubs: React.FC<PreviewPubs> = ({ previewPubs, toggle, previewVisible, onCancel, isMe }) => {
 
   const [description, setDescription] = useState(previewPubs.description);
   const [hashtag, setHashtag] = useState(previewPubs.hashtags.join(' '));
@@ -25,6 +26,7 @@ const PreviewPubs: React.FC<PreviewPubs> = ({ previewPubs, previewVisible, onCan
         () => {
           message.success("Picture well deleted", 5);
           dispatch(getMyProfile());
+          toggle();
         },
         (err) => {
           message.error(err.response.data.message, 5);
@@ -36,6 +38,12 @@ const PreviewPubs: React.FC<PreviewPubs> = ({ previewPubs, previewVisible, onCan
     const mentions = users.split(' ');
     const data = { imageUrl: previewPubs.imageUrl, description, hashtags, mentions };
 
+    for (const hash in hashtags) {
+      if (hashtags[hash].substring(0, 1) !== "#") {
+        message.error("Hashtag must start with #", 5);
+        return;
+      }
+    }
     dispatch(updatePost(previewPubs.id, data))
       .then(() => {
         message.success("Picture well updated", 5);
@@ -47,7 +55,7 @@ const PreviewPubs: React.FC<PreviewPubs> = ({ previewPubs, previewVisible, onCan
   }
 
   return (
-    <Modal visible={previewVisible} footer={isMe ? <FooterPreviewPubs /> : null} onCancel={onCancel}>
+    <Modal visible={previewVisible} footer={isMe ? <FooterPreviewPubs update={updateThis} deletePic={deleteThis} /> : null} onCancel={onCancel}>
       <Row type="flex" align="middle">
         <Col span={12}>
           <img src={previewPubs.imageUrl || ''} alt="" />

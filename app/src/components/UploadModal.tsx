@@ -17,10 +17,16 @@ const UploadModal: React.FC<uploadProps> = ({ visible, toggleModal }) => {
 	const dispatch = useDispatch();
 
 	const uploadPicture = () => {
-		const hashtags = hashtag.split(' ');
-		const mentions = user.split(' ');
-		const data = { imageUrl, description, hashtags, mentions };
+		const hashtags = (hashtag !== '') ? hashtag.split(' ') : [];
+		const mentions = (user !== '') ? user.split(' ') : [];
+		const data = { imageUrl: 'https://avatars2.githubusercontent.com/u/29895484?s=460&v=4', description, hashtags, mentions };
 
+		for (const hash in hashtags) {
+			if (hashtags[hash].substring(0, 1) !== "#") {
+				message.error("Hashtag must start with #", 5);
+				return;
+			}
+		}
 		dispatch(uploadPost(data))
 			.then(() => {
 				message.success("Picture well uploaded", 5);
