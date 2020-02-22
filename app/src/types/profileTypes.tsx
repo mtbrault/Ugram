@@ -24,10 +24,15 @@ export interface updateProfileParam {
   profilePicture: string;
 }
 
+interface mention {
+  id: string;
+  username: string;
+}
+
 export interface publicationType {
   imageUrl: string;
   description: string;
   hashtags: string[];
-  mentions: string[],
+  mentions: mention[],
   id?: string;
 }
