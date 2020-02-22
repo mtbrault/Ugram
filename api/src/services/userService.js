@@ -85,6 +85,8 @@ const getAll = async (skip, limit, id = false) => {
 	};
 };
 
+// TODO: maybe change username in all posts mentions (really heavy, maybe not the best thing)
+// or prevent username modification in update.
 const update = async (user, {
 	username, password, firstname, lastname,
 	email, profilePic, phoneNumber

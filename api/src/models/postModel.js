@@ -1,6 +1,20 @@
 const mongoose = require('mongoose');
 const votingPlugin = require('./plugins/votingPlugin');
 
+const MentionSchema = mongoose.Schema({
+	id: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "User",
+		required: true
+	},
+	username: {
+		type: String,
+		required: true,
+		lowercase: true,
+		trim: true
+	}
+}, {_id: false});
+
 const PostSchema = mongoose.Schema({
 	author: {
 		type: mongoose.Schema.Types.ObjectId,
@@ -22,7 +36,7 @@ const PostSchema = mongoose.Schema({
 		required: false
 	},
 	mentions: {
-		type: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}],
+		type: [MentionSchema],
 		required: false
 	}
 }, { timestamps: true });
