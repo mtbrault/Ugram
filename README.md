@@ -1,43 +1,23 @@
 # ugram-h2020-team-08
 
-**Abstract**\
-This project is split between two main targets, the Ract Frontend and the Backend API
+# Run the app
 
-# Frontend directory
-`cd app`
+`docker-compose build && docker-compose up`
 
-# Backend directory
-`cd api`
+# API Documentation
+
+You can see the API documentation (here)[https://github.com/GLO3112-classrooms/ugram-h2020-team-08/wiki/API-Documentation]
 
 ## Project setup
 There are two ways to run this project:
 - With Docker: you need Docker and Docker-compose installed.
 - With NodeJS: you need NodeJS, Npm and MongoDB installed.
 
-## Run Project
-- ### The docker-compose way :
-__WARNING : if you run the project with docker-compose, you might not be able to run it the NodeJS way with the same Database because the owner of some DB files can change.__\
-If you have docker and docker-compose installed, and have a running docker-daemon, you can run the project the easy way by opening a terminal at the root of the project and running :
-```bash
-docker-compose up --build
-```
+# Features list
 
-- ### The standard way :
-Open a terminal at the root of the project, install all the dependencies:
-```
-cd ./api && npm install && cd ../ app && npm install && cd ..
-```
-Then, open a terminal in /app , one in /api and one where you want your database to be.\
-In this last one run the mongo daemon pointing it to the project's database :
-```bash
-mongod --dbpath ./data
-```
-In the the api terminal, run the the following commands :
-```bash
-export DB_HOST=127.0.0.1
-npm run start
-```
-And in the app terminal, start the app :
-```bash
-npm run start
-```
+* First, you need to register an account to access the app. Or login yourself if you already have an account.
+* In the Home page, you can see the list of users (disabled if there is no other users than you). When you click on a user, you can see his profil.
+* In the Home page, you can see the list of publications, ordered by time.
+* Click "Profil" button to access to your profil and see your publications.
+* Click on a publications to see its details (description, hashtags, etc...)
+* To mention a user, the username must be registered to the app
