@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { History } from 'history';
 import {
-  List, Avatar, Button, Tag, Card, Col, Row,
+  Avatar, Button, Card, Col, List, Row, Tag,
 } from 'antd/es';
-import { getAllUsers, getAllPost } from '../store/actions';
+import { getAllPost, getAllUsers } from '../store/actions';
 import {
-  storeTypes, profileType, initialProfile, postList, publicationType,
+  initialProfile, postList, profileType, publicationType, storeTypes,
 } from '../types';
 import PreviewPubs from '../components/PreviewPubs';
 
@@ -45,6 +45,13 @@ const Home: React.FC<HomeProps> = ({ history }) => {
     }, 3000);
   };
 
+  const getUserByPubs = (post: publicationType, username?: boolean): profileType|string => {
+    const user = data.users.filter((author) => author.id === post.author)[0];
+    if (username)
+      return user.username;
+    return user;
+  };
+
   const loadMore = (
     <div className="text-center load-more">
       <Button onClick={onLoadMore} icon={loading ? 'loading' : 'plus'}>Loading more</Button>
@@ -67,12 +74,11 @@ const Home: React.FC<HomeProps> = ({ history }) => {
             <List.Item>
               <Card
                 title={
-                  <Button type="link" icon="user" onClick={() => console.log('username')/* history.push('/profile', ) */}>Username</Button>
+                  <Button type="link" icon="user" onClick={() => history.push('/profile', getUserByPubs(post))}>{getUserByPubs(post, true)}</Button>
                 }
                 className="card-pubs"
-                onClick={() => openPreview(post)}
               >
-                <img src={post.imageUrl} alt="" />
+                <img onClick={() => openPreview(post)} src={post.imageUrl} width={200} height={200} alt="" />
               </Card>
             </List.Item>
           )}
