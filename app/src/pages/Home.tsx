@@ -53,7 +53,7 @@ const Home: React.FC<HomeProps> = ({ history }) => {
 
   return (
     <Row type="flex" align="middle" justify="center">
-      <Col span={16}>
+      <Col md={16} xs={24}>
         <List
           header={(
             <h3 className="title-h1">
@@ -95,7 +95,7 @@ const Home: React.FC<HomeProps> = ({ history }) => {
               header={(
                 <h3 className="title-h1">
                   List of users&nbsp;
-              <Tag>{data.users.length}</Tag>
+                  <Tag>{data.users.length}</Tag>
                 </h3>
               )}
               itemLayout="horizontal"
@@ -104,7 +104,7 @@ const Home: React.FC<HomeProps> = ({ history }) => {
               renderItem={(user: profileType) => (
                 <List.Item onClick={() => history.push('/profile', user)} className="list-item">
                   <List.Item.Meta
-                    avatar={<Avatar className="user-avatar-list" src={user.profilePic || undefined} />}
+                    avatar={<Avatar className="user-avatar-list" src={user.profilePic || undefined} icon="avatar" />}
                     title={(<b>{`${user.firstname} ${user.lastname}`}</b>)}
                     description={user.username}
                   />

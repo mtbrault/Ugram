@@ -43,7 +43,7 @@ const Login: React.FC<LoginProps> = ({ history }) => {
       .catch((err) => {
         message.error(err.response.data.message, 5);
       });
-  }
+  };
 
   return (
     <>

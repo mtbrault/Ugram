@@ -9,7 +9,7 @@ import { updateProfile } from '../store/actions';
 import { profileType } from '../types/profileTypes';
 
 
-/*const S3 = require('react-aws-s3');
+/* const S3 = require('react-aws-s3');
 
 export const AWS_PUBLIC_KEY = 'AKIAJQA27VI6RCZTG2NQ';
 export const AWS_SECRET_KEY = '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';
@@ -23,7 +23,7 @@ export const configS3 = () => ({
   accessKeyId: AWS_PUBLIC_KEY,
   secretAccessKey: AWS_SECRET_KEY,
   s3Url: S3_BUCKET_URL,
-});*/
+}); */
 
 interface ModalProps {
   toggleModal(): void;
@@ -54,22 +54,19 @@ const ProfilModal: React.FC<ModalProps> = ({
     return isJpgOrPng && isLt2M;
   };
 
-  const getBase64 = (file: Blob) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = error => reject(error);
-    });
-  }
+  const getBase64 = (file: Blob) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 
   const handleChange = async (info: any) => {
-    if (!beforeUpload(info.file))
-      return;
+    if (!beforeUpload(info.file)) return;
     const b64 = await getBase64(info.file.originFileObj);
 
     if (!b64) {
-      message.error("Problem while uploading image", 5)
+      message.error('Problem while uploading image', 5);
       return;
     }
     info.file.preview = b64;
@@ -110,7 +107,7 @@ const ProfilModal: React.FC<ModalProps> = ({
             onChange={handleChange}
             style={{ width: 0 }}
           >
-            {image ? <Avatar src={image} size={100} /> : <Avatar size={100} icon={'user'} />}
+            {image ? <Avatar src={image} size={100} /> : <Avatar size={100} icon="user" />}
           </Upload>
         </Col>
       </Row>

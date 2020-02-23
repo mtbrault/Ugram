@@ -66,10 +66,10 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
       {(previewPubs && edit) ? <EditPublicationModal pubs={previewPubs} toggleModal={() => setEdit(!edit)} visible={edit} /> : null}
       {upload && <UploadModal toggleModal={() => setUpload(!upload)} visible={upload} />}
       <Row type="flex" align="middle" justify="center">
-        <Col span={16}>
+        <Col md={13} sm={16} xs={24}>
           <Card bordered>
             <Row type="flex" align="middle" justify="center">
-              <Col span={13}>
+              <Col md={13} sm={16} xs={24}>
                 <Row type="flex" justify="space-between">
                   <Col span={10} className="text-center">
                     <Avatar size={100} icon="user" className="profil-pic" src={data.profilePic} />
@@ -96,7 +96,7 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
                 </Row>
               </Col>
               {isMe && (
-                <Col span={11} className="text-center">
+                <Col md={11} sm={16} xs={24} className="text-center">
                   <Button type="ghost" icon="setting" onClick={() => setVisible(true)}>Edit account</Button>
                   <br />
                   <br />
@@ -120,7 +120,7 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
               renderItem={(item) => (
                 <List.Item>
                   <Card className="card-pubs" onClick={() => openPreview(item)}>
-                    <img src={item.imageUrl} alt="" />
+                    <img src={item.imageUrl} width={200} height={200} alt="" />
                   </Card>
                 </List.Item>
               )}
