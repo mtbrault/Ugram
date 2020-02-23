@@ -21,7 +21,7 @@ export interface updateProfileParam {
   lastname: string;
   email: string;
   phoneNumber: string;
-  profilePicture: string;
+  profilePic: string;
 }
 
 export interface mentionType {

@@ -23,8 +23,8 @@ const Home: React.FC<HomeProps> = ({ history }) => {
   const postsList = useSelector<storeTypes, postList>((store) => store.postReducers);
 
   useEffect(() => {
-    if (!data.users[0] && data.next) dispatch(getAllUsers(data.next));
-  }, [dispatch, data]);
+    dispatch(getAllUsers());
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(getAllPost());
@@ -39,7 +39,7 @@ const Home: React.FC<HomeProps> = ({ history }) => {
     if (!data.next) return;
     setLoading(true);
     setTimeout(() => {
-      dispatch(getAllUsers(data.next));
+      dispatch(getAllUsers());
       setLoading(false);
       window.dispatchEvent(new Event('resize'));
     }, 3000);
@@ -78,40 +78,40 @@ const Home: React.FC<HomeProps> = ({ history }) => {
           )}
         />
         {previewPubs && previewVisible
-        && (
-          <PreviewPubs
-            previewPubs={previewPubs}
-            previewVisible={previewVisible}
-            toggle={() => setPreviewVisible(!previewVisible)}
-            isMe={false}
-          />
-        )}
+          && (
+            <PreviewPubs
+              previewPubs={previewPubs}
+              previewVisible={previewVisible}
+              toggle={() => setPreviewVisible(!previewVisible)}
+              isMe={false}
+            />
+          )}
         {data.users.length !== 0
-        && (
-        <List
-          bordered
-          size="small"
-          className="users-list"
-          header={(
-            <h3 className="title-h1">
-              List of users&nbsp;
+          && (
+            <List
+              bordered
+              size="small"
+              className="users-list"
+              header={(
+                <h3 className="title-h1">
+                  List of users&nbsp;
               <Tag>{data.users.length}</Tag>
-            </h3>
+                </h3>
+              )}
+              itemLayout="horizontal"
+              dataSource={data.users}
+              loadMore={(data.next) ? loadMore : ''}
+              renderItem={(user: profileType) => (
+                <List.Item onClick={() => history.push('/profile', user)} className="list-item">
+                  <List.Item.Meta
+                    avatar={<Avatar className="user-avatar-list" src={user.profilePic || undefined} />}
+                    title={(<b>{`${user.firstname} ${user.lastname}`}</b>)}
+                    description={user.username}
+                  />
+                </List.Item>
+              )}
+            />
           )}
-          itemLayout="horizontal"
-          dataSource={data.users}
-          loadMore={(data.next) ? loadMore : ''}
-          renderItem={(user: profileType) => (
-            <List.Item onClick={() => history.push('/profile', user)} className="list-item">
-              <List.Item.Meta
-                avatar={<Avatar className="user-avatar-list" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
-                title={(<b>{`${user.firstname} ${user.lastname}`}</b>)}
-                description={user.username}
-              />
-            </List.Item>
-          )}
-        />
-        )}
       </Col>
     </Row>
   );

@@ -35,8 +35,9 @@ export default class APIManager {
 		return API.get('/auth/tokeninfo');
 	}
 
-	static async getListUsers(next: string) {
-		const res = await API.get(next);
+	static async getListUsers() {
+		const res = await API.get('/user?page=0&limit=100&noself=1');
+		console.log(res.data);
 		res.data.users.map(async (user: profileType) => {
 			const publication = await API.get(`/user/${user.id}/post?limit=0`);
 			user.publications = publication.data.posts;
@@ -60,7 +61,10 @@ export default class APIManager {
 		const res = await API.patch('/self', param);
 		if (!res.data)
 			return res;
-		return [res.data];
+		return {
+			users: [res.data]
+		}
+			;
 	}
 
 	static async updatePost(id: string, param: uploadType) {

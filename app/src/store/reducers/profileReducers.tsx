@@ -14,7 +14,7 @@ const initialState: initialProfile = {
 		publications: [],
 	},
 	users: [],
-	next: '/user?page=0&limit=5&noself=1',
+	next: '/user?page=0&limit=100&noself=1',
 }
 
 export const GET_MY_PROFILE = 'GET_MY_PROFILE';
@@ -30,7 +30,7 @@ export default handleActions<initialProfile>(
 	{
 		[`${GET_MY_PROFILE}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, myProfile: payload.users[0] }),
 		[`${UPDATE_PROFILE}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, myProfile: payload.users[0] }),
-		[`${GET_USER_LIST}_${SUCCEEDED}`]: ({ users, ...state }, { payload }) => ({ ...state, users: [...users, ...payload.users], next: payload.next }),
+		[`${GET_USER_LIST}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, users: payload.users, next: payload.next }),
 		[`${UPLOAD_POST}_${SUCCEEDED}`]: (state) => ({ ...state }),
 		[`${UPDATE_POST}_${SUCCEEDED}`]: (state) => ({ ...state }),
 		[`${DELETE_POST}_${SUCCEEDED}`]: (state) => ({ ...state }),

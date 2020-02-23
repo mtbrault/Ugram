@@ -72,7 +72,7 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
               <Col span={13}>
                 <Row type="flex" justify="space-between">
                   <Col span={10} className="text-center">
-                    <Avatar size={100} icon="user" className="profil-pic" />
+                    <Avatar size={100} icon="user" className="profil-pic" src={data.profilePic} />
                     <h3>{`${data.firstname} ${data.lastname}`}</h3>
                   </Col>
                   <Col span={10}>
@@ -126,15 +126,15 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
               )}
             />
             {previewPubs && previewVisible
-            && (
-              <PreviewPubs
-                previewPubs={previewPubs}
-                previewVisible={previewVisible}
-                toggle={() => setPreviewVisible(!previewVisible)}
-                editPubs={() => editPubs()}
-                isMe={isMe}
-              />
-            )}
+              && (
+                <PreviewPubs
+                  previewPubs={previewPubs}
+                  previewVisible={previewVisible}
+                  toggle={() => setPreviewVisible(!previewVisible)}
+                  editPubs={() => editPubs()}
+                  isMe={isMe}
+                />
+              )}
           </Col>
         </Col>
       </Row>

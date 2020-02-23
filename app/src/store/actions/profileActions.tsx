@@ -8,13 +8,12 @@ export const getMyProfile = createActionThunk(GET_MY_PROFILE, async () => {
 	return res;
 });
 
-export const getAllUsers = createActionThunk(GET_USER_LIST, async (next: string) => {
-	const res = await APIManager.getListUsers(next);
+export const getAllUsers = createActionThunk(GET_USER_LIST, async () => {
+	const res = await APIManager.getListUsers();
 	return res;
 });
 
 export const updateProfile = createActionThunk(UPDATE_PROFILE, async (param: updateProfileParam) => {
-	console.log(param);
 	const res = await APIManager.updateProfile(param);
 	return res;
 });
