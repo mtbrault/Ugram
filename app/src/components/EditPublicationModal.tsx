@@ -38,16 +38,11 @@ const EditPublicationModal: React.FC<EditPublicationModal> = ({ visible, toggleM
         return;
       }
     }
-    for (const mention in updatedMentions) {
-      if (updatedMentions[mention].substring(0, 1) !== '@') {
-        message.error('Mention must start with @', 5);
-        return;
-      }
-    }
     dispatch(updatePost(pubs.id, data))
       .then(() => {
         message.success('Picture well updated', 5);
         dispatch(getMyProfile());
+        toggleModal();
       },
       (err) => {
         message.error(err.response.data.message, 5);
@@ -56,8 +51,8 @@ const EditPublicationModal: React.FC<EditPublicationModal> = ({ visible, toggleM
 
   return (
     <Modal
-      title={'Edit picture'}
-      okText={'Edit'}
+      title="Edit picture"
+      okText="Edit"
       visible={visible}
       onOk={updateThis}
       onCancel={() => toggleModal()}

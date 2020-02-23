@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Col, List, Modal, Row, Tag, message,
 } from 'antd/es';
 import { useDispatch } from 'react-redux';
-import { publicationType, mentionType } from '../types';
+import { publicationType } from '../types';
 import FooterPreviewPubs from './FooterPreviewPubs';
-import { deletePost, getMyProfile, updatePost } from '../store/actions';
+import { deletePost, getMyProfile } from '../store/actions';
 
 interface PreviewPubs {
   previewPubs: publicationType;
@@ -36,11 +36,11 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
 
   const convertMentions = (): string[] => {
     const mentionArray: string[] = [];
-    previewPubs.mentions.forEach(element => {
+    previewPubs.mentions.forEach((element) => {
       mentionArray.push(element.username);
     });
     return mentionArray;
-  }
+  };
 
   return (
     <Modal
