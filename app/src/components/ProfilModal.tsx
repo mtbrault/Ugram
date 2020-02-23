@@ -5,7 +5,7 @@ import {
 } from 'antd/es';
 import { UploadFile } from 'antd/es/upload/interface';
 import InputComponent from './InputComponent';
-import { updateProfile } from '../store/actions';
+import { updateProfile, getMyProfile } from '../store/actions';
 import { profileType } from '../types/profileTypes';
 
 
@@ -81,6 +81,7 @@ const ProfilModal: React.FC<ModalProps> = ({
       }))
         .then(() => {
           message.success('Profile well updated', 5);
+          dispatch(getMyProfile());
           toggleModal();
         })
         .catch((err) => message.error(err.message, 5));
