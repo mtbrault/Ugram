@@ -3,6 +3,7 @@
 # Run the app
 
 Before running the app, make sure that you're docker container are down : `docker-compose down`.
+You should have an issue `Error: Cannot find module './DirectoryWatcher'`, in this case, shut down docker and restart it, it should fix it.
 `docker-compose build && docker-compose up`
 
 # API Documentation
