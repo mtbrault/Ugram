@@ -42,9 +42,13 @@ code {
     right: 0;
 }
 
+.ant-mentions > textarea {
+    background-color: ghostwhite;
+}
+
 .header-container {
     background: white;
-    border: 1px solid #000000;
+    border: 1px solid #e8e8e8;
     text-align: center;
     padding: 10px;
 }
@@ -92,7 +96,27 @@ code {
     padding: 10px;
 }
 
+.card-pubs {
+    width: fit-content;
+}
+
+.card-pubs .ant-card-head-title {
+    padding: 3px 0;
+}
+
+.card-pubs > .ant-card-head {
+    min-height: auto;
+}
+
 .card-pubs > .ant-card-body {
     padding: 0;
     cursor: pointer;
+}
+
+.modal-pubs .ant-modal {
+    width: fit-content;
+}
+
+.ant-list-split .ant-list-header {
+    border-bottom: 0;
 }

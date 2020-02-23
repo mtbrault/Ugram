@@ -33,6 +33,6 @@ export interface publicationType {
   imageUrl: string;
   description: string;
   hashtags: string[];
-  mentions: mention[],
+  mentions: string[] | mention[],
   id?: string;
 }

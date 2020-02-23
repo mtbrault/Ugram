@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Avatar, Button, Card, Col, Icon, Row, Upload, Spin, List,
+  Avatar, Button, Card, Col, Icon, Row, List,
 } from 'antd/es';
 import { useDispatch, useSelector } from 'react-redux';
 import { History } from 'history';
 import { getMyProfile } from '../store/actions';
-import Loader from "../components/Loader";
+import Loader from '../components/Loader';
 
-import { storeTypes } from '../types/storeTypes';
-import { profileType, publicationType } from '../types/profileTypes';
+import { storeTypes, profileType, publicationType } from '../types';
+
 import ProfilModal from '../components/ProfilModal';
 import PreviewPubs from '../components/PreviewPubs';
 import UploadModal from '../components/UploadModal';
+import EditPublicationModal from "../components/EditPublicationModal";
 
 interface ProfileProps {
   history: History;
@@ -23,6 +24,7 @@ interface ProfileProps {
 const Profile: React.FC<ProfileProps> = ({ history, location }) => {
   const [modalVisible, setVisible] = useState(false);
   const [upload, setUpload] = useState(false);
+  const [edit, setEdit] = useState(false);
   const [isMe] = useState(!(location.state && location.state.username));
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewPubs, setPreviewPubs] = useState<publicationType>();
@@ -35,17 +37,6 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
 
   const me = useSelector<storeTypes, profileType>((store) => store.profileReducers.myProfile);
   const data = (location.state && location.state.username) ? location.state : me;
-  const toggleModal = () => {
-    setVisible(!modalVisible);
-  };
-
-  const toggleUpload = () => {
-    setUpload(!upload);
-  }
-
-  const togglePreview = () => {
-    setPreviewVisible(!previewVisible);
-  }
 
   const formatDate = (createdAtDate: string): string => {
     const newDate = new Date(createdAtDate);
@@ -57,12 +48,10 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
     setPreviewPubs(item);
   };
 
-  const uploadButton = (
-    <div>
-      <Icon type="plus" />
-      <div className="ant-upload-text">Upload</div>
-    </div>
-  );
+  const editPubs = () => {
+    setPreviewVisible(!previewVisible);
+    setEdit(!edit);
+  };
 
   if (!data.username) {
     return (
@@ -72,19 +61,20 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
 
   return (
     <>
-      {modalVisible && <ProfilModal toggleModal={toggleModal} visible={modalVisible} data={data} />}
-      {upload && <UploadModal toggleModal={toggleUpload} visible={upload} />}
+      {modalVisible && <ProfilModal toggleModal={() => setVisible(!modalVisible)} visible={modalVisible} data={data} />}
+      {edit && previewPubs && <EditPublicationModal pubs={previewPubs} toggleModal={() => setEdit(!edit)} visible={upload} />}
+      {upload && <UploadModal toggleModal={() => setUpload(!upload)} visible={upload} />}
       <Row type="flex" align="middle" justify="center">
         <Col span={16}>
           <Card bordered>
             <Row type="flex" align="middle" justify="center">
-              <Col span={14}>
+              <Col span={13}>
                 <Row type="flex" justify="space-between">
                   <Col span={10} className="text-center">
                     <Avatar size={100} icon="user" className="profil-pic" />
                     <h3>{`${data.firstname} ${data.lastname}`}</h3>
                   </Col>
-                  <Col span={13}>
+                  <Col span={10}>
                     <p>
                       <Icon type="user" className="p-icon" />
                       {data.username}
@@ -104,10 +94,14 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
                   </Col>
                 </Row>
               </Col>
-              <Col span={10} className="text-center">
-                {isMe && <Button type="ghost" icon="setting" onClick={() => setVisible(true)}>Edit account</Button>}
-                {isMe && <Button type="ghost" icon="setting" onClick={() => setUpload(true)}>Upload a picture</Button>}
-              </Col>
+              {isMe && (
+                <Col span={11} className="text-center">
+                  <Button type="ghost" icon="setting" onClick={() => setVisible(true)}>Edit account</Button>
+                  <br />
+                  <br />
+                  <Button type="ghost" icon="upload" onClick={() => setUpload(true)}>Upload a picture</Button>
+                </Col>
+              )}
             </Row>
           </Card>
         </Col>
@@ -120,7 +114,7 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
               <span className="span-icon">Publications</span>
             </h2>
             <List
-              grid={{ gutter: 16, column: 3 }}
+              grid={{ gutter: 16, column: 4 }}
               dataSource={data.publications}
               renderItem={(item) => (
                 <List.Item>
@@ -131,16 +125,15 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
               )}
             />
             {previewPubs && previewVisible
-              && (
-                <PreviewPubs
-                  previewPubs={previewPubs}
-                  previewVisible={previewVisible}
-                  toggle={togglePreview}
-                  onCancel={() => setPreviewVisible(false)}
-                  isMe={isMe}
-                />
-              )}
-            {/* {isMe && uploadButton} */}
+            && (
+              <PreviewPubs
+                previewPubs={previewPubs}
+                previewVisible={previewVisible}
+                toggle={() => setPreviewVisible(!previewVisible)}
+                editPubs={() => editPubs()}
+                isMe={isMe}
+              />
+            )}
           </Col>
         </Col>
       </Row>
