@@ -1,6 +1,6 @@
 # ugram-h2020-team-08
 
-# Run the app
+# Run the app
 
 `docker-compose build && docker-compose up`
 
