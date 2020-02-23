@@ -16,9 +16,9 @@ const MentionsTagsComponent: React.FC<MentionsTagsComponentProps> = ({
 }) => {
   const [mentioned, setMentioned] = useState(false);
 
-  const onSelect = (value: string) => {
+  const onSelect = (val: string) => {
     setMentioned(true);
-    setValue(value);
+    setValue(val);
   };
 
   return (
@@ -26,27 +26,28 @@ const MentionsTagsComponent: React.FC<MentionsTagsComponentProps> = ({
       <Col span={20}>
         <b>{title}</b>
         {type === 'mentions' && (
-        <Mentions
-          placeholder="input @ to mention people"
-          defaultValue={value || '@'}
-          onSelect={({ value }) => onSelect(value || '')}
-        >
-          {arrayUserName.map((username, key) => (
-            <Mentions.Option key={key} value={username}>{`@${username}`}</Mentions.Option>
-          ))}
-        </Mentions>
+          <Mentions
+            placeholder="Add space between users"
+            onSelect={({ value }) => onSelect(value || '')}
+            onChange={(value) => onSelect(value)}
+          >
+            {arrayUserName.map((username, key) => (
+              <Mentions.Option key={key} value={username}>{`@${username}`}</Mentions.Option>
+            ))}
+          </Mentions>
         )}
         {type === 'tags' && (
-        <Mentions
-          placeholder="input # to write hashtags"
-          prefix='#'
-          defaultValue={value || '#'}
-          onSelect={({ value }) => onSelect(value || '')}
-        >
-          {hashtagsExample.map((hashtag, key) => (
-            <Mentions.Option key={key} value={hashtag}>{`#${hashtag}`}</Mentions.Option>
-          ))}
-        </Mentions>
+          <Mentions
+            placeholder="input # to write hashtags"
+            prefix='#'
+            defaultValue={value || '#'}
+            onSelect={({ value }) => onSelect('#' + value || '')}
+            onChange={(value) => onSelect(value)}
+          >
+            {hashtagsExample.map((hashtag, key) => (
+              <Mentions.Option key={key} value={hashtag}>{`#${hashtag}`}</Mentions.Option>
+            ))}
+          </Mentions>
         )}
       </Col>
     </Row>

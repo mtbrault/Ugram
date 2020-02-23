@@ -24,7 +24,7 @@ export interface updateProfileParam {
   profilePicture: string;
 }
 
-interface mention {
+export interface mentionType {
   id: string;
   username: string;
 }
@@ -33,6 +33,6 @@ export interface publicationType {
   imageUrl: string;
   description: string;
   hashtags: string[];
-  mentions: string[] | mention[],
-  id?: string;
+  mentions: mentionType[];
+  id: string;
 }

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { loginParam, registerParam } from '../../types/authTypes';
-import { updateProfileParam, profileType, publicationType } from '../../types/profileTypes';
+import { loginParam, registerParam, updateProfileParam, profileType, publicationType, uploadType } from '../../types';
 
 const API = axios.create({
 	baseURL: 'http://localhost:8080',
@@ -64,12 +63,13 @@ export default class APIManager {
 		return [res.data];
 	}
 
-	static async updatePost(id: string, param: publicationType) {
+	static async updatePost(id: string, param: uploadType) {
 		const res = await API.patch(`/post/${id}`, param);
 		return res.data;
 	}
 
-	static async uploadPost(param: publicationType) {
+	static async uploadPost(param: uploadType) {
+		console.log(param);
 		const res = await API.post('/post', param);
 		if (!res.data)
 			return res;

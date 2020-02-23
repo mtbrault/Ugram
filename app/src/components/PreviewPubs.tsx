@@ -3,7 +3,7 @@ import {
   Col, List, Modal, Row, Tag, message,
 } from 'antd/es';
 import { useDispatch } from 'react-redux';
-import { publicationType } from '../types';
+import { publicationType, mentionType } from '../types';
 import FooterPreviewPubs from './FooterPreviewPubs';
 import { deletePost, getMyProfile, updatePost } from '../store/actions';
 
@@ -33,6 +33,15 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
         },
       );
   };
+  console.log(previewPubs.mentions);
+  const convertMentions = (): string[] => {
+    const mentionArray: string[] = [];
+    previewPubs.mentions.forEach(element => {
+      mentionArray.push(element.username);
+    });
+    console.log(mentionArray);
+    return mentionArray;
+  }
 
   return (
     <Modal
@@ -48,42 +57,42 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
           <img src={previewPubs.imageUrl || ''} alt="" />
         </Col>
         {(previewPubs?.description || previewPubs?.hashtags.length !== 0 || previewPubs?.mentions.length !== 0) && (
-        <Col span={12}>
-          {previewPubs?.description && (
-            <div>
-              <b>Description:</b>
-              <p>{previewPubs?.description}</p>
-            </div>
-          )}
-          {previewPubs?.hashtags.length !== 0 && (
-            <div>
-              <b>Hashtag:</b>
-              <List
-                grid={{ gutter: 16, column: 2 }}
-                dataSource={previewPubs?.hashtags}
-                renderItem={(tag) => (
-                  <List.Item>
-                    <Tag>{`${tag}`}</Tag>
-                  </List.Item>
-                )}
-              />
-            </div>
-          )}
-          {previewPubs?.mentions.length !== 0 && (
-            <div>
-              <b>Mention:</b>
-              <List
-                grid={{ gutter: 16, column: 2 }}
-                dataSource={previewPubs?.mentions}
-                renderItem={(user) => (
-                  <List.Item>
-                    <Tag>{`@${user}`}</Tag>
-                  </List.Item>
-                )}
-              />
-            </div>
-          )}
-        </Col>
+          <Col span={12}>
+            {previewPubs?.description && (
+              <div>
+                <b>Description:</b>
+                <p>{previewPubs?.description}</p>
+              </div>
+            )}
+            {previewPubs?.hashtags.length !== 0 && (
+              <div>
+                <b>Hashtag:</b>
+                <List
+                  grid={{ gutter: 16, column: 2 }}
+                  dataSource={previewPubs?.hashtags}
+                  renderItem={(tag) => (
+                    <List.Item>
+                      <Tag>{`${tag}`}</Tag>
+                    </List.Item>
+                  )}
+                />
+              </div>
+            )}
+            {previewPubs?.mentions.length !== 0 && (
+              <div>
+                <b>Mention:</b>
+                <List
+                  grid={{ gutter: 16, column: 2 }}
+                  dataSource={convertMentions()}
+                  renderItem={(user) => (
+                    <List.Item>
+                      <Tag>{`@${user}`}</Tag>
+                    </List.Item>
+                  )}
+                />
+              </div>
+            )}
+          </Col>
         )}
       </Row>
     </Modal>
