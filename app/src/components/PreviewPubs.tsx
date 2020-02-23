@@ -33,13 +33,12 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
         },
       );
   };
-  console.log(previewPubs.mentions);
+
   const convertMentions = (): string[] => {
     const mentionArray: string[] = [];
     previewPubs.mentions.forEach(element => {
       mentionArray.push(element.username);
     });
-    console.log(mentionArray);
     return mentionArray;
   }
 

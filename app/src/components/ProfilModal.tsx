@@ -9,7 +9,7 @@ import { updateProfile } from '../store/actions';
 import { profileType } from '../types/profileTypes';
 
 
-const S3 = require('react-aws-s3');
+/*const S3 = require('react-aws-s3');
 
 export const AWS_PUBLIC_KEY = 'AKIAJQA27VI6RCZTG2NQ';
 export const AWS_SECRET_KEY = '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';
@@ -23,7 +23,7 @@ export const configS3 = () => ({
   accessKeyId: AWS_PUBLIC_KEY,
   secretAccessKey: AWS_SECRET_KEY,
   s3Url: S3_BUCKET_URL,
-});
+});*/
 
 interface ModalProps {
   toggleModal(): void;
@@ -34,7 +34,6 @@ interface ModalProps {
 const ProfilModal: React.FC<ModalProps> = ({
   toggleModal, visible, data,
 }) => {
-  const [uploading, setUploading] = useState(false);
   const [image, setImage] = useState(data.profilePic);
   const [email, setEmail] = useState(data.email);
   const [firstname, setFirstname] = useState(data.firstname);
@@ -42,26 +41,7 @@ const ProfilModal: React.FC<ModalProps> = ({
   const [phoneNumber, setPhone] = useState(data.phoneNumber);
   const dispatch = useDispatch();
 
-  const syncProfilPic = (file: RcFile) => {
-    console.log('syncProfilPic', file);
-    const fileInput = document.getElementById('avatar') as HTMLInputElement;
-    console.log(fileInput);
-    const imagePath = fileInput.value;
-    const newFileName = file.name;
-    console.log(newFileName);
-    console.log('value', imagePath);
-    if (fileInput && imagePath) {
-      const ReactS3Client = new S3(configS3());
-      ReactS3Client
-        .uploadFile(imagePath, newFileName)
-        .then((then: any) => console.log(then))
-        .catch((error: any) => console.error(error));
-      setUploading(false);
-      setImage(newFileName);
-    }
-  };
-
-  const beforeUpload = (file: UploadFile) => {
+  const beforeUpload = (file: UploadFile): boolean => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
       message.error('You can only upload JPG/PNG file!', 5);
@@ -73,15 +53,26 @@ const ProfilModal: React.FC<ModalProps> = ({
     return isJpgOrPng && isLt2M;
   };
 
-  const handleChange = (info: any) => {
-    console.log('Handle change', info);
-    const test = document.getElementById('avatar') as HTMLInputElement;
-    console.log('value', test.value);
-    if (info.file.status === 'uploading') {
-      setUploading(true);
-    } else if (info.file.status === 'done') {
-      syncProfilPic(info.file);
+  const getBase64 = (file: Blob) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }
+
+  const handleChange = async (info: any) => {
+    if (!beforeUpload(info.file))
+      return;
+    const b64 = await getBase64(info.file.originFileObj);
+
+    if (!b64) {
+      message.error("Problem while uploading image", 5)
+      return;
     }
+    info.file.preview = b64;
+    setImage(info.file.preview);
   };
 
   const updateProfil = () => {
@@ -115,11 +106,10 @@ const ProfilModal: React.FC<ModalProps> = ({
             listType="picture-card"
             showUploadList={false}
             action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            beforeUpload={beforeUpload}
             onChange={handleChange}
             style={{ width: 0 }}
           >
-            {image ? <Avatar src={image} size={100} /> : <Avatar size={100} icon={uploading ? 'loading' : 'user'} />}
+            {image ? <Avatar src={image} size={100} /> : <Avatar size={100} icon={'user'} />}
           </Upload>
         </Col>
       </Row>

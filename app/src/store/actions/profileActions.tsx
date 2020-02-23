@@ -14,6 +14,7 @@ export const getAllUsers = createActionThunk(GET_USER_LIST, async (next: string)
 });
 
 export const updateProfile = createActionThunk(UPDATE_PROFILE, async (param: updateProfileParam) => {
+	console.log(param);
 	const res = await APIManager.updateProfile(param);
 	return res;
 });
