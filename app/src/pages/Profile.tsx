@@ -49,8 +49,9 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
   };
 
   const editPubs = () => {
+    console.log(previewPubs);
+    setEdit(true);
     setPreviewVisible(!previewVisible);
-    setEdit(!edit);
   };
 
   if (!data.username) {
@@ -62,7 +63,7 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
   return (
     <>
       {modalVisible && <ProfilModal toggleModal={() => setVisible(!modalVisible)} visible={modalVisible} data={data} />}
-      {edit && previewPubs && <EditPublicationModal pubs={previewPubs} toggleModal={() => setEdit(!edit)} visible={upload} />}
+      {(previewPubs && edit) ? <EditPublicationModal pubs={previewPubs} toggleModal={() => setEdit(!edit)} visible={edit} /> : null}
       {upload && <UploadModal toggleModal={() => setUpload(!upload)} visible={upload} />}
       <Row type="flex" align="middle" justify="center">
         <Col span={16}>
