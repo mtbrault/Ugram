@@ -21,3 +21,7 @@ There are two ways to run this project:
 * Click "Profil" button to access to your profil and see your publications.
 * Click on a publication to see its details (description, hashtags, etc...)
 * To mention a user, the username must be registered to the app
+
+#### ⚠️ DISCLAIMER
+
+We are having S3 issues during this delivery, so we are temporarily using b64 upload. So, the picture size must be < 50ko...
