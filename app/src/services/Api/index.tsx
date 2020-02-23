@@ -12,7 +12,7 @@ API.interceptors.request.use(({ headers, ...config }) => ({
 		...headers,
 		'Content-Type': 'application/json',
 		Authorization: `Bearer ${headers.Authorization || Cookies.get('token')}`,
-	}
+	},
 }));
 
 export default class APIManager {

@@ -47,7 +47,7 @@ const ProfilModal: React.FC<ModalProps> = ({
       message.error('You can only upload JPG/PNG file!', 5);
     }
     console.log(file.size);
-    const isLt2M = (file.size / 1024 / 1024) < 0.05;
+    const isLt2M = (file.size / 1024 / 1024) < 2;
     if (!isLt2M) {
       message.error('Image must smaller than 50KO!', 5);
     }

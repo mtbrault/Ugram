@@ -12,7 +12,7 @@ interface PreviewPubs {
   previewVisible: boolean;
   toggle(): void;
   editPubs?: () => void;
-  isMe: boolean;
+  isMe?: boolean;
 }
 
 const PreviewPubs: React.FC<PreviewPubs> = ({

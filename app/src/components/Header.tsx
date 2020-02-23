@@ -4,6 +4,7 @@ import { Col, Input, Row } from 'antd/es';
 import { Button } from 'antd';
 import Cookies from 'js-cookie';
 import { History } from 'history';
+import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { tokenInfo } from '../store/actions';
 
@@ -36,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
         />
       </Col>
       <Col xs={6} md={3}>
-        <Button type="ghost" icon="user" onClick={() => history.push('/profile')}>
+        <Button type="ghost" icon="user" onClick={() => history.push('/profile', { isMe: true })}>
           Profil
         </Button>
       </Col>

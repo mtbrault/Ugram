@@ -45,9 +45,9 @@ const Home: React.FC<HomeProps> = ({ history }) => {
     }, 3000);
   };
 
-  const getUserByPubs = (post: publicationType, username?: boolean): profileType|string => {
+  const getUserByPubs = (post: publicationType, username?: boolean): profileType | string => {
     const user = data.users.filter((author) => author.id === post.author)[0];
-    if (username)
+    if (user)
       return user.username;
     return user;
   };

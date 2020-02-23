@@ -13,6 +13,7 @@ export interface profileType {
   phoneNumber: string;
   createdAt: string;
   profilePic: string;
+  isMe?: boolean;
   publications: publicationType[];
 }
 

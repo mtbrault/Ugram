@@ -24,8 +24,8 @@ interface ProfileProps {
 const Profile: React.FC<ProfileProps> = ({ history, location }) => {
   const [modalVisible, setVisible] = useState(false);
   const [upload, setUpload] = useState(false);
-  const [edit, setEdit] = useState(false);
-  const [isMe] = useState(!(location.state && location.state.username));
+  const [edit, setEdit] = useState(false)
+  const [isMe, setIsMe] = useState((location.state && location.state.isMe) || !location.state);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewPubs, setPreviewPubs] = useState<publicationType>();
   const dispatch = useDispatch();
@@ -34,6 +34,10 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
     dispatch(getMyProfile())
       .catch(() => history.goBack());
   }, [dispatch, history]);
+
+  useEffect(() => {
+    setIsMe((location.state && location.state.isMe) || !location.state);
+  }, [location]);
 
   const me = useSelector<storeTypes, profileType>((store) => store.profileReducers.myProfile);
   const data = (location.state && location.state.username) ? location.state : me;
