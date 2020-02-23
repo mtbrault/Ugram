@@ -8,7 +8,7 @@ const app = express();
 const config = require("./config");
 
 app.use(logger("dev"));
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '10000mb', extended: true}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
