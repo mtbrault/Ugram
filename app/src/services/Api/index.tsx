@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { loginParam, registerParam, updateProfileParam, profileType, publicationType, uploadType } from '../../types';
+import { loginParam, registerParam, updateProfileParam, profileType, uploadType } from '../../types';
 
 const API = axios.create({
 	baseURL: 'http://localhost:8080',
@@ -18,7 +18,6 @@ API.interceptors.request.use(({ headers, ...config }) => ({
 export default class APIManager {
 	static async registerUser(param: registerParam) {
 		const res = await API.post('/auth/register', param);
-		console.log(res);
 		if (res.data)
 			return res.data;
 		return res;
@@ -37,7 +36,6 @@ export default class APIManager {
 
 	static async getListUsers() {
 		const res = await API.get('/user?page=0&limit=100&noself=1');
-		console.log(res.data);
 		res.data.users.map(async (user: profileType) => {
 			const publication = await API.get(`/user/${user.id}/post?limit=0`);
 			user.publications = publication.data.posts;
@@ -73,7 +71,6 @@ export default class APIManager {
 	}
 
 	static async uploadPost(param: uploadType) {
-		console.log(param);
 		const res = await API.post('/post', param);
 		if (!res.data)
 			return res;

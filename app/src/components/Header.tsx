@@ -4,7 +4,6 @@ import { Col, Input, Row } from 'antd/es';
 import { Button } from 'antd';
 import Cookies from 'js-cookie';
 import { History } from 'history';
-import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { tokenInfo } from '../store/actions';
 
@@ -22,8 +21,11 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
 
   useEffect(() => {
     dispatch(tokenInfo())
-      .catch(() => logout());
-  }, [dispatch, logout]);
+      .catch(() => {
+        Cookies.remove('token');
+        history.push('/login');
+      });
+  }, [dispatch, history]);
 
   return (
     <Row type="flex" align="middle" justify="center" className="header-container">

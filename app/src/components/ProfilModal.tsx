@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import {
   Avatar, Col, Row, Modal, message, Upload,
 } from 'antd/es';
-import { RcFile, UploadFile } from 'antd/es/upload/interface';
+import { UploadFile } from 'antd/es/upload/interface';
 import InputComponent from './InputComponent';
 import { updateProfile } from '../store/actions';
 import { profileType } from '../types/profileTypes';
@@ -46,7 +46,6 @@ const ProfilModal: React.FC<ModalProps> = ({
     if (!isJpgOrPng) {
       message.error('You can only upload JPG/PNG file!', 5);
     }
-    console.log(file.size);
     const isLt2M = (file.size / 1024 / 1024) < 2;
     if (!isLt2M) {
       message.error('Image must smaller than 50KO!', 5);

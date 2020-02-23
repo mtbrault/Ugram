@@ -25,7 +25,6 @@ const UploadModal: React.FC<uploadProps> = ({ visible, toggleModal }) => {
 		if (!isJpgOrPng) {
 			message.error('You can only upload JPG/PNG file!', 5);
 		}
-		console.log(file.size);
 		const isLt2M = (file.size / 1024 / 1024) < 2;
 		if (!isLt2M) {
 			message.error('Image must smaller than 50KO!', 5);

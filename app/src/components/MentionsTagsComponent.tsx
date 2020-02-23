@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Col, Mentions, Row } from 'antd/es';
 
 interface MentionsTagsComponentProps {
@@ -14,10 +14,7 @@ const hashtagsExample = ['Université Laval', 'ugram', '2020'];
 const MentionsTagsComponent: React.FC<MentionsTagsComponentProps> = ({
   title, type, value, setValue,
 }) => {
-  const [mentioned, setMentioned] = useState(false);
-
   const onSelect = (val: string) => {
-    setMentioned(true);
     setValue(val);
   };
 

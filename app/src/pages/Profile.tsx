@@ -53,7 +53,6 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
   };
 
   const editPubs = () => {
-    console.log(previewPubs);
     setEdit(true);
     setPreviewVisible(!previewVisible);
   };
