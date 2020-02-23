@@ -26,7 +26,7 @@ const EditPublicationModal: React.FC<EditPublicationModal> = ({ visible, toggleM
     const updatedMentions: Array<string> = (newMentions !== '') ? newMentions.split(' ') : [];
     const updatedHashtags: Array<string> = (newHashtags !== '') ? newHashtags.split(' ') : [];
     const data = {
-      imageUrl: pubs.imageUrl || 'https://avatars2.githubusercontent.com/u/29895484?s=460&v=4',
+      imageUrl: pubs.imageUrl,
       description,
       hashtags: updatedHashtags,
       mentions: updatedMentions,
@@ -44,9 +44,9 @@ const EditPublicationModal: React.FC<EditPublicationModal> = ({ visible, toggleM
         dispatch(getMyProfile());
         toggleModal();
       },
-      (err) => {
-        message.error(err.response.data.message, 5);
-      });
+        (err) => {
+          message.error(err.response.data.message, 5);
+        });
   };
 
   return (

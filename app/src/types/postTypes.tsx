@@ -5,7 +5,7 @@ export interface postList {
 }
 
 export interface uploadType {
-	imageUrl: string;
+	imageUrl: string | undefined;
 	description: string;
 	hashtags: string[];
 	mentions: string[];

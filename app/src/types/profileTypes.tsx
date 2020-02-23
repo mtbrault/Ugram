@@ -25,6 +25,12 @@ export interface updateProfileParam {
   profilePic: string;
 }
 
+export interface updatePostType {
+  description: string;
+  hashtags: string[];
+  mentions: string[];
+}
+
 export interface mentionType {
   id: string;
   username: string;
