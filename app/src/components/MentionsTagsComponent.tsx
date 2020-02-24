@@ -17,7 +17,6 @@ const MentionsTagsComponent: React.FC<MentionsTagsComponentProps> = ({
     setValue(res);
   };
 
-  const arrayUserName = ['mehdmhd', 'matthieu_bg'];
   const hashtagsExample = ['ULaval', 'ugram', '2020', 'winter'];
 
   return (
@@ -29,9 +28,6 @@ const MentionsTagsComponent: React.FC<MentionsTagsComponentProps> = ({
             placeholder="Add space between users"
             onChange={(value) => onSelect(value)}
           >
-            {arrayUserName.map((username, key) => (
-              <Mentions.Option key={key} value={username}>{`@${username}`}</Mentions.Option>
-            ))}
           </Mentions>
         )}
         {type === 'tags' && (

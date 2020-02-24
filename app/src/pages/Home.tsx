@@ -18,7 +18,6 @@ const Home: React.FC<HomeProps> = ({ history }) => {
   const [loading, setLoading] = useState(false);
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewPubs, setPreviewPubs] = useState<publicationType>();
-  const [usernameList, setUsernameList] = useState<Array<string>>([]);
   const dispatch = useDispatch();
   const data = useSelector<storeTypes, initialProfile>((store) => store.profileReducers);
   const postsList = useSelector<storeTypes, postList>((store) => store.postReducers);
