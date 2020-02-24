@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Modal, Row, Col, Upload, message,
-} from 'antd/es';
+import { Modal, message } from 'antd/es';
 import { useDispatch } from 'react-redux';
 import { getMyProfile, updatePost } from '../store/actions';
 import InputComponent from './InputComponent';
@@ -33,8 +31,9 @@ const EditPublicationModal: React.FC<EditPublicationModal> = ({ visible, toggleM
     };
 
     for (const hashtag in updatedHashtags) {
-      if (updatedHashtags[hashtag].substring(0, 1) !== '#') {
-        message.error('Hashtag must start with #', 5);
+      if (updatedHashtags[hashtag].substring(0, 1) !== '#'
+        && updatedHashtags[hashtag].length < 3) {
+        message.error(`Hashtag must start with # or longer than [${updatedHashtags[hashtag]}]`, 5);
         return;
       }
     }
@@ -44,9 +43,9 @@ const EditPublicationModal: React.FC<EditPublicationModal> = ({ visible, toggleM
         dispatch(getMyProfile());
         toggleModal();
       },
-        (err) => {
-          message.error(err.response.data.message, 5);
-        });
+      (err) => {
+        message.error(err.response.data.message, 5);
+      });
   };
 
   return (
@@ -57,11 +56,6 @@ const EditPublicationModal: React.FC<EditPublicationModal> = ({ visible, toggleM
       onOk={updateThis}
       onCancel={() => toggleModal()}
     >
-      <Row type="flex" align="middle" justify="center">
-        <Col span={24} className="text-center">
-          <Upload />
-        </Col>
-      </Row>
       <InputComponent id="description" title="Description" type="text" value={description} onChange={setDescription} />
       <MentionsTagsComponent type="mentions" title="Mention a user" value={mentions.join(' ')} setValue={setNewMentions} />
       <MentionsTagsComponent type="tags" title="Hashtags" value={hashtags.join(' ')} setValue={setNewHashtags} />

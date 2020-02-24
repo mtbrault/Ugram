@@ -4,19 +4,21 @@ import { Col, Mentions, Row } from 'antd/es';
 interface MentionsTagsComponentProps {
   title: string;
   type: string;
-  value?: string;
+  value: string;
+  usersList?: string;
   setValue(e: string): void;
 }
 
-const arrayUserName = ['mehdmhd', 'matthieu_bg'];
-const hashtagsExample = ['Université Laval', 'ugram', '2020'];
-
 const MentionsTagsComponent: React.FC<MentionsTagsComponentProps> = ({
-  title, type, value, setValue,
+  title, type, value, setValue, usersList
 }) => {
   const onSelect = (val: string) => {
-    setValue(val);
+    const res = val.substring(0, val.length - 1);
+    setValue(res);
   };
+
+  const arrayUserName = ['mehdmhd', 'matthieu_bg'];
+  const hashtagsExample = ['ULaval', 'ugram', '2020', 'winter'];
 
   return (
     <Row type="flex" justify="center" className="input-container">
@@ -25,7 +27,6 @@ const MentionsTagsComponent: React.FC<MentionsTagsComponentProps> = ({
         {type === 'mentions' && (
           <Mentions
             placeholder="Add space between users"
-            onSelect={({ value }) => onSelect(value || '')}
             onChange={(value) => onSelect(value)}
           >
             {arrayUserName.map((username, key) => (
@@ -36,9 +37,8 @@ const MentionsTagsComponent: React.FC<MentionsTagsComponentProps> = ({
         {type === 'tags' && (
           <Mentions
             placeholder="input # to write hashtags"
-            prefix='#'
+            prefix="#"
             defaultValue={value || '#'}
-            onSelect={({ value }) => onSelect('#' + value || '')}
             onChange={(value) => onSelect(value)}
           >
             {hashtagsExample.map((hashtag, key) => (

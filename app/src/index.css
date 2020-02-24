@@ -98,6 +98,7 @@ code {
 
 .card-pubs {
     width: fit-content;
+    margin: auto;
 }
 
 .card-pubs .ant-card-head-title {
