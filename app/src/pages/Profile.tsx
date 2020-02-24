@@ -44,7 +44,7 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
 
   const formatDate = (createdAtDate: string): string => {
     const newDate = new Date(createdAtDate);
-    return `${(newDate.getDay()).toString()}/${(newDate.getMonth()).toString()}/${(newDate.getFullYear()).toString()}`;
+    return `${newDate.getDate()}/${newDate.getMonth() + 1}/${newDate.getFullYear()}`;
   };
 
   const openPreview = (item: publicationType) => {
@@ -69,7 +69,7 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
       {(previewPubs && edit) ? <EditPublicationModal pubs={previewPubs} toggleModal={() => setEdit(!edit)} visible={edit} /> : null}
       {upload && <UploadModal toggleModal={() => setUpload(!upload)} visible={upload} />}
       <Row type="flex" align="middle" justify="center">
-        <Col md={13} sm={16} xs={24}>
+        <Col sm={16} xs={24}>
           <Card bordered>
             <Row type="flex" align="middle" justify="center">
               <Col md={13} sm={16} xs={24}>
@@ -118,7 +118,9 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
               <span className="span-icon">Publications</span>
             </h2>
             <List
-              grid={{ gutter: 16, column: 4 }}
+              grid={{
+                gutter: 16, column: 4, xs: 1, sm: 2, md: 2, lg: 3, xl: 4,
+              }}
               dataSource={data.publications}
               renderItem={(item) => (
                 <List.Item>
