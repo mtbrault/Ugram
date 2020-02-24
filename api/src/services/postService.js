@@ -29,7 +29,7 @@ const create = async (author, { imageUrl, description, hashtags, mentions }) => 
 
 	!!description || (description = "");
 
-	let post = new Post({ author: author._id, imageUrl, description, hashtags, mentions });
+	let post = new Post({ author: { id: author._id, username: author.username }, imageUrl, description, hashtags, mentions });
 	post = await post.save();
 	return post;
 };
@@ -48,7 +48,7 @@ const getAll = async (skip, limit, query = {}) => {
 };
 
 const getByUser = (user, skip, limit) => {
-	return getAll(skip, limit, { author: user._id || user });
+	return getAll(skip, limit, { "author.id": user._id || user });
 };
 
 const getById = async id => {
@@ -65,9 +65,8 @@ const update = async (post, { imageUrl, description, hashtags, mentions }, merge
 			const [err, users] = await to(User.find({ username: { $in: mentions } }).lean());
 			if (err || users.length !== mentions.length)
 				terr("Unknown Username in mentions", 400);
-			const author = post.author.toString();
 			mentions = users.map(x => {
-				if (post.author.equals(x._id))
+				if (post.author.id.equals(x._id))
 					terr("User cannot mention himself", 400);
 				return {
 					id: x._id,
