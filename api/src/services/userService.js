@@ -57,10 +57,12 @@ const getById = async id => {
 	return user;
 };
 
-const getAll = async (skip, limit, id=false) => {
+const getAll = async (skip, limit, id, userParam) => {
 	const query = {};
 	if(id)
 		query._id = { $ne: id };
+	if (userParam.length !== 0)
+		query.$or = userParam;
 	const users = await User.find(query).skip(skip).limit(limit + 1).lean();
 
 	const last = users.length != limit + 1;

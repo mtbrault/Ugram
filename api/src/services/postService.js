@@ -34,7 +34,17 @@ const create = async (author, { imageUrl, description, hashtags, mentions }) => 
 	return post;
 };
 
-const getAll = async (skip, limit, query = {}) => {
+const getAll = async (skip, limit, requestParam ) => {
+	const query = {};
+
+	requestParam.forEach(function (value, index) {
+		if (value["hashtags"] !== undefined)
+			requestParam[index].hashtags = {$all: requestParam[index].hashtags.split(".")};
+	});
+
+	if (requestParam.length !== 0)
+		query.$and = requestParam;
+
 	const posts = await Post.find(query).sort("-createdAt").skip(skip).limit(limit + 1); // TODO: make request lean with mongoose-lean-virtuals
 	const last = posts.length != limit + 1;
 	if(!last)

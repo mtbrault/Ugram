@@ -25,7 +25,7 @@ const get = async (req, res, next) => {
 
 const getAll = async (req, res, next) => {
 	const noself = parseInt(req.query.noself, 10) ? req.user._id : false;
-	const [err, ret] = await to(userService.getAll(req.skip, req.limit, noself));
+	const [err, ret] = await to(userService.getAll(req.skip, req.limit, noself, req.requestParam));
 	if(err)
 		return rerr(next, err);
 	const {last, users} = ret;
@@ -36,9 +36,9 @@ const getAll = async (req, res, next) => {
 		users
 	};
 	if(!last)
-		chunk.next = `/user?page=${req.page + 1}&limit=${req.limit}${req.query.noself ? "&noself=" + req.query.noself : ""}`;
+		chunk.next = `/user/search?page=${req.page + 1}&limit=${req.limit}${req.query.noself ? "&noself=" + req.query.noself : ""}`;
 	return res.status(200).json(chunk);
-}
+};
 
 const update = async (req, res, next) => {
 	const [err, user] = await to(userService.update(req.user, req.body));

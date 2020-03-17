@@ -22,7 +22,7 @@ const uploadForUser = async (req, res, next) => {
 
 // use only after extractParams
 const getAll = async (req, res, next) => {
-	const [err, ret] = await to(postService.getAll(req.skip, req.limit));
+	const [err, ret] = await to(postService.getAll(req.skip, req.limit, req.requestParam));
 	if(err)
 		return rerr(next, err);
 	const {last, posts} = ret;
