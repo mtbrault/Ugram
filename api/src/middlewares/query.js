@@ -11,7 +11,7 @@ function formatRegKeyValue (key, value, isWildcard) {
 	if (isWildcard)
 		obj[key] = new RegExp(`.*${value}.*`, "i");
 	else
-		obj[key] = value;
+		obj[key] = "#" + value;
 	return obj;
 }
 
