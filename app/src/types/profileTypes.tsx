@@ -4,6 +4,12 @@ export interface initialProfile {
   next: string;
 }
 
+export interface initialSearch {
+  users: profileType[];
+  posts_hashtag: publicationType[];
+  posts_desc: publicationType[];
+}
+
 export interface profileType {
   id: string;
   username: string;
