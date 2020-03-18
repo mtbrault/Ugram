@@ -1,4 +1,4 @@
-const { User } = require("../db");
+const { User, Post } = require("../db");
 const { terr } = require("../middlewares/utils");
 
 const authenticate = async ({ username, password }) => {
@@ -123,6 +123,7 @@ const update = async (user, {
 }
 
 const remove = async (user) => {
+	await Post.deleteMany({"author.id": user._id});
 	return User.findByIdAndDelete(user._id);
 };
 
