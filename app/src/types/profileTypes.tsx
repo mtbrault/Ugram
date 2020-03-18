@@ -5,9 +5,7 @@ export interface initialProfile {
 }
 
 export interface initialSearch {
-  users_list: {
-    users: profileType[];
-  };
+  users_list: profileType[];
   posts_hashtag: publicationType[];
   posts_desc: publicationType[];
 }
