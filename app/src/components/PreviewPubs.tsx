@@ -52,11 +52,11 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
       onCancel={toggle}
     >
       <Row type="flex" align="middle">
-        <Col span={12}>
+        <Col xs={24} md={12} className="text-center">
           <img src={previewPubs.imageUrl || ''} width={200} height={200} alt="" />
         </Col>
         {(previewPubs?.description || previewPubs?.hashtags.length !== 0 || previewPubs?.mentions.length !== 0) && (
-          <Col span={12}>
+          <Col xs={24} md={12}>
             {previewPubs?.description && (
               <div>
                 <b>Description:</b>

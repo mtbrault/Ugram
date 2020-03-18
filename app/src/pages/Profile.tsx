@@ -44,7 +44,7 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
 
   const formatDate = (createdAtDate: string): string => {
     const newDate = new Date(createdAtDate);
-    return `${(newDate.getDay()).toString()}/${(newDate.getMonth()).toString()}/${(newDate.getFullYear()).toString()}`;
+    return `${newDate.getDate()}/${newDate.getMonth() + 1}/${newDate.getFullYear()}`;
   };
 
   const openPreview = (item: publicationType) => {
@@ -69,10 +69,10 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
       {(previewPubs && edit) ? <EditPublicationModal pubs={previewPubs} toggleModal={() => setEdit(!edit)} visible={edit} /> : null}
       {upload && <UploadModal toggleModal={() => setUpload(!upload)} visible={upload} />}
       <Row type="flex" align="middle" justify="center">
-        <Col md={13} sm={16} xs={24}>
+        <Col sm={16} xs={24}>
           <Card bordered>
             <Row type="flex" align="middle" justify="center">
-              <Col md={13} sm={16} xs={24}>
+              <Col md={14} sm={16} xs={24}>
                 <Row type="flex" justify="space-between">
                   <Col span={10} className="text-center">
                     <Avatar size={100} icon="user" className="profil-pic" src={data.profilePic} />
@@ -99,7 +99,7 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
                 </Row>
               </Col>
               {isMe && (
-                <Col md={11} sm={16} xs={24} className="text-center">
+                <Col md={10} sm={16} xs={24} className="text-center">
                   <Button type="ghost" icon="setting" onClick={() => setVisible(true)}>Edit account</Button>
                   <br />
                   <br />
@@ -111,18 +111,20 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
         </Col>
       </Row>
       <Row type="flex" justify="center">
-        <Col span={16}>
+        <Col sm={18} xs={24}>
           <Col span={24} className="container text-center">
             <h2>
               <Icon type="save" />
               <span className="span-icon">Publications</span>
             </h2>
             <List
-              grid={{ gutter: 16, column: 4 }}
+              grid={{
+                gutter: 8, column: 4, xs: 1, sm: 2, md: 2, lg: 3, xl: 4,
+              }}
               dataSource={data.publications}
               renderItem={(item) => (
                 <List.Item>
-                  <Card className="card-pubs" onClick={() => openPreview(item)}>
+                  <Card bordered className="card-pubs" onClick={() => openPreview(item)}>
                     <img src={item.imageUrl} width={200} height={200} alt="" />
                   </Card>
                 </List.Item>

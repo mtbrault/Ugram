@@ -47,8 +47,8 @@ const Home: React.FC<HomeProps> = ({ history }) => {
 
   const getUserByPubs = (post: publicationType, username?: boolean): profileType | string => {
     const user = data.users.filter((author) => author.id === post.author)[0];
-    if (user)
-      return user.username;
+    if (user !== undefined) return user.username;
+    if (username) return data.myProfile.username;
     return user;
   };
 
@@ -60,7 +60,7 @@ const Home: React.FC<HomeProps> = ({ history }) => {
 
   return (
     <Row type="flex" align="middle" justify="center">
-      <Col md={16} xs={24}>
+      <Col sm={18} xs={24}>
         <List
           header={(
             <h3 className="title-h1">
@@ -68,11 +68,14 @@ const Home: React.FC<HomeProps> = ({ history }) => {
               <Tag>{postsList.posts.length}</Tag>
             </h3>
           )}
-          grid={{ gutter: 16, column: 4 }}
+          grid={{
+            gutter: 8, column: 4, xs: 1, sm: 2, md: 2, lg: 3, xl: 4,
+          }}
           dataSource={postsList.posts}
           renderItem={(post: publicationType) => (
             <List.Item>
               <Card
+                bordered
                 title={
                   <Button type="link" icon="user" onClick={() => history.push('/profile', getUserByPubs(post))}>{getUserByPubs(post, true)}</Button>
                 }
@@ -84,40 +87,45 @@ const Home: React.FC<HomeProps> = ({ history }) => {
           )}
         />
         {previewPubs && previewVisible
-          && (
-            <PreviewPubs
-              previewPubs={previewPubs}
-              previewVisible={previewVisible}
-              toggle={() => setPreviewVisible(!previewVisible)}
-              isMe={false}
-            />
-          )}
+        && (
+          <PreviewPubs
+            previewPubs={previewPubs}
+            previewVisible={previewVisible}
+            toggle={() => setPreviewVisible(!previewVisible)}
+            isMe={false}
+          />
+        )}
         {data.users.length !== 0
-          && (
-            <List
-              bordered
-              size="small"
-              className="users-list"
-              header={(
-                <h3 className="title-h1">
-                  List of users&nbsp;
-                  <Tag>{data.users.length}</Tag>
-                </h3>
-              )}
-              itemLayout="horizontal"
-              dataSource={data.users}
-              loadMore={(data.next) ? loadMore : ''}
-              renderItem={(user: profileType) => (
-                <List.Item onClick={() => history.push('/profile', user)} className="list-item">
+        && (
+          <List
+            grid={{
+              gutter: 8, column: 4, xs: 1, sm: 2, md: 2, lg: 3, xl: 4,
+            }}
+            header={(
+              <h3 className="title-h1">
+                List of users&nbsp;
+                <Tag>{data.users.length}</Tag>
+              </h3>
+            )}
+            itemLayout="horizontal"
+            dataSource={data.users}
+            loadMore={(data.next) ? loadMore : ''}
+            renderItem={(user: profileType) => (
+              <List.Item onClick={() => history.push('/profile', user)} className="list-item">
+                <Card
+                  bordered
+                  className="card-user"
+                >
                   <List.Item.Meta
-                    avatar={<Avatar className="user-avatar-list" src={user.profilePic || undefined} icon="avatar" />}
+                    avatar={<Avatar size={40} src={user.profilePic} icon="user" />}
                     title={(<b>{`${user.firstname} ${user.lastname}`}</b>)}
                     description={user.username}
                   />
-                </List.Item>
-              )}
-            />
-          )}
+                </Card>
+              </List.Item>
+            )}
+          />
+        )}
       </Col>
     </Row>
   );
