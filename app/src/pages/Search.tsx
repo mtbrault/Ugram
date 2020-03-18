@@ -16,6 +16,11 @@ interface SearchProps {
 const Search: React.FC<SearchProps> = ({ history }) => {
   const search = useSelector<storeTypes, initialSearch>((store) => store.searchReducers);
 
+  useEffect(() => {
+    if (!search.loading)
+      history.push('/');
+  }, [search])
+
   return (
     <Row type="flex" align="middle" justify="center">
       <Col span={24} className="text-center">

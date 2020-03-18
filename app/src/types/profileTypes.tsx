@@ -8,6 +8,7 @@ export interface initialSearch {
   users_list: profileType[];
   posts_hashtag: publicationType[];
   posts_desc: publicationType[];
+  loading: boolean;
 }
 
 export interface profileType {
