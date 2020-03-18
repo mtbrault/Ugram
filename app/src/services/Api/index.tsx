@@ -30,6 +30,11 @@ export default class APIManager {
 		return res;
 	}
 
+	static async deleteUser() {
+		const res = await API.delete('/self');
+		return res;
+	}
+
 	static tokenInfo() {
 		return API.get('/auth/tokeninfo');
 	}
@@ -84,6 +89,22 @@ export default class APIManager {
 
 	static async deletePost(id: string) {
 		const res = await API.delete(`/post/${id}`);
+		return res.data;
+	}
+
+	static async searchUser(search: string) {
+		const res = await API.get(`/user?username=${search}`);
+		console.log(res.data);
+		return res.data;
+	}
+
+	static async searchPostHashtag(search: string) {
+		const res = await API.get(`/post?hashtags=${search}`);
+		return res.data;
+	}
+
+	static async searchPostDesc(search: string) {
+		const res = await API.get(`/post?description=${search}`);
 		return res.data;
 	}
 }
