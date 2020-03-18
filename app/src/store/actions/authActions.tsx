@@ -4,7 +4,7 @@ import { REGISTER_USER, LOGIN_USER, TOKEN_INFO } from '../reducers/authReducers'
 import { loginParam, registerParam } from '../../types/authTypes';
 
 export const loginUser = createActionThunk(LOGIN_USER, async (param: loginParam) => {
-	const res = await APIManager.loginUser(param)
+	const res = await APIManager.loginUser(param);
 	return res;
 });
 

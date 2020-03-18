@@ -36,4 +36,4 @@ export default handleActions<initialProfile>(
 		[`${DELETE_POST}_${SUCCEEDED}`]: (state) => ({ ...state }),
 	},
 	initialState,
-)
+);
