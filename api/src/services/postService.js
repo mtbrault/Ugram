@@ -34,9 +34,7 @@ const create = async (author, { imageUrl, description, hashtags, mentions }) => 
 	return post;
 };
 
-const getAll = async (skip, limit, requestParam ) => {
-	const query = {};
-
+const getAll = async (skip, limit, query = {}, requestParam = []) => {
 	requestParam.forEach(function (value, index) {
 		if (value["hashtags"] !== undefined)
 			requestParam[index].hashtags = {$all: requestParam[index].hashtags.split(".")};
