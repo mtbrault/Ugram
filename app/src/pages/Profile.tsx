@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Avatar, Button, Card, Col, Icon, Row, List,
+  Avatar, Button, Card, Col, Icon, Row, List, Popconfirm
 } from 'antd/es';
 import { useDispatch, useSelector } from 'react-redux';
 import { History } from 'history';
@@ -115,7 +115,13 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
                   <Button type="ghost" icon="upload" onClick={() => setUpload(true)}>Upload a picture</Button>
                   <br />
                   <br />
-                  <Button type="danger" icon="delete" onClick={() => deleteAccount()}>Delete account</Button>
+                  <Popconfirm
+                    title="Are you sure?"
+                    icon={<Icon type="delete" style={{ color: 'red' }} />}
+                    onConfirm={() => deleteAccount()}
+                  >
+                    <Button type="danger" icon="delete">Delete account</Button>
+                  </Popconfirm>
                 </Col>
               )}
             </Row>
@@ -143,15 +149,15 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
               )}
             />
             {previewPubs && previewVisible
-              && (
-                <PreviewPubs
-                  previewPubs={previewPubs}
-                  previewVisible={previewVisible}
-                  toggle={() => setPreviewVisible(!previewVisible)}
-                  editPubs={() => editPubs()}
-                  isMe={isMe}
-                />
-              )}
+            && (
+              <PreviewPubs
+                previewPubs={previewPubs}
+                previewVisible={previewVisible}
+                toggle={() => setPreviewVisible(!previewVisible)}
+                editPubs={() => editPubs()}
+                isMe={isMe}
+              />
+            )}
           </Col>
         </Col>
       </Row>
