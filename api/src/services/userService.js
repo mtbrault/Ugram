@@ -59,10 +59,16 @@ const getById = async id => {
 	return user;
 };
 
+<<<<<<< HEAD
 const getAll = async (skip, limit, id = false) => {
+=======
+const getAll = async (skip, limit, id, userParam) => {
+>>>>>>> c0da4a5bdf84f67f1a9ce22611ac4cbc1484639e
 	const query = {};
 	if (id)
 		query._id = { $ne: id };
+	if (userParam.length !== 0)
+		query.$or = userParam;
 	const users = await User.find(query).skip(skip).limit(limit + 1).lean();
 
 	const last = users.length != limit + 1;
@@ -85,7 +91,7 @@ const getAll = async (skip, limit, id = false) => {
 	};
 };
 
-// TODO: maybe change username in all posts mentions (really heavy, maybe not the best thing)
+// TODO: maybe change username in all posts mentions and authors (really heavy, maybe not the best thing)
 // or prevent username modification in update.
 const update = async (user, {
 	username, password, firstname, lastname,

@@ -7,7 +7,7 @@ const user = require('../controllers/userController');
 const post = require('../controllers/postController');
 
 const { isValidUserId, isAdminOrLoggedUser, isValidPostId, isAdminOrPostAuthor } = require("../middlewares/validation");
-const { extractParams } = require("../middlewares/query");
+const { extractPageParams, extractUserParams, extractPostParams} = require("../middlewares/query");
 
 require('../middlewares/passport')(passport);
 
@@ -32,7 +32,7 @@ router.post('/auth/login', user.login);
 router.post('/auth/register', user.register);                                         //C
 
 // ** User **
-router.get('/user', passport.authenticate('jwt', {session:false}), extractParams, user.getAll);      //R
+router.get('/user', passport.authenticate('jwt', {session:false}), extractPageParams, extractUserParams, user.getAll);      //R
 router.get('/self', passport.authenticate('jwt', {session:false}), user.get);         //R
 router.get('/user/:id', passport.authenticate('jwt', {session:false}), isValidUserId("id"), user.getById);         //R
 router.patch('/self', passport.authenticate('jwt', {session:false}), user.update);    //U
@@ -50,9 +50,9 @@ router.delete('/user/:id', passport.authenticate('jwt', {session:false}), isVali
 // ** Post **
 router.post('/post', passport.authenticate('jwt', {session:false}), post.upload); //C
 router.post('/user/:id/post', passport.authenticate('jwt', {session:false}), isValidUserId("id"), isAdminOrLoggedUser, post.uploadForUser); //C
-router.get('/post', passport.authenticate('jwt', {session:false}), extractParams, post.getAll); //R
-router.get('/self/post', passport.authenticate('jwt', {session:false}), extractParams, post.getSelf); //R
-router.get('/user/:id/post', passport.authenticate('jwt', {session:false}), isValidUserId("id"), extractParams, post.getByUser); //R
+router.get('/post', passport.authenticate('jwt', {session:false}), extractPageParams, extractPostParams, post.getAll); //R
+router.get('/self/post', passport.authenticate('jwt', {session:false}), extractPageParams, post.getSelf); //R
+router.get('/user/:id/post', passport.authenticate('jwt', {session:false}), isValidUserId("id"), extractPageParams, post.getByUser); //R
 router.get('/post/:id', passport.authenticate('jwt', {session:false}), isValidPostId("id"), post.getById); //R
 router.patch('/post/:id', passport.authenticate('jwt', {session:false}), isValidPostId("id"), isAdminOrPostAuthor, post.update); //U
 router.delete('/post/:id', passport.authenticate('jwt', {session:false}), isValidPostId("id"), isAdminOrPostAuthor, post.remove); //D

@@ -50,7 +50,7 @@ const isAdminOrLoggedUser = async (req, res, next) => {
 
 // Should be used only after isValidPostId
 const isAdminOrPostAuthor = async (req, res, next) => {
-	const author = req.refPost.author._id || req.refPost.author;
+	const author = req.refPost.author.id;
 	if(!req.user._id.equals(author) && !req.user.isadmin)
 		return rerr(next, "Forbidden", 403);
 	next();
