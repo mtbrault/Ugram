@@ -41,6 +41,7 @@ const Login: React.FC<LoginProps> = ({ history }) => {
         history.push('/');
       })
       .catch((err) => {
+        console.log(err);
         message.error(err.response.data.message, 5);
       });
   };
@@ -61,10 +62,14 @@ const Login: React.FC<LoginProps> = ({ history }) => {
               value={password}
             />
             <Row type="flex" justify="center">
-              <Col span={20} className="btn-center">
+              <Col span={24} className="btn-center">
                 <Button type="primary" onClick={submitForm}>
                   Login
                 </Button>
+              </Col>
+              or
+              <Col span={24} className="btn-center">
+                <Button type="ghost" icon="google">Login with Google</Button>
               </Col>
             </Row>
           </Card>

@@ -4,7 +4,7 @@ import {
 } from 'antd/es';
 import { useDispatch, useSelector } from 'react-redux';
 import { History } from 'history';
-import { getMyProfile } from '../store/actions';
+import { getMyProfile, deleteUser } from '../store/actions';
 import Loader from '../components/Loader';
 
 import { storeTypes, profileType, publicationType } from '../types';
@@ -104,6 +104,9 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
                   <br />
                   <br />
                   <Button type="ghost" icon="upload" onClick={() => setUpload(true)}>Upload a picture</Button>
+                  <br />
+                  <br />
+                  <Button type="danger" icon="delete" onClick={() => deleteUser()}>Delete account</Button>
                 </Col>
               )}
             </Row>
