@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { History } from 'history';
 import { getMyProfile, deleteUser } from '../store/actions';
 import Loader from '../components/Loader';
+import Cookies from 'js-cookie';
 
 import { storeTypes, profileType, publicationType } from '../types';
 
@@ -38,6 +39,14 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
   useEffect(() => {
     setIsMe((location.state && location.state.isMe) || !location.state);
   }, [location]);
+
+  const deleteAccount = () => {
+    dispatch(deleteUser())
+      .then(() => {
+        Cookies.remove('token');
+        history.push('/login');
+      })
+  }
 
   const me = useSelector<storeTypes, profileType>((store) => store.profileReducers.myProfile);
   const data = (location.state && location.state.username) ? location.state : me;
@@ -106,7 +115,7 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
                   <Button type="ghost" icon="upload" onClick={() => setUpload(true)}>Upload a picture</Button>
                   <br />
                   <br />
-                  <Button type="danger" icon="delete" onClick={() => deleteUser()}>Delete account</Button>
+                  <Button type="danger" icon="delete" onClick={() => deleteAccount()}>Delete account</Button>
                 </Col>
               )}
             </Row>
