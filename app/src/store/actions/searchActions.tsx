@@ -5,7 +5,7 @@ import { SEARCH_POST_DESC, SEARCH_POST_HASHTAG, SEARCH_USER } from '../reducers/
 export const searchUserByUsername = createActionThunk(SEARCH_USER, async (search: string) => {
 	const res = await APIManager.searchUser(search);
 	return {
-		users: res,
+		users_list: res,
 	};
 });
 

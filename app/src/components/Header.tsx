@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Col, Input, Row } from 'antd/es';
+import { Col, Input, Row, message } from 'antd/es';
 import { Button } from 'antd';
 import Cookies from 'js-cookie';
 import { History } from 'history';
 import { useDispatch } from 'react-redux';
-import { tokenInfo } from '../store/actions';
-import { searchPostByDesc, searchPostByHashtag, searchUserByUsername } from '../store/actions'
+import {
+  tokenInfo, searchPostByDesc, searchPostByHashtag, searchUserByUsername,
+} from '../store/actions';
 
 interface HeaderProps {
   history: History;
@@ -29,11 +30,14 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
   }, [dispatch, history]);
 
   const search = (val: string) => {
+    if (val.length !== 0) {
     dispatch(searchPostByDesc(val));
     dispatch(searchPostByHashtag(val));
     dispatch(searchUserByUsername(val));
     history.push('/search');
-  }
+    } else
+      message.info("Please enter a string for search");
+  };
 
   return (
     <Row type="flex" align="middle" justify="space-between" className="header-container">

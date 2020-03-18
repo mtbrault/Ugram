@@ -2,10 +2,13 @@ import { handleActions } from 'redux-actions';
 import { initialSearch } from '../../types/profileTypes';
 
 const initialState: initialSearch = {
-	users: [],
+	users_list: {
+    users: [],
+    count: 0,
+  },
 	posts_hashtag: [],
 	posts_desc: [],
-}
+};
 
 export const SEARCH_POST_HASHTAG = 'SEARCH_POST_HASHTAG';
 export const SEARCH_POST_DESC = 'SEARCH_POST_DESC';
