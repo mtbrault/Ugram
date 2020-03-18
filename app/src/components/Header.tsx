@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import { History } from 'history';
 import { useDispatch } from 'react-redux';
 import { tokenInfo } from '../store/actions';
+import { searchPostByDesc, searchPostByHashtag, searchUserByUsername } from '../store/actions'
 
 interface HeaderProps {
   history: History;
@@ -27,6 +28,13 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
       });
   }, [dispatch, history]);
 
+  const search = (val: string) => {
+    dispatch(searchPostByDesc(val));
+    dispatch(searchPostByHashtag(val));
+    dispatch(searchUserByUsername(val));
+    history.push('/search');
+  }
+
   return (
     <Row type="flex" align="middle" justify="space-between" className="header-container">
       <Col xs={0} md={3} lg={5} onClick={() => history.push('/home')}>
@@ -38,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
       <Col xs={15} md={12}>
         <Input.Search
           placeholder="Search by username or hashtag here"
-          onSearch={(value) => console.log(value)}
+          onSearch={(value) => search(value)}
         />
       </Col>
       <Col xs={0} md={3} lg={2}>
