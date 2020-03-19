@@ -89,17 +89,17 @@ export default class APIManager {
   }
 
   static async searchUser(search: string) {
-    const res = await API.get(`/user?username="${search}"&limit=100`);
+    const res = await API.get(`/user?username=${search}&limit=100`);
     return res.data;
   }
 
   static async searchPostHashtag(search: string) {
-    const res = await API.get(`/post?hashtags="${search}"&limit=100`);
+    const res = await API.get(`/post?hashtags=${search}&limit=100`);
     return res.data;
   }
 
   static async searchPostDesc(search: string) {
-    const res = await API.get(`/post?description="${search}"&limit=100`);
+    const res = await API.get(`/post?description=${search}&limit=100`);
     return res.data;
   }
 }
