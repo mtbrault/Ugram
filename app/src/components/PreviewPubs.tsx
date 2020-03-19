@@ -71,7 +71,7 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
                   dataSource={previewPubs?.hashtags}
                   renderItem={(tag) => (
                     <List.Item>
-                      <Tag>{`${tag}`}</Tag>
+                      <Tag>{`#${tag}`}</Tag>
                     </List.Item>
                   )}
                 />

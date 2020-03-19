@@ -22,7 +22,13 @@ const EditPublicationModal: React.FC<EditPublicationModal> = ({ visible, toggleM
 
   const updateThis = () => {
     const updatedMentions: Array<string> = (newMentions !== '') ? newMentions.split(' ') : [];
-    const updatedHashtags: Array<string> = (newHashtags !== '') ? newHashtags.split(' ') : [];
+    let updatedHashtags: Array<string> = (newHashtags !== '')
+      ? (newHashtags.replace(new RegExp('#', 'g'), '')).split(' ') : [];
+
+    if (updatedHashtags.length === 0) {
+      updatedHashtags = hashtags;
+    }
+
     const data = {
       imageUrl: pubs.imageUrl,
       description,
@@ -43,9 +49,7 @@ const EditPublicationModal: React.FC<EditPublicationModal> = ({ visible, toggleM
         dispatch(getMyProfile());
         toggleModal();
       },
-      (err) => {
-        message.error(err.response.data.message, 5);
-      });
+      (err) => message.error(err.response.data.message, 5));
   };
 
   return (
@@ -58,7 +62,7 @@ const EditPublicationModal: React.FC<EditPublicationModal> = ({ visible, toggleM
     >
       <InputComponent id="description" title="Description" type="text" value={description} onChange={setDescription} />
       <MentionsTagsComponent type="mentions" title="Mention a user" value={mentions.join(' ')} setValue={setNewMentions} />
-      <MentionsTagsComponent type="tags" title="Hashtags" value={hashtags.join(' ')} setValue={setNewHashtags} />
+      <MentionsTagsComponent type="tags" title="Hashtags" value={`#${hashtags.join(' #')}`} setValue={setNewHashtags} />
     </Modal>
   );
 };

@@ -10,10 +10,10 @@ interface MentionsTagsComponentProps {
 }
 
 const MentionsTagsComponent: React.FC<MentionsTagsComponentProps> = ({
-  title, type, value, setValue, usersList
+  title, type, value, setValue, usersList,
 }) => {
   const onSelect = (val: string) => {
-    const res = val.substring(0, val.length - 1);
+    const res = val.trim();
     setValue(res);
   };
 
@@ -27,8 +27,7 @@ const MentionsTagsComponent: React.FC<MentionsTagsComponentProps> = ({
           <Mentions
             placeholder="Add space between users"
             onChange={(value) => onSelect(value)}
-          >
-          </Mentions>
+          />
         )}
         {type === 'tags' && (
           <Mentions

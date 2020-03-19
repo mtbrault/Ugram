@@ -52,8 +52,10 @@ const UploadModal: React.FC<uploadProps> = ({ visible, toggleModal }) => {
   };
 
   const uploadPicture = () => {
-    const mentions: string[] = (usersMentioned !== '') ? usersMentioned.split(' ') : [];
-    const hashtags: string[] = (hashtag !== '') ? hashtag.split(' ') : [];
+    const mentions: Array<string> = (usersMentioned !== '') ? usersMentioned.split(' ') : [];
+    const hashtags: Array<string> = (hashtag !== '')
+      ? (hashtag.replace(new RegExp('#', 'g'), '')).split(' ') : [];
+
     for (const hash in hashtags) {
       if (hashtags[hash].substring(0, 1) !== '#'
         && hashtags[hash].length < 3) {
