@@ -53,8 +53,7 @@ const UserSchema = mongoose.Schema({
 	profilePic: {
 		type: String,
 		trim: true
-	}
-	// posts: [Post.schema]
+	},
 }, { timestamps: true });
 
 UserSchema.pre('save', async function () {

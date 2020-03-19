@@ -10,4 +10,9 @@ declare module 'redux-thunk-actions' {
 		type: string,
 		action: import('redux-actions').ActionFunction1<Arg1, Payload>
 	): import('redux-actions').ActionFunction1<Arg1, Payload>
+
+	export function createActionThunk<Arg1, Arg2, Payload = any>(
+		type: string,
+		action: import('redux-actions').ActionFunction2<Arg1, Arg2, Payload>
+	): import('redux-actions').ActionFunction2<Arg1, Arg2, Payload>
 }

@@ -5,6 +5,7 @@ import Divider from './Divider';
 import Header from './Header';
 import Home from '../pages/Home';
 import Profile from '../pages/Profile';
+import Search from '../pages/Search';
 
 const AppRouter: React.SFC = () => (
   <>
@@ -13,6 +14,7 @@ const AppRouter: React.SFC = () => (
     <Switch>
       <Route exact path="/home" component={Home} />
       <Route exact path="/profile" component={Profile} />
+      <Route exact path="/search" component={Search} />
       <Route exact path="/" render={() => <Redirect to="/home" />} />
     </Switch>
   </>

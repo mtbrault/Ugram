@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { History } from 'history';
 import {
-  Card, Row, Col, Button,
+  Card, Row, Col, Button, message,
 } from 'antd/es';
 import { useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
@@ -16,7 +16,6 @@ interface LoginProps {
 
 const Login: React.FC<LoginProps> = ({ history }) => {
   const dispatch = useDispatch();
-  const [error, setError] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [show, setShow] = useState(false);
@@ -31,9 +30,8 @@ const Login: React.FC<LoginProps> = ({ history }) => {
   }, [dispatch, history])
 
   const submitForm = (): void => {
-    setError('');
     if (username === '' || password === '') {
-      setError('You need fill all the field');
+      message.error('You need fill all the field', 5);
       return;
     }
     dispatch(loginUser({ username, password }))
@@ -43,10 +41,10 @@ const Login: React.FC<LoginProps> = ({ history }) => {
         history.push('/');
       })
       .catch((err) => {
-        console.log(err.message);
-        setError('Connexion failed');
+        console.log(err);
+        message.error(err.response.data.message, 5);
       });
-  }
+  };
 
   return (
     <>
@@ -63,12 +61,15 @@ const Login: React.FC<LoginProps> = ({ history }) => {
               onChange={setPassword}
               value={password}
             />
-            <p style={{ color: 'red' }}>{error}</p>
             <Row type="flex" justify="center">
-              <Col span={20} className="btn-center">
+              <Col span={24} className="btn-center">
                 <Button type="primary" onClick={submitForm}>
                   Login
                 </Button>
+              </Col>
+              or
+              <Col span={24} className="btn-center">
+                <Button type="ghost" icon="google">Login with Google</Button>
               </Col>
             </Row>
           </Card>
