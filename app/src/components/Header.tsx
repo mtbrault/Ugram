@@ -42,7 +42,7 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
   return (
     <Row type="flex" align="middle" justify="space-between" className="header-container">
       <Col xs={0} md={3} lg={5} onClick={() => history.push('/home')}>
-        <h1 className="title-h1 title-header">UGram</h1>
+        <h1 className="title-h1 title-header">UGrammage</h1>
       </Col>
       <Col xs={2} md={0} onClick={() => history.push('/home')}>
         <h1 className="title-h1 title-header">U</h1>
