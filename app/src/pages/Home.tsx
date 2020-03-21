@@ -61,7 +61,6 @@ const Home: React.FC<HomeProps> = ({ history }) => {
   return (
     <Row type="flex" align="middle" justify="center">
       <Col sm={18} xs={24}>
-        <Button>Break the world</Button>;
         <List
           header={(
             <h3 className="title-h1">
