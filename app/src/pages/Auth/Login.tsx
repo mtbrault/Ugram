@@ -6,12 +6,10 @@ import {
 import { useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
 import { loginUser, getMyProfile } from '../../store/actions';
-
-
 import InputComponennt from '../../components/InputComponent';
 
 interface LoginProps {
-  history: History
+  history: History;
 }
 
 const Login: React.FC<LoginProps> = ({ history }) => {
@@ -27,11 +25,14 @@ const Login: React.FC<LoginProps> = ({ history }) => {
         .then(() => history.push('/'))
         .catch(() => Cookies.remove('token'));
     }
-  }, [dispatch, history])
+    else {
+      console.log(window.location.href);
+    }
+  }, [dispatch, history]);
 
   const submitForm = (): void => {
     if (username === '' || password === '') {
-      message.error('You need fill all the field', 5);
+      message.error('You need fill all the field', 3);
       return;
     }
     dispatch(loginUser({ username, password }))
@@ -41,8 +42,7 @@ const Login: React.FC<LoginProps> = ({ history }) => {
         history.push('/');
       })
       .catch((err) => {
-        console.log(err);
-        message.error(err.response.data.message, 5);
+        message.error(err.response.data.message, 3);
       });
   };
 

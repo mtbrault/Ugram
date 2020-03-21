@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { History } from 'history';
 import {
   Avatar, Button, Card, Col, List, Row, Tag,
 } from 'antd/es';
-import {initialProfile, initialSearch, postList, profileType, publicationType, storeTypes} from '../types';
+import { initialProfile, initialSearch, profileType, publicationType, storeTypes } from '../types';
 import PreviewPubs from '../components/PreviewPubs';
 import { getAllUsers } from '../store/actions';
 
@@ -25,7 +25,7 @@ const Search: React.FC<SearchProps> = ({ history }) => {
 
   useEffect(() => {
     if (!search.loading) history.push('/');
-  }, [search]);
+  }, [search, history]);
 
   const openPreview = (item: publicationType) => {
     setPreviewVisible(!previewVisible);
@@ -96,14 +96,14 @@ const Search: React.FC<SearchProps> = ({ history }) => {
           )}
         />
         {previewPubs && previewVisible
-        && (
-          <PreviewPubs
-            previewPubs={previewPubs}
-            previewVisible={previewVisible}
-            toggle={() => setPreviewVisible(!previewVisible)}
-            isMe={false}
-          />
-        )}
+          && (
+            <PreviewPubs
+              previewPubs={previewPubs}
+              previewVisible={previewVisible}
+              toggle={() => setPreviewVisible(!previewVisible)}
+              isMe={false}
+            />
+          )}
         {search.users_list
           && (
             <List
