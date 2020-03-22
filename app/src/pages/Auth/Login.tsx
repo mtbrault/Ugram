@@ -5,8 +5,9 @@ import {
 } from 'antd/es';
 import { useDispatch } from 'react-redux';
 import Cookies from 'js-cookie';
-import { loginUser, getMyProfile } from '../../store/actions';
+import { loginUser, getMyProfile, loginGoogle } from '../../store/actions';
 import InputComponennt from '../../components/InputComponent';
+import GoogleLogin from 'react-google-login';
 
 interface LoginProps {
   history: History;
@@ -17,6 +18,7 @@ const Login: React.FC<LoginProps> = ({ history }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [show, setShow] = useState(false);
+  const googleId: string = process.env.REACT_APP_GOOGLE_CLIENT_ID!;
 
   useEffect(() => {
     const token = Cookies.get('token');
@@ -24,9 +26,6 @@ const Login: React.FC<LoginProps> = ({ history }) => {
       dispatch(getMyProfile())
         .then(() => history.push('/'))
         .catch(() => Cookies.remove('token'));
-    }
-    else {
-      console.log(window.location.href);
     }
   }, [dispatch, history]);
 
@@ -45,6 +44,20 @@ const Login: React.FC<LoginProps> = ({ history }) => {
         message.error(err.response.data.message, 3);
       });
   };
+
+  const googleFailed = (res: any) => {
+    message.error(res.error, 3);
+  }
+
+  const googleSucceed = (res: any) => {
+    const param = {
+      accessToken: res.accessToken,
+      email: res.profileObj.email,
+      username: res.profileObj.name,
+      profilePicture: res.profileObj.imageUrl,
+    }
+    dispatch(loginGoogle(param));
+  }
 
   return (
     <>
@@ -69,7 +82,13 @@ const Login: React.FC<LoginProps> = ({ history }) => {
               </Col>
               or
               <Col span={24} className="btn-center">
-                <Button type="ghost" icon="google">Login with Google</Button>
+                <GoogleLogin
+                  clientId={googleId}
+                  buttonText="Login with Google"
+                  onSuccess={googleSucceed}
+                  onFailure={googleFailed}
+                  cookiePolicy="single_host_origin"
+                />
               </Col>
             </Row>
           </Card>

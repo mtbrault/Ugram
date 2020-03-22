@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import {
-  loginParam, registerParam, updateProfileParam, profileType, uploadType,
+  loginParam, registerParam, updateProfileParam, profileType, uploadType, loginGoogleParam
 } from '../../types';
 
 const API = axios.create({
@@ -28,6 +28,11 @@ export default class APIManager {
     const res = await API.post('/auth/login', param);
     if (res.data) return res.data;
     return res;
+  }
+
+  static async loginGoogle(param: loginGoogleParam) {
+    const res = await API.post('/blabla', param);
+    return res.data;
   }
 
   static async deleteUser() {

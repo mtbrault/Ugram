@@ -3,6 +3,13 @@ export interface loginParam {
 	password: string;
 }
 
+export interface loginGoogleParam {
+	email: string;
+	username: string;
+	accessToken: string;
+	profilePicture: string;
+}
+
 export interface registerParam {
 	username: string;
 	firstname: string;
