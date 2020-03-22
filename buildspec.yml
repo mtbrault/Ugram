@@ -7,5 +7,3 @@ phases:
       - npm install --prefix ./app/
       - npm run build --prefix ./app/
       - aws s3 cp ./app/build s3://ugram-app/ --recursive
-      - cd api
-      - eb deploy
