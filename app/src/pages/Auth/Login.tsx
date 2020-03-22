@@ -50,7 +50,7 @@ const Login: React.FC<LoginProps> = ({ history }) => {
       <Row type="flex" justify="center">
         <Col lg={7} md={10} sm={16} xs={24}>
           <Card bordered>
-            <h1 className="text-center">Test</h1>
+            <h1 className="text-center">Ugram</h1>
             <InputComponennt id="email" title="Email / Username / Phone" type="text" onChange={setUsername} value={username} />
             <InputComponennt
               id="password"
