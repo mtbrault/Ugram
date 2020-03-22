@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { History } from 'history';
 import {
   Avatar, Button, Card, Col, List, Row, Tag,
 } from 'antd/es';
-import { getAllUsers } from '../store/actions';
+import { getAllUsers, getAllPost } from '../store/actions';
 import {
   initialProfile, postList, profileType, publicationType, storeTypes,
 } from '../types';
@@ -22,6 +22,13 @@ const Home: React.FC<HomeProps> = ({ history }) => {
   const data = useSelector<storeTypes, initialProfile>((store) => store.profileReducers);
   const postsList = useSelector<storeTypes, postList>((store) => store.postReducers);
 
+  useEffect(() => {
+    dispatch(getAllPost())
+      .catch(() => {
+        history.push('/login');
+      });
+  }, [dispatch])
+
   const openPreview = (item: publicationType) => {
     setPreviewVisible(!previewVisible);
     setPreviewPubs(item);
@@ -35,13 +42,6 @@ const Home: React.FC<HomeProps> = ({ history }) => {
       setLoading(false);
       window.dispatchEvent(new Event('resize'));
     }, 3000);
-  };
-
-  const getUserByPubs = (post: publicationType, username?: boolean): profileType | string => {
-    const user = data.users.filter((author) => author.id === post.author)[0];
-    if (user !== undefined) return user.username;
-    if (username) return data.myProfile.username;
-    return user;
   };
 
   const loadMore = (
@@ -69,7 +69,7 @@ const Home: React.FC<HomeProps> = ({ history }) => {
               <Card
                 bordered
                 title={
-                  <Button type="link" icon="user" onClick={() => history.push('/profile', getUserByPubs(post))}>{getUserByPubs(post, true)}</Button>
+                  <Button type="link" icon="user" onClick={() => history.push('/profile', post.author.username)}>{post.author.username}</Button>
                 }
                 className="card-pubs"
               >

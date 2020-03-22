@@ -5,7 +5,7 @@ import {
 } from '../../types';
 
 const API = axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: (process.env.REACT_APP_NODE_ENV === 'dev') ? 'http://localhost:8080' : process.env.REACT_APP_BACKEND_URL_PROD,
 });
 
 API.interceptors.request.use(({ headers, ...config }) => ({

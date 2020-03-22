@@ -32,13 +32,6 @@ const Search: React.FC<SearchProps> = ({ history }) => {
     setPreviewPubs(item);
   };
 
-  const getUserByPubs = (post: publicationType, username?: boolean): profileType | string => {
-    const user = data.users.filter((author) => author.id === post.author)[0];
-    if (user !== undefined) return user.username;
-    if (username) return data.myProfile.username;
-    return user;
-  };
-
   return (
     <Row type="flex" align="middle" justify="center">
       <Col span={24} className="text-center">
@@ -61,7 +54,7 @@ const Search: React.FC<SearchProps> = ({ history }) => {
               <Card
                 bordered
                 title={
-                  <Button type="link" icon="user" onClick={() => history.push('/profile', getUserByPubs(post))}>{getUserByPubs(post, true)}</Button>
+                  <Button type="link" icon="user" onClick={() => history.push('/profile', post.author.username)}>{post.author.username}</Button>
                 }
                 className="card-pubs"
               >
@@ -86,7 +79,7 @@ const Search: React.FC<SearchProps> = ({ history }) => {
               <Card
                 bordered
                 title={
-                  <Button type="link" icon="user" onClick={() => history.push('/profile', getUserByPubs(post))}>{getUserByPubs(post, true)}</Button>
+                  <Button type="link" icon="user" onClick={() => history.push('/profile', post.author.username)}>{post.author.username}</Button>
                 }
                 className="card-pubs"
               >
