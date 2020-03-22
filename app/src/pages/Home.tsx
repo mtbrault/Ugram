@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { History } from 'history';
 import {
   Avatar, Button, Card, Col, List, Row, Tag,
 } from 'antd/es';
-import { getAllPost, getAllUsers } from '../store/actions';
+import { getAllUsers } from '../store/actions';
 import {
   initialProfile, postList, profileType, publicationType, storeTypes,
 } from '../types';
@@ -21,14 +21,6 @@ const Home: React.FC<HomeProps> = ({ history }) => {
   const dispatch = useDispatch();
   const data = useSelector<storeTypes, initialProfile>((store) => store.profileReducers);
   const postsList = useSelector<storeTypes, postList>((store) => store.postReducers);
-
-  useEffect(() => {
-    dispatch(getAllUsers());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(getAllPost());
-  }, [dispatch]);
 
   const openPreview = (item: publicationType) => {
     setPreviewVisible(!previewVisible);
@@ -61,7 +53,6 @@ const Home: React.FC<HomeProps> = ({ history }) => {
   return (
     <Row type="flex" align="middle" justify="center">
       <Col sm={18} xs={24}>
-        <Button>Break the world</Button>;
         <List
           header={(
             <h3 className="title-h1">
@@ -88,45 +79,45 @@ const Home: React.FC<HomeProps> = ({ history }) => {
           )}
         />
         {previewPubs && previewVisible
-        && (
-          <PreviewPubs
-            previewPubs={previewPubs}
-            previewVisible={previewVisible}
-            toggle={() => setPreviewVisible(!previewVisible)}
-            isMe={false}
-          />
-        )}
+          && (
+            <PreviewPubs
+              previewPubs={previewPubs}
+              previewVisible={previewVisible}
+              toggle={() => setPreviewVisible(!previewVisible)}
+              isMe={false}
+            />
+          )}
         {data.users.length !== 0
-        && (
-          <List
-            grid={{
-              gutter: 8, column: 4, xs: 1, sm: 2, md: 2, lg: 3, xl: 4,
-            }}
-            header={(
-              <h3 className="title-h1">
-                List of users&nbsp;
-                <Tag>{data.users.length}</Tag>
-              </h3>
-            )}
-            itemLayout="horizontal"
-            dataSource={data.users}
-            loadMore={(data.next) ? loadMore : ''}
-            renderItem={(user: profileType) => (
-              <List.Item onClick={() => history.push('/profile', user)} className="list-item">
-                <Card
-                  bordered
-                  className="card-user"
-                >
-                  <List.Item.Meta
-                    avatar={<Avatar size={40} src={user.profilePic} icon="user" />}
-                    title={(<b>{`${user.firstname} ${user.lastname}`}</b>)}
-                    description={user.username}
-                  />
-                </Card>
-              </List.Item>
-            )}
-          />
-        )}
+          && (
+            <List
+              grid={{
+                gutter: 8, column: 4, xs: 1, sm: 2, md: 2, lg: 3, xl: 4,
+              }}
+              header={(
+                <h3 className="title-h1">
+                  List of users&nbsp;
+                  <Tag>{data.users.length}</Tag>
+                </h3>
+              )}
+              itemLayout="horizontal"
+              dataSource={data.users}
+              loadMore={(data.next) ? loadMore : ''}
+              renderItem={(user: profileType) => (
+                <List.Item onClick={() => history.push('/profile', user)} className="list-item">
+                  <Card
+                    bordered
+                    className="card-user"
+                  >
+                    <List.Item.Meta
+                      avatar={<Avatar size={40} src={user.profilePic} icon="user" />}
+                      title={(<b>{`${user.firstname} ${user.lastname}`}</b>)}
+                      description={user.username}
+                    />
+                  </Card>
+                </List.Item>
+              )}
+            />
+          )}
       </Col>
     </Row>
   );

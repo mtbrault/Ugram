@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import { History } from 'history';
 import { useDispatch } from 'react-redux';
 import {
-  tokenInfo, searchPostByDesc, searchPostByHashtag, searchUserByUsername,
+  tokenInfo, searchPostByDesc, searchPostByHashtag, searchUserByUsername, getAllPost, getAllUsers
 } from '../store/actions';
 
 interface HeaderProps {
@@ -23,6 +23,10 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
 
   useEffect(() => {
     dispatch(tokenInfo())
+      .then(() => {
+        dispatch(getAllPost());
+        dispatch(getAllUsers());
+      })
       .catch(() => {
         Cookies.remove('token');
         history.push('/login');
@@ -31,10 +35,10 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
 
   const search = (val: string) => {
     if (val.length !== 0) {
-    dispatch(searchPostByDesc(val));
-    dispatch(searchPostByHashtag(val));
-    dispatch(searchUserByUsername(val));
-    history.push('/search');
+      dispatch(searchPostByDesc(val));
+      dispatch(searchPostByHashtag(val));
+      dispatch(searchUserByUsername(val));
+      history.push('/search');
     } else
       message.info("Please enter a string for search");
   };

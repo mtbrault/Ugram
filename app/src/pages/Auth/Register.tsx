@@ -39,8 +39,8 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
       message.error('You need to fill each field', 3);
     else if (!regMail.test(email))
       message.error('Bad email format', 3);
-    else if (!regTel.test(phoneNumber))
-      message.error('Bad phone number format', 3);
+    else if (!regTel.test(phoneNumber) || phoneNumber.length !== 10)
+      message.error('Phone number must be 10 numbers', 3);
     else {
       dispatch(registerUser({
         email, username, firstname, lastname, phoneNumber, password,
