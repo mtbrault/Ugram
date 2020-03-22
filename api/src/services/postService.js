@@ -43,7 +43,7 @@ const getAll = async (skip, limit, query = {}, requestParam = []) => {
 	if (requestParam.length !== 0)
 		query.$and = requestParam;
 
-	const posts = await Post.find(query).sort("-createdAt").skip(skip).limit(limit + 1); // TODO: make request lean with mongoose-lean-virtuals
+	const posts = await Post.find(query).sort("-createdAt").skip(skip).limit(limit + 1);
 	const last = posts.length != limit + 1;
 	if (!last)
 		posts.pop();

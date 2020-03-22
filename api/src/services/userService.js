@@ -87,8 +87,6 @@ const getAll = async (skip, limit, id, userParam) => {
 	};
 };
 
-// TODO: maybe change username in all posts mentions and authors (really heavy, maybe not the best thing)
-// or prevent username modification in update.
 const update = async (user, {
 	username, password, firstname, lastname,
 	email, profilePic, phoneNumber
@@ -126,7 +124,6 @@ const update = async (user, {
 
 const remove = async (user) => {
 	await Post.deleteMany({"author.id": user._id});
-	// do Comment.updateMany() to set user to [deleted]
 	return User.findByIdAndDelete(user._id);
 };
 
