@@ -20,7 +20,7 @@ config.jwt.secret          = process.env.JWT_SECRET || 'kkIX7SDOnb67MmTgU5cvko4X
 config.jwt.expiration      = process.env.JWT_EXPIRATION || '10000';
 config.google.clientId     = process.env.GOOGLE_CLIENT_ID;
 
-if(!config.google.clientId)
+if (!config.google.clientId)
 	throw new Error("google configuration missing");
 
 module.exports = config;

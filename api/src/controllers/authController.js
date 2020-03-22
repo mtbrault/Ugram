@@ -27,7 +27,6 @@ const google = async (req, res, next) => {
 		return rerr(next, err);
 	}
 	const { user, created } = ret;
-	console.log(user);
 	return res.status(created ? 201 : 200).json({ token: user.getJWT(), ...user.toWeb() });
 };
 
