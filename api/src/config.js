@@ -4,7 +4,8 @@ const config = {
 	app: {},
 	api: {},
 	db: {},
-	jwt: {}
+	jwt: {},
+	google: {}
 };
 
 config.app.env             = process.env.APP || 'dev';
@@ -17,5 +18,9 @@ config.db.port             = process.env.DB_PORT || '27017';
 config.db.name             = process.env.DB_NAME || 'ugram';
 config.jwt.secret          = process.env.JWT_SECRET || 'kkIX7SDOnb67MmTgU5cvko4XaN2wqzQczii4GBBFYPW8xotJhTh4J2sGys6QHr76';
 config.jwt.expiration      = process.env.JWT_EXPIRATION || '10000';
+config.google.clientId     = process.env.GOOGLE_CLIENT_ID;
+
+if(!config.google.clientId)
+	throw new Error("google configuration missing");
 
 module.exports = config;
