@@ -41,6 +41,7 @@ const Login: React.FC<LoginProps> = ({ history }) => {
         history.push('/');
       })
       .catch((err) => {
+        console.log(err.response.data);
         message.error(err.response.data.message, 3);
       });
   };
@@ -54,7 +55,15 @@ const Login: React.FC<LoginProps> = ({ history }) => {
       accessToken: res.accessToken,
       tokenId: res.tokenId
     };
-    dispatch(loginGoogle(param));
+    dispatch(loginGoogle(param))
+      .then((res) => {
+        Cookies.set('token', res.token);
+        dispatch(getMyProfile());
+        history.push('/');
+      })
+      .catch((err) => {
+        message.error(err.response.data.message, 3);
+      })
   }
 
   return (

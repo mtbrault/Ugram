@@ -1,23 +1,7 @@
 const userService = require('../services/userService');
 const { to, rerr } = require('../middlewares/utils');
 
-
-//USERS
-const login = async (req, res, next) => {
-	let [err, user] = await to(userService.authenticate(req.body));
-	if (err)
-		return rerr(next, err, 401);
-	return res.status(200).json({ token: user.getJWT(), ...user.toWeb() });
-}
-
-const register = async (req, res, next) => {
-	let [err, user] = await to(userService.create(req.body));
-	if (err)
-		return rerr(next, err);
-	return res.status(201).json({ token: user.getJWT(), ...user.toWeb() });
-}
-
-// *** From here Authenticated calls, use only after Passport middleware ***
+// *** All these calls should be Authenticated calls, use only after Passport middleware ***
 
 const get = async (req, res, next) => {
 	return res.status(200).json(req.user.toWeb());
@@ -74,8 +58,6 @@ const removeById = async (req, res, next) => {
 };
 
 module.exports = {
-	login,
-	register,
 	get,
 	getById,
 	getAll,
