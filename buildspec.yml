@@ -6,4 +6,4 @@ phases:
     commands:
       - npm install --prefix ./app/
       - npm run build --prefix ./app/
-      - aws s3 cp ./app/build s3://ugram-app/ --recursive
+      - aws s3 sync s3://ugram-app/ ./app/build/
