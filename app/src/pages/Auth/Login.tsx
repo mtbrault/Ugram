@@ -52,10 +52,8 @@ const Login: React.FC<LoginProps> = ({ history }) => {
   const googleSucceed = (res: any) => {
     const param = {
       accessToken: res.accessToken,
-      email: res.profileObj.email,
-      username: res.profileObj.name,
-      profilePicture: res.profileObj.imageUrl,
-    }
+      tokenId: res.tokenId
+    };
     dispatch(loginGoogle(param));
   }
 

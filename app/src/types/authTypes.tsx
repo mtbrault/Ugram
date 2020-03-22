@@ -4,10 +4,8 @@ export interface loginParam {
 }
 
 export interface loginGoogleParam {
-	email: string;
-	username: string;
 	accessToken: string;
-	profilePicture: string;
+	tokenId: string;
 }
 
 export interface registerParam {

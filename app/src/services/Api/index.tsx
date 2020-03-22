@@ -31,7 +31,7 @@ export default class APIManager {
   }
 
   static async loginGoogle(param: loginGoogleParam) {
-    const res = await API.post('/blabla', param);
+    const res = await API.post('/auth/google', param);
     return res.data;
   }
 
