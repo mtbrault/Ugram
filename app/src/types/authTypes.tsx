@@ -3,6 +3,11 @@ export interface loginParam {
 	password: string;
 }
 
+export interface loginGoogleParam {
+	accessToken: string;
+	tokenId: string;
+}
+
 export interface registerParam {
 	username: string;
 	firstname: string;

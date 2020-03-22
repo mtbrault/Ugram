@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { History } from 'history';
 import {
   Avatar, Button, Card, Col, List, Row, Tag,
 } from 'antd/es';
-import { getAllPost, getAllUsers } from '../store/actions';
+import { getAllUsers, getAllPost } from '../store/actions';
 import {
   initialProfile, postList, profileType, publicationType, storeTypes,
 } from '../types';
@@ -23,12 +23,11 @@ const Home: React.FC<HomeProps> = ({ history }) => {
   const postsList = useSelector<storeTypes, postList>((store) => store.postReducers);
 
   useEffect(() => {
-    dispatch(getAllUsers());
-  }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(getAllPost());
-  }, [dispatch]);
+    dispatch(getAllPost())
+      .catch(() => {
+        history.push('/login');
+      });
+  }, [dispatch])
 
   const openPreview = (item: publicationType) => {
     setPreviewVisible(!previewVisible);
@@ -43,13 +42,6 @@ const Home: React.FC<HomeProps> = ({ history }) => {
       setLoading(false);
       window.dispatchEvent(new Event('resize'));
     }, 3000);
-  };
-
-  const getUserByPubs = (post: publicationType, username?: boolean): profileType | string => {
-    const user = data.users.filter((author) => author.id === post.author)[0];
-    if (user !== undefined) return user.username;
-    if (username) return data.myProfile.username;
-    return user;
   };
 
   const loadMore = (
@@ -77,7 +69,7 @@ const Home: React.FC<HomeProps> = ({ history }) => {
               <Card
                 bordered
                 title={
-                  <Button type="link" icon="user" onClick={() => history.push('/profile', getUserByPubs(post))}>{getUserByPubs(post, true)}</Button>
+                  <Button type="link" icon="user" onClick={() => history.push('/profile', post.author.username)}>{post.author.username}</Button>
                 }
                 className="card-pubs"
               >
@@ -87,45 +79,45 @@ const Home: React.FC<HomeProps> = ({ history }) => {
           )}
         />
         {previewPubs && previewVisible
-        && (
-          <PreviewPubs
-            previewPubs={previewPubs}
-            previewVisible={previewVisible}
-            toggle={() => setPreviewVisible(!previewVisible)}
-            isMe={false}
-          />
-        )}
+          && (
+            <PreviewPubs
+              previewPubs={previewPubs}
+              previewVisible={previewVisible}
+              toggle={() => setPreviewVisible(!previewVisible)}
+              isMe={false}
+            />
+          )}
         {data.users.length !== 0
-        && (
-          <List
-            grid={{
-              gutter: 8, column: 4, xs: 1, sm: 2, md: 2, lg: 3, xl: 4,
-            }}
-            header={(
-              <h3 className="title-h1">
-                List of users&nbsp;
-                <Tag>{data.users.length}</Tag>
-              </h3>
-            )}
-            itemLayout="horizontal"
-            dataSource={data.users}
-            loadMore={(data.next) ? loadMore : ''}
-            renderItem={(user: profileType) => (
-              <List.Item onClick={() => history.push('/profile', user)} className="list-item">
-                <Card
-                  bordered
-                  className="card-user"
-                >
-                  <List.Item.Meta
-                    avatar={<Avatar size={40} src={user.profilePic} icon="user" />}
-                    title={(<b>{`${user.firstname} ${user.lastname}`}</b>)}
-                    description={user.username}
-                  />
-                </Card>
-              </List.Item>
-            )}
-          />
-        )}
+          && (
+            <List
+              grid={{
+                gutter: 8, column: 4, xs: 1, sm: 2, md: 2, lg: 3, xl: 4,
+              }}
+              header={(
+                <h3 className="title-h1">
+                  List of users&nbsp;
+                  <Tag>{data.users.length}</Tag>
+                </h3>
+              )}
+              itemLayout="horizontal"
+              dataSource={data.users}
+              loadMore={(data.next) ? loadMore : ''}
+              renderItem={(user: profileType) => (
+                <List.Item onClick={() => history.push('/profile', user)} className="list-item">
+                  <Card
+                    bordered
+                    className="card-user"
+                  >
+                    <List.Item.Meta
+                      avatar={<Avatar size={40} src={user.profilePic} icon="user" />}
+                      title={(<b>{`${user.firstname} ${user.lastname}`}</b>)}
+                      description={user.username}
+                    />
+                  </Card>
+                </List.Item>
+              )}
+            />
+          )}
       </Col>
     </Row>
   );
