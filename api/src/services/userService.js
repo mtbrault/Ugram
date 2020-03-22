@@ -31,7 +31,7 @@ const create = async ({
 	]});
 	if(user) {
 		let reason = "phone number";
-		if (username === username) {
+		if (username.toLowerCase() === user.username) {
 			reason = "username";
 		} else if (email === user.email) {
 			reason = "email address";
