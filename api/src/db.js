@@ -2,7 +2,10 @@ const mongoose = require("mongoose");
 const pe = require("parse-error");
 
 const { db } = require('./config');
-const db_url = `${db.dialect}://${db.host}:${db.port}/${db.name}`;
+const userpass = (db.user && db.password) ? `${db.user}:${db.password}@`: '';
+const dbparams = !!db.params ? `?${db.params}` : '';
+const dbport = (db.dialect === "mongodb+srv") ? '' : `:${db.port}`;
+const db_url = `${db.dialect}://${userpass}${db.host}${dbport}/${db.name}${dbparams}`;
 
 const settings = {
 	useUnifiedTopology: true,
