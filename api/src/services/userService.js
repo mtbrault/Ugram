@@ -96,6 +96,8 @@ const update = async (user, {
 		if(value && user[key] != value) {
 			query.push({ [key]: value.toLowerCase() });
 			user[key] = value.toLowerCase();
+			if(key === "username")
+				user.displayname = value;
 		}
 	}
 	if (query.length) {
