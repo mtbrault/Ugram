@@ -21,15 +21,12 @@ router.get('/', (req, res) => {
 });
 
 // ** Auth **
-// router.post('/auth/google', auth.google);
-// router.post('/auth/twitter', auth.twitter);
-// router.post('/auth/reddit', auth.reddit);
-// router.post('/auth/microsoft', auth.microsoft);
+router.post('/auth/google', auth.google);
 router.get('/auth/tokeninfo', passport.authenticate('jwt', {session:false}), auth.tokeninfo);
+router.post('/auth/login', auth.login);
 
 // ** Auth and User **
-router.post('/auth/login', user.login);
-router.post('/auth/register', user.register);                                         //C
+router.post('/auth/register', auth.register);                                         //C
 
 // ** User **
 router.get('/user', passport.authenticate('jwt', {session:false}), extractPageParams, extractUserParams, user.getAll);      //R

@@ -1,0 +1,5 @@
+*_o*
+data/
+node_modules/
+schemas/
+.env
