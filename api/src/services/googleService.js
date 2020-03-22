@@ -51,8 +51,14 @@ const authenticate = async ({ accessToken, tokenId }) => {
 	let created = false;
 	let user = await User.findOne({"googleId": userId});
 	if(!user) {
-		user = await create(accessToken);
-		created = true;
+		user = await User.findOne({email: payload['email'].toLowerCase()});
+		if(user) {
+			user.googleId = userId;
+			user = await user.save();
+		} else {
+			user = await create(accessToken);
+			created = true;
+		}
 	}
 	return { user, created };
 };
