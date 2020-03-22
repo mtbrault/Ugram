@@ -31,4 +31,4 @@ module.exports = {
 	Post: require("./models/postModel"),
 	Comment: require("./models/commentModel"),
 	connection: mongoose.connection
-}
+};
