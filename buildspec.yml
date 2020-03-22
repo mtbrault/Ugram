@@ -4,7 +4,6 @@ phases:
     runtime-versions:
       nodejs: 10
     commands:
-      - npm start --prefix ./app
       - npm install --prefix ./app/
       - npm run build --prefix ./app/
       - aws s3 cp ./app/build s3://ugram-app/ --recursive
