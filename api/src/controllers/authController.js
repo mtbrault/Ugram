@@ -1,5 +1,5 @@
-// const authService = require('../services/authService');
 const userService = require('../services/userService');
+const googleService = require('../services/googleService');
 const { to, rerr } = require('../middlewares/utils');
 
 const login = async (req, res, next) => {
@@ -21,7 +21,10 @@ const tokeninfo = async (req, res, next) => {
 };
 
 const google = async (req, res, next) => {
-	return res.status(200).json({status: "OK"}); // not impl
+	let [err, {user, created}] = await to(googleService.authenticate(req.body));
+	if(err)
+		return rerr(next, err);
+	return res.status(created ? 201 : 200).json({ token: user.getJWT(), ...user.toWeb() });
 };
 
 module.exports = {

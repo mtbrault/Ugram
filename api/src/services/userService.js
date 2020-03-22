@@ -11,7 +11,7 @@ const authenticate = async ({ username, password }) => {
 		key = "phoneNumber";
 	}
 	let user = await User.findOne({ [key]: username.toLowerCase() });
-	if (!user || (key === "email" && !user.password))
+	if (!user || !user.password)
 		throw new Error("Bad Credentials");
 	user = await user.comparePassword(password);
 	return user;
