@@ -8,7 +8,7 @@ const create = async (author, { imageUrl, description, hashtags, mentions }) => 
 	if (notEmpty(mentions)) {
 		mentions = mentions.map(x => {
 			const username = x.toLowerCase();
-			if(username === author.username)
+			if (username === author.username)
 				terr("User cannot mention himself", 400);
 			return username;
 		});
@@ -45,7 +45,7 @@ const getAll = async (skip, limit, query = {}, requestParam = []) => {
 
 	const posts = await Post.find(query).sort("-createdAt").skip(skip).limit(limit + 1); // TODO: make request lean with mongoose-lean-virtuals
 	const last = posts.length != limit + 1;
-	if(!last)
+	if (!last)
 		posts.pop();
 	return {
 		last,
@@ -91,7 +91,7 @@ const update = async (post, { imageUrl, description, hashtags, mentions }, merge
 	if (imageUrl) post.imageUrl = imageUrl;
 	if (description) post.description = description;
 	if (Array.isArray(hashtags)) {
-		if(!merge) {
+		if (!merge) {
 			post.hashtags = hashtags;
 		} else if (hashtags.length > 0) {
 			post.hashtags.addToSet(...hashtags);

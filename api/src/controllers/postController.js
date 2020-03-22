@@ -23,7 +23,7 @@ const uploadForUser = async (req, res, next) => {
 // use only after extractParams
 const getAll = async (req, res, next) => {
 	const [err, ret] = await to(postService.getAll(req.skip, req.limit, {}, req.requestParam));
-	if(err)
+	if (err)
 		return rerr(next, err);
 	const {last, posts} = ret;
 	const chunk = {
@@ -32,7 +32,7 @@ const getAll = async (req, res, next) => {
 		count: posts.length,
 		posts
 	};
-	if(!last)
+	if (!last)
 		chunk.next = `/post?page=${req.page + 1}&limit=${req.limit}`;
 	return res.status(200).json(chunk);
 };
@@ -40,7 +40,7 @@ const getAll = async (req, res, next) => {
 // use only after extractParams
 const getSelf = async (req, res, next) => {
 	const [err, ret] = await to(postService.getByUser(req.user, req.skip, req.limit));
-	if(err)
+	if (err)
 		return rerr(next, err);
 	const {last, posts} = ret;
 	const chunk = {
@@ -49,7 +49,7 @@ const getSelf = async (req, res, next) => {
 		count: posts.length,
 		posts
 	};
-	if(!last)
+	if (!last)
 		chunk.next = `/self/post?page=${req.page + 1}&limit=${req.limit}`;
 	return res.status(200).json(chunk);
 };
@@ -57,7 +57,7 @@ const getSelf = async (req, res, next) => {
 // use only after isValidUserId and extractParams
 const getByUser = async (req, res, next) => {
 	const [err, ret] = await to(postService.getByUser(req.refUser, req.skip, req.limit));
-	if(err)
+	if (err)
 		return rerr(next, err);
 	const {last, posts} = ret;
 	const chunk = {
@@ -66,7 +66,7 @@ const getByUser = async (req, res, next) => {
 		count: posts.length,
 		posts
 	};
-	if(!last)
+	if (!last)
 		chunk.next = `/user/${req.refUser._id}/post?page=${req.page + 1}&limit=${req.limit}`;
 	return res.status(200).json(chunk);
 };

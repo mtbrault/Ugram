@@ -10,7 +10,7 @@ const get = async (req, res, next) => {
 const getAll = async (req, res, next) => {
 	const noself = parseInt(req.query.noself, 10) ? req.user._id : false;
 	const [err, ret] = await to(userService.getAll(req.skip, req.limit, noself, req.requestParam));
-	if(err)
+	if (err)
 		return rerr(next, err);
 	const {last, users} = ret;
 	const chunk = {
@@ -19,7 +19,7 @@ const getAll = async (req, res, next) => {
 		count: users.length,
 		users
 	};
-	if(!last)
+	if (!last)
 		chunk.next = `/user/search?page=${req.page + 1}&limit=${req.limit}${req.query.noself ? "&noself=" + req.query.noself : ""}`;
 	return res.status(200).json(chunk);
 };
@@ -33,7 +33,7 @@ const update = async (req, res, next) => {
 
 const remove = async (req, res, next) => {
 	const [err, user] = await to(userService.remove(req.user));
-	if(err)
+	if (err)
 		return rerr(next, err);
 	return res.status(204).send();
 };
@@ -52,7 +52,7 @@ const updateById = async (req, res, next) => {
 
 const removeById = async (req, res, next) => {
 	const [err, user] = await to(userService.remove(req.refUser));
-	if(err)
+	if (err)
 		return rerr(next, err, 500);
 	return res.status(204).send();
 };

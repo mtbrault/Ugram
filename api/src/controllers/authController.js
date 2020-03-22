@@ -22,12 +22,11 @@ const tokeninfo = async (req, res, next) => {
 
 const google = async (req, res, next) => {
 	const [err, ret] = await to(googleService.authenticate(req.body));
-	if(err) {
+	if (err) {
 		console.log(err);
 		return rerr(next, err);
 	}
 	const { user, created } = ret;
-	console.log(user);
 	return res.status(created ? 201 : 200).json({ token: user.getJWT(), ...user.toWeb() });
 };
 
