@@ -20,10 +20,10 @@
 		});
 
 	const db = require('./db');
-	db.db.on('error', console.error.bind(console, "Db connection error:"));
+	db.connection.on('error', console.error.bind(console, "Db connection error:"));
 
 	await new Promise(resolve => {
-		db.db.once('open', () => {
+		db.connection.once('open', () => {
 			dbLoaded = true;
 			resolve();
 		})
@@ -46,13 +46,13 @@
 		if (srvLoaded) {
 			srv.close(() => {
 				console.log('Server closed.');
-				db.db.close(false, () => {
+				db.connection.close(false, () => {
 					console.log('MongoDB connection closed.');
 					process.exit(err ? 1 : 0);
 				});
 			});
 		} else if (dbLoaded) {
-			db.db.close(false, () => {
+			db.connection.close(false, () => {
 				console.log('MongoDB connection closed.');
 				process.exit(err ? 1 : 0);
 			});

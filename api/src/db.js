@@ -30,5 +30,5 @@ module.exports = {
 	User: require("./models/userModel"),
 	Post: require("./models/postModel"),
 	Comment: require("./models/commentModel"),
-	db: mongoose.connection
+	connection: mongoose.connection
 }
