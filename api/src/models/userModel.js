@@ -10,17 +10,23 @@ const UserSchema = mongoose.Schema({
 		trim: true,
 		lowercase: true,
 		unique: true,
+		required: true,
 		match: [/^[a-zA-Z]\w{3,}$/, "Invalid Username"]
 	},
 	displayname: {
 		type: String,
 		trim: true,
 		unique: true,
+		required: true,
 		match: [/^[a-zA-Z]\w{3,}$/, "Invalid displayName"]
 	},
 	password: {
 		type: String,
-		required: true
+		required: function() { return !this.googleId }
+	},
+	googleId: {
+		type: String,
+		required: function() { return !this.password }
 	},
 	isadmin: {
 		type: Boolean,
@@ -37,7 +43,6 @@ const UserSchema = mongoose.Schema({
 	},
 	phoneNumber: {
 		type: String,
-		required: true,
 		trim: true,
 		unique: true,
 		match: [/^\+?\d(?:\d-?)+$/, "Invalid phone number"]
@@ -82,12 +87,11 @@ UserSchema.methods.toWeb = function () {
 		id: this._id,
 		username: this.displayname,
 		email: this.email,
-		phoneNumber: this.phoneNumber,
 		createdAt: this.createdAt,
 		updatedAt: this.updatedAt
 	};
 
-	for (key of ["firstname", "lastname", "profilePic"])
+	for (key of ["phoneNumber", "firstname", "lastname", "profilePic"])
 		if(this[key]) ret[key] = this[key];
 
 	return ret;

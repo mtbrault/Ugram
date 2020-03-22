@@ -11,7 +11,7 @@ const authenticate = async ({ username, password }) => {
 		key = "phoneNumber";
 	}
 	let user = await User.findOne({ [key]: username.toLowerCase() });
-	if (!user)
+	if (!user || (key === "email" && !user.password))
 		throw new Error("Bad Credentials");
 	user = await user.comparePassword(password);
 	return user;
@@ -123,6 +123,7 @@ const update = async (user, {
 
 const remove = async (user) => {
 	await Post.deleteMany({"author.id": user._id});
+	// do Comment.updateMany() to set user to [deleted]
 	return User.findByIdAndDelete(user._id);
 };
 
