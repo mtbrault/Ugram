@@ -19,8 +19,15 @@ const create = async accessToken => {
 		terr("Invalid accessToken", 400);
 	if(!res.data || !res.data.id || !res.data.email)
 		terr("Bad response from google", 500);
-	const username = "user" + res.data.id;
-	const user = new User({
+	let username = "user" + res.data.id;
+	const length = username.length;
+	let user = await User.findOne({ username });
+	while(user) {
+		const n = (parseInt(username.slice(length), 10) || 0) + 1;
+		username = username.slice(0,length) + n
+		user = await user.findOne({ username });
+	}
+	user = new User({
 		username,
 		displayname: username,
 		googleId: res.data.id,
@@ -36,7 +43,9 @@ const create = async accessToken => {
 const authenticate = async ({ accessToken, tokenId }) => {
 	if(!accessToken || !tokenId)
 		terr("missing accessToken or tokenId field", 400);
-	const ticket = await client.verifyIdToken({ idToken: tokenId, audience: CLIENT_ID });
+	const [err, ticket] = await to(client.verifyIdToken({ idToken: tokenId, audience: google.clientId }));
+	if(err)
+		terr("Invalid tokenId", 400);
 	const payload = ticket.getPayload();
 	const userId = payload['sub'];
 	let created = false;
