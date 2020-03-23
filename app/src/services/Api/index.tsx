@@ -1,10 +1,14 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import https from 'https';
 import {
   loginParam, registerParam, updateProfileParam, profileType, uploadType, loginGoogleParam
 } from '../../types';
 
 const API = axios.create({
+  httpsAgent: new https.Agent({
+    rejectUnauthorized: false
+  }),
   baseURL: (process.env.REACT_APP_NODE_ENV === 'dev') ? 'http://localhost:8080' : process.env.REACT_APP_BACKEND_URL_PROD,
 });
 
