@@ -10,20 +10,20 @@ Comme nous utilisons un certificat non signé et que nous n'avons pas de nom de 
 
 Voici comment accepter le certificat sous Firefox.
 Ici, cliquez sur "Advanced".
-[](https://i.imgur.com/OvJmvMq.png)
+![](https://i.imgur.com/OvJmvMq.png)
 
 Maintenant cliquez sur "Accept the risk and continue".
-[](https://i.imgur.com/C7WmjnW.png)
+![](https://i.imgur.com/C7WmjnW.png)
 
 Une fois le certificat activé vous pouvez vous rendre sur l'app avec votre navigateur.
 
 ## Log sur Sentry et Cloudwatch
 
 Le backend hébergé sur Elastic Beanstalk possède des logs sur Cloudwatch.
-[](https://i.imgur.com/PFd6S5T.png)
+![](https://i.imgur.com/PFd6S5T.png)
 
 Le frontend hébergé sur S3 possède des logs avec Sentry.
-[](https://i.imgur.com/fa8CdyT.png)
+![](https://i.imgur.com/fa8CdyT.png)
 
 ## API Documentation
 
