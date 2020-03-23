@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
     res.status(200).json({
         status: "success",
         message: "Welcome to ugram API",
-        data: { version: "v0.0.1" }
+        data: { version: "v1.0.1" }
     })
 });
 
