@@ -27,7 +27,7 @@ const Home: React.FC<HomeProps> = ({ history }) => {
       .catch(() => {
         history.push('/login');
       });
-  }, [dispatch])
+  }, [dispatch, history])
 
   const openPreview = (item: publicationType) => {
     setPreviewVisible(!previewVisible);

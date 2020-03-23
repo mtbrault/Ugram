@@ -4,7 +4,7 @@ import { History } from 'history';
 import {
   Avatar, Button, Card, Col, List, Row, Tag,
 } from 'antd/es';
-import { initialProfile, initialSearch, profileType, publicationType, storeTypes } from '../types';
+import { initialSearch, profileType, publicationType, storeTypes } from '../types';
 import PreviewPubs from '../components/PreviewPubs';
 import { getAllUsers } from '../store/actions';
 
@@ -17,7 +17,6 @@ const Search: React.FC<SearchProps> = ({ history }) => {
   const [previewPubs, setPreviewPubs] = useState<publicationType>();
   const search = useSelector<storeTypes, initialSearch>((store) => store.searchReducers);
   const dispatch = useDispatch();
-  const data = useSelector<storeTypes, initialProfile>((store) => store.profileReducers);
 
   useEffect(() => {
     dispatch(getAllUsers());

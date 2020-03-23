@@ -41,8 +41,10 @@ const Login: React.FC<LoginProps> = ({ history }) => {
         history.push('/');
       })
       .catch((err) => {
-        console.log(err.response.data);
-        message.error(err.response.data.message, 3);
+        if (err.response)
+          message.error(err.response.data.message, 3);
+        else
+          message.error("Impossible to connect to API", 3);
       });
   };
 

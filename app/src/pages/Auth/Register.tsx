@@ -51,7 +51,10 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
           history.push('/');
         })
         .catch((err) => {
-          message.error(err.response.data.message, 3);
+          if (err.response)
+            message.error(err.response.data.message, 3);
+          else
+            message.error("Impossible to connnect to API", 3);
         });
     }
   };
