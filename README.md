@@ -1,28 +1,48 @@
 # ugram-h2020-team-08
 
-# Run the app
+## Accéder à l'app
 
-Before running the app, make sure that you're docker container are down : `docker-compose down`.
+Le lien de l'API : https://ugram-api.eba-b2ikdsse.us-east-2.elasticbeanstalk.com.
+Le lien de l'APP : https://ugram-app.s3.us-east-2.amazonaws.com/index.html.
 
-You should have an issue `Error: Cannot find module './DirectoryWatcher'`, in this case, shut down docker and restart it, it should fix it.
+N'oubliez pas de précisez le *index.html* à la fin du lien de l'app où vous ne pourrez pas  y accéder.
+Comme nous utilisons un certificat non signé et que nous n'avons pas de nom de domaine (qui sont payants) il est nécessaire de d'abord se rendre sur le lien de l'API et d'accepter le certificat avant de se rendre sur l'app.
 
+Voici comment accepter le certificat sous Firefox.
+Ici, cliquez sur "Advanced".
+[](https://i.imgur.com/OvJmvMq.png)
 
-`docker-compose build && docker-compose up`
+Maintenant cliquez sur "Accept the risk and continue".
+[](https://i.imgur.com/C7WmjnW.png)
 
-# API Documentation
+Une fois le certificat activé vous pouvez vous rendre sur l'app avec votre navigateur.
 
-You can see the API documentation [here](https://github.com/GLO3112-classrooms/ugram-h2020-team-08/wiki/API-Documentation)
+## Log sur Sentry et Cloudwatch
 
-## Project setup
-There are two ways to run this project:
-- With Docker: you need Docker and Docker-compose installed.
-- With NodeJS: you need NodeJS, Npm and MongoDB installed.
+Le backend hébergé sur Elastic Beanstalk possède des logs sur Cloudwatch.
+[](https://i.imgur.com/PFd6S5T.png)
 
-# Features list
+Le frontend hébergé sur S3 possède des logs avec Sentry.
+[](https://i.imgur.com/fa8CdyT.png)
 
-* First, you need to register an account to access the app. Or login yourself if you already have an account.
-* In the Home page, you can see the list of users (disabled if there is no other users than you). When you click on a user, you can see his profil.
-* In the Home page, you can see the list of publications, ordered by time.
-* Click "Profil" button to access to your profil and see your publications.
-* Click on a publication to see its details (description, hashtags, etc...).
-* To mention a user, the username must be registered to the app.
+## API Documentation
+
+Vous trouverez la documentation de l'API [ici](https://github.com/GLO3112-classrooms/ugram-h2020-team-08/wiki/API-Documentation).
+
+## Les différentes features
+
+* On peut s'enregistrer ou se connecter à l'application via les formulaires d'accueil.
+* On peut se connnecter via Google sur la page de login.
+
+* On peut se déconnecter avec le bouton "Logout" dans la barre de navigation.
+* Dans la barre de recherche on peut trouver un user ou un post par hashtag ou description.
+
+Page Home :
+* On peut voir la liste des utilisateurs et se rendre sur leur profil en cliquant dessus.
+* On peut voir la liste de toutes les publications (et leur détails en cliquant dessus).
+
+Page Profil :
+* On peut éditer les données de son profil via le bouton "Edit account".
+* On peut supprimer son compte via le bouton "Delete account".
+* On peut créer un post avec le bouton "Upload a picture".
+* On peut consulter ses posts et leurs détails en cliquant dessus.
