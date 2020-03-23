@@ -13,7 +13,7 @@ Ici, cliquez sur "Advanced".
 ![](https://i.imgur.com/OvJmvMq.png)
 
 Maintenant cliquez sur "Accept the risk and continue".
-![](https://imgur.com/a/LNb5HLY)
+![](https://i.imgur.com/C7WmjnW.png)
 
 Une fois le certificat activé vous pouvez vous rendre sur l'app avec votre navigateur.
 
