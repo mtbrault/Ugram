@@ -44,6 +44,14 @@ const Home: React.FC<HomeProps> = ({ history }) => {
     }, 3000);
   };
 
+  const getUserByPubs = (post: publicationType, username: boolean): profileType | string => {
+    const user = data.users.filter((author) => author.id === post.author.id)[0];
+    if (user === undefined)
+      return (username) ? data.myProfile.username : data.myProfile;
+    else
+      return (username) ? user.username : user;
+  };
+
   const loadMore = (
     <div className="text-center load-more">
       <Button onClick={onLoadMore} icon={loading ? 'loading' : 'plus'}>Loading more</Button>
@@ -69,7 +77,7 @@ const Home: React.FC<HomeProps> = ({ history }) => {
               <Card
                 bordered
                 title={
-                  <Button type="link" icon="user" onClick={() => history.push('/profile', post.author.username)}>{post.author.username}</Button>
+                  <Button type="link" icon="user" onClick={() => history.push('/profile', getUserByPubs(post, false))}>{getUserByPubs(post, true)}</Button>
                 }
                 className="card-pubs"
               >
