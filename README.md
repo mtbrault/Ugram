@@ -7,7 +7,7 @@ Le lien de l'API : https://ugram-api.eba-b2ikdsse.us-east-2.elasticbeanstalk.com
 Le lien de l'APP : https://ugram-app.s3.us-east-2.amazonaws.com/index.html.
 
 N'oubliez pas de précisez le *index.html* à la fin du lien de l'app où vous ne pourrez pas  y accéder.
-Comme nous utilisons un certificat non signé et que nous n'avons pas de nom de domaine (qui sont payants) il est nécessaire de d'abord se rendre sur le lien de l'API et d'accepter le certificat avant de se rendre sur l'app.
+Comme nous utilisons un certificat non signé et que nous n'avons pas de nom de domaine (qui sont payants) il est nécessaire de d'abord se rendre sur le lien de l'API et d'accepter le certificat https avant de se rendre sur l'app.
 
 Voici comment accepter le certificat sous Firefox.
 Ici, cliquez sur "Advanced".
@@ -17,6 +17,8 @@ Maintenant cliquez sur "Accept the risk and continue".
 ![](https://i.imgur.com/C7WmjnW.png)
 
 Une fois le certificat activé vous pouvez vous rendre sur l'app avec votre navigateur.
+
+Si vous n'arrivez pas à accepter le certificat, essayez sur un autre navigateur ou lancez le front en local avec `npm install && npm start` dans le dossier *app* qui arrive à utiliser l'API en http classique.
 
 ## Log sur Sentry et Cloudwatch
 
