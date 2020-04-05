@@ -1,5 +1,11 @@
-import testReducers from './testReducers';
+import authReducers from './authReducers';
+import profileReducers from './profileReducers';
+import postReducers from './postReducers';
+import searchReducers from './searchReducers';
 
 export default {
-	testReducers,
+	authReducers,
+	profileReducers,
+	postReducers,
+	searchReducers,
 }

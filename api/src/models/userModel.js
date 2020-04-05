@@ -10,17 +10,23 @@ const UserSchema = mongoose.Schema({
 		trim: true,
 		lowercase: true,
 		unique: true,
+		required: true,
 		match: [/^[a-zA-Z]\w{3,}$/, "Invalid Username"]
 	},
 	displayname: {
 		type: String,
 		trim: true,
 		unique: true,
+		required: true,
 		match: [/^[a-zA-Z]\w{3,}$/, "Invalid displayName"]
 	},
 	password: {
 		type: String,
-		required: true
+		required: function() { return !this.googleId }
+	},
+	googleId: {
+		type: String,
+		required: function() { return !this.password }
 	},
 	isadmin: {
 		type: Boolean,
@@ -37,9 +43,9 @@ const UserSchema = mongoose.Schema({
 	},
 	phoneNumber: {
 		type: String,
-		required: true,
 		trim: true,
 		unique: true,
+		sparse: true,
 		match: [/^\+?\d(?:\d-?)+$/, "Invalid phone number"]
 	},
 	email: {
@@ -57,7 +63,7 @@ const UserSchema = mongoose.Schema({
 }, { timestamps: true });
 
 UserSchema.pre('save', async function () {
-	if(this.password && (this.isModified('password') || this.isNew)){
+	if (this.password && (this.isModified('password') || this.isNew)) {
 		let res = await bcrypt.genSalt(10);
 		res = await bcrypt.hash(this.password, res);
 		this.password = res;
@@ -65,10 +71,10 @@ UserSchema.pre('save', async function () {
 });
 
 UserSchema.methods.comparePassword = async function (pw) {
-	if(!this.password)
+	if (!this.password)
 		throw new Error('password not set');
 	const res = await bcrypt.compare(pw, this.password);
-	if(!res)
+	if (!res)
 		throw new Error('Bad Credentials');
 	return this;
 };
@@ -82,13 +88,12 @@ UserSchema.methods.toWeb = function () {
 		id: this._id,
 		username: this.displayname,
 		email: this.email,
-		phoneNumber: this.phoneNumber,
 		createdAt: this.createdAt,
 		updatedAt: this.updatedAt
 	};
 
-	for (key of ["firstname", "lastname", "profilePic"])
-		if(this[key]) ret[key] = this[key];
+	for (key of ["phoneNumber", "firstname", "lastname", "profilePic"])
+		if (this[key]) ret[key] = this[key];
 
 	return ret;
 };
@@ -100,8 +105,8 @@ UserSchema.virtual('fullname').set(function (name) {
 });
 
 UserSchema.virtual('fullname').get(function () {
-	if(!this.first) return null;
-	if(!this.last) return this.first;
+	if (!this.first) return null;
+	if (!this.last) return this.first;
 
 	return this.first + ' ' + this.last;
 });
