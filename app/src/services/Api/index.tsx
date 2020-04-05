@@ -1,11 +1,15 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import https from 'https';
 import {
-  loginParam, registerParam, updateProfileParam, profileType, uploadType,
+  loginParam, registerParam, updateProfileParam, profileType, uploadType, loginGoogleParam
 } from '../../types';
 
 const API = axios.create({
-  baseURL: 'http://localhost:8080',
+  httpsAgent: new https.Agent({
+    rejectUnauthorized: false
+  }),
+  baseURL: (process.env.REACT_APP_NODE_ENV === 'dev') ? 'http://localhost:8080' : process.env.REACT_APP_BACKEND_URL_PROD,
 });
 
 API.interceptors.request.use(({ headers, ...config }) => ({
@@ -28,6 +32,11 @@ export default class APIManager {
     const res = await API.post('/auth/login', param);
     if (res.data) return res.data;
     return res;
+  }
+
+  static async loginGoogle(param: loginGoogleParam) {
+    const res = await API.post('/auth/google', param);
+    return res.data;
   }
 
   static async deleteUser() {

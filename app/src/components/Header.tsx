@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import { History } from 'history';
 import { useDispatch } from 'react-redux';
 import {
-  tokenInfo, searchPostByDesc, searchPostByHashtag, searchUserByUsername,
+  tokenInfo, searchPostByDesc, searchPostByHashtag, searchUserByUsername, getAllPost, getAllUsers
 } from '../store/actions';
 
 interface HeaderProps {
@@ -23,6 +23,10 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
 
   useEffect(() => {
     dispatch(tokenInfo())
+      .then(() => {
+        dispatch(getAllPost());
+        dispatch(getAllUsers());
+      })
       .catch(() => {
         Cookies.remove('token');
         history.push('/login');
@@ -31,10 +35,10 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
 
   const search = (val: string) => {
     if (val.length !== 0) {
-    dispatch(searchPostByDesc(val));
-    dispatch(searchPostByHashtag(val));
-    dispatch(searchUserByUsername(val));
-    history.push('/search');
+      dispatch(searchPostByDesc(val));
+      dispatch(searchPostByHashtag(val));
+      dispatch(searchUserByUsername(val));
+      history.push('/search');
     } else
       message.info("Please enter a string for search");
   };
@@ -42,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
   return (
     <Row type="flex" align="middle" justify="space-between" className="header-container">
       <Col xs={0} md={3} lg={5} onClick={() => history.push('/home')}>
-        <h1 className="title-h1 title-header">UGram</h1>
+        <h1 className="title-h1 title-header">Ugram</h1>
       </Col>
       <Col xs={2} md={0} onClick={() => history.push('/home')}>
         <h1 className="title-h1 title-header">U</h1>

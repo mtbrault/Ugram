@@ -46,7 +46,10 @@ export interface mentionType {
 export interface publicationType {
   imageUrl: string;
   description: string;
-  author: string;
+  author: {
+    id: string;
+    username: string;
+  };
   hashtags: string[];
   mentions: mentionType[];
   id: string;

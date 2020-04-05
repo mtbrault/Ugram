@@ -23,11 +23,11 @@ const UploadModal: React.FC<uploadProps> = ({ visible, toggleModal }) => {
   const beforeUpload = (file: UploadFile): boolean => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!', 5);
+      message.error('You can only upload JPG/PNG file!', 3);
     }
     const isLt2M = (file.size / 1024 / 1024) < 2;
     if (!isLt2M) {
-      message.error('Image must smaller than 50KO!', 5);
+      message.error('Image must smaller than 50KO!', 3);
     }
     return isJpgOrPng && isLt2M;
   };
@@ -44,7 +44,7 @@ const UploadModal: React.FC<uploadProps> = ({ visible, toggleModal }) => {
     const b64 = await getBase64(info.file.originFileObj);
 
     if (!b64) {
-      message.error('Problem while uploading image', 5);
+      message.error('Problem while uploading image', 3);
       return;
     }
     info.file.preview = b64;
@@ -59,7 +59,7 @@ const UploadModal: React.FC<uploadProps> = ({ visible, toggleModal }) => {
     for (const hash in hashtags) {
       if (hashtags[hash].substring(0, 1) !== '#'
         && hashtags[hash].length < 3) {
-        message.error('Hashtag must start with #', 5);
+        message.error('Hashtag must start with #', 3);
         return;
       }
     }
@@ -69,12 +69,12 @@ const UploadModal: React.FC<uploadProps> = ({ visible, toggleModal }) => {
 
     dispatch(uploadPost(data))
       .then(() => {
-        message.success('Picture well uploaded', 5);
+        message.success('Picture well uploaded', 3);
         dispatch(getMyProfile());
         toggleModal();
       })
       .catch((error) => {
-        message.error(error.response.data.message, 5);
+        message.error(error.response.data.message, 3);
       });
   };
 

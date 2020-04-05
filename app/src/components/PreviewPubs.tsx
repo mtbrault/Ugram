@@ -24,12 +24,12 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
     dispatch(deletePost(previewPubs.id))
       .then(
         () => {
-          message.success('Picture well deleted', 5);
+          message.success('Picture well deleted', 3);
           dispatch(getMyProfile());
           toggle();
         },
         (err) => {
-          message.error(err.response.data.message, 5);
+          message.error(err.response.data.message, 3);
         },
       );
   };

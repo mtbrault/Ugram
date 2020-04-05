@@ -39,17 +39,17 @@ const EditPublicationModal: React.FC<EditPublicationModal> = ({ visible, toggleM
     for (const hashtag in updatedHashtags) {
       if (updatedHashtags[hashtag].substring(0, 1) !== '#'
         && updatedHashtags[hashtag].length < 3) {
-        message.error(`Hashtag must start with # or longer than [${updatedHashtags[hashtag]}]`, 5);
+        message.error(`Hashtag must start with # or longer than [${updatedHashtags[hashtag]}]`, 3);
         return;
       }
     }
     dispatch(updatePost(pubs.id, data))
       .then(() => {
-        message.success('Picture well updated', 5);
+        message.success('Picture well updated', 3);
         dispatch(getMyProfile());
         toggleModal();
       },
-      (err) => message.error(err.response.data.message, 5));
+        (err) => message.error(err.response.data.message, 5));
   };
 
   return (

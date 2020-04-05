@@ -36,11 +36,11 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
     const regTel = new RegExp('(^[0-9]*)$');
 
     if (username === '' || email === '' || password === '' || phoneNumber === '' || firstname === '' || lastname === '')
-      message.error('You need to fill each field', 5);
+      message.error('You need to fill each field', 3);
     else if (!regMail.test(email))
-      message.error('Bad email format', 5);
-    else if (!regTel.test(phoneNumber))
-      message.error('Bad phone number format', 5);
+      message.error('Bad email format', 3);
+    else if (!regTel.test(phoneNumber) || phoneNumber.length !== 10)
+      message.error('Phone number must be 10 numbers', 3);
     else {
       dispatch(registerUser({
         email, username, firstname, lastname, phoneNumber, password,
@@ -51,7 +51,10 @@ const Register: React.FC<RegisterProps> = ({ history }) => {
           history.push('/');
         })
         .catch((err) => {
-          message.error(err.response.data.message, 5);
+          if (err.response)
+            message.error(err.response.data.message, 3);
+          else
+            message.error("Impossible to connnect to API", 3);
         });
     }
   };

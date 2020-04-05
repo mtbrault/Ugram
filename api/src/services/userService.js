@@ -11,7 +11,7 @@ const authenticate = async ({ username, password }) => {
 		key = "phoneNumber";
 	}
 	let user = await User.findOne({ [key]: username.toLowerCase() });
-	if (!user)
+	if (!user || !user.password)
 		throw new Error("Bad Credentials");
 	user = await user.comparePassword(password);
 	return user;
@@ -33,7 +33,7 @@ const create = async ({
 	});
 	if (user) {
 		let reason = "phone number";
-		if (username === username) {
+		if (username.toLowerCase() === user.username) {
 			reason = "username";
 		} else if (email === user.email) {
 			reason = "email address";
@@ -87,8 +87,6 @@ const getAll = async (skip, limit, id, userParam) => {
 	};
 };
 
-// TODO: maybe change username in all posts mentions and authors (really heavy, maybe not the best thing)
-// or prevent username modification in update.
 const update = async (user, {
 	username, password, firstname, lastname,
 	email, profilePic, phoneNumber
@@ -98,6 +96,8 @@ const update = async (user, {
 		if (value && user[key] != value) {
 			query.push({ [key]: value.toLowerCase() });
 			user[key] = value.toLowerCase();
+			if (key === "username")
+				user.displayname = value;
 		}
 	}
 	if (query.length) {

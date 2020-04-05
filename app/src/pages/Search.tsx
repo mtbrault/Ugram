@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { History } from 'history';
 import {
   Avatar, Button, Card, Col, List, Row, Tag,
 } from 'antd/es';
-import {initialProfile, initialSearch, postList, profileType, publicationType, storeTypes} from '../types';
+import { initialProfile, initialSearch, profileType, publicationType, storeTypes } from '../types';
 import PreviewPubs from '../components/PreviewPubs';
 import { getAllUsers } from '../store/actions';
 
@@ -16,8 +16,8 @@ const Search: React.FC<SearchProps> = ({ history }) => {
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewPubs, setPreviewPubs] = useState<publicationType>();
   const search = useSelector<storeTypes, initialSearch>((store) => store.searchReducers);
-  const dispatch = useDispatch();
   const data = useSelector<storeTypes, initialProfile>((store) => store.profileReducers);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllUsers());
@@ -25,18 +25,19 @@ const Search: React.FC<SearchProps> = ({ history }) => {
 
   useEffect(() => {
     if (!search.loading) history.push('/');
-  }, [search]);
+  }, [search, history]);
 
   const openPreview = (item: publicationType) => {
     setPreviewVisible(!previewVisible);
     setPreviewPubs(item);
   };
 
-  const getUserByPubs = (post: publicationType, username?: boolean): profileType | string => {
-    const user = data.users.filter((author) => author.id === post.author)[0];
-    if (user !== undefined) return user.username;
-    if (username) return data.myProfile.username;
-    return user;
+  const getUserByPubs = (post: publicationType, username: boolean): profileType | string => {
+    const user = data.users.filter((author) => author.id === post.author.id)[0];
+    if (user === undefined)
+      return (username) ? data.myProfile.username : data.myProfile;
+    else
+      return (username) ? user.username : user;
   };
 
   return (
@@ -61,7 +62,7 @@ const Search: React.FC<SearchProps> = ({ history }) => {
               <Card
                 bordered
                 title={
-                  <Button type="link" icon="user" onClick={() => history.push('/profile', getUserByPubs(post))}>{getUserByPubs(post, true)}</Button>
+                  <Button type="link" icon="user" onClick={() => history.push('/profile', getUserByPubs(post, false))}>{getUserByPubs(post, true)}</Button>
                 }
                 className="card-pubs"
               >
@@ -86,7 +87,7 @@ const Search: React.FC<SearchProps> = ({ history }) => {
               <Card
                 bordered
                 title={
-                  <Button type="link" icon="user" onClick={() => history.push('/profile', getUserByPubs(post))}>{getUserByPubs(post, true)}</Button>
+                  <Button type="link" icon="user" onClick={() => history.push('/profile', getUserByPubs(post, false))}>{getUserByPubs(post, true)}</Button>
                 }
                 className="card-pubs"
               >
@@ -96,14 +97,14 @@ const Search: React.FC<SearchProps> = ({ history }) => {
           )}
         />
         {previewPubs && previewVisible
-        && (
-          <PreviewPubs
-            previewPubs={previewPubs}
-            previewVisible={previewVisible}
-            toggle={() => setPreviewVisible(!previewVisible)}
-            isMe={false}
-          />
-        )}
+          && (
+            <PreviewPubs
+              previewPubs={previewPubs}
+              previewVisible={previewVisible}
+              toggle={() => setPreviewVisible(!previewVisible)}
+              isMe={false}
+            />
+          )}
         {search.users_list
           && (
             <List
