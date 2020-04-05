@@ -37,7 +37,7 @@ const getAll = async (req, res, next) => {
 	return res.status(200).json(chunk);
 };
 
-// use only after extractParams
+// use only after extractPageParams
 const getSelf = async (req, res, next) => {
 	const [err, ret] = await to(postService.getByUser(req.user, req.skip, req.limit));
 	if (err)
@@ -90,7 +90,7 @@ const remove = async (req, res, next) => {
 	if (err)
 		return rerr(next, err, 500);
 	return res.status(204).send();
-}
+};
 
 module.exports = {
 	upload,
