@@ -56,6 +56,30 @@ const extractPostParams = (req, res, next) => {
 		{name: "description", isWild: true}]);
 };
 
+const extractDateParams = (req, res, next) => {
+	var now = new Date();
+	if (req.query) {
+		switch (req.query.date) {
+			default :
+			case ('year'):
+				now.setFullYear(now.getFullYear() - 1);
+				break;
+			case ('month'):
+				if (now.getMonth() === 0)
+					now.setFullYear(now.getFullYear() - 1);
+				now.setMonth(now.getMonth() - 1)
+				break;
+			case ('day'):
+				if (now.getDate() === 1)
+					now.setMonth(now.getMonth() - 1);
+				now.setDate(now.getDate() - 1);
+				break;
+		}
+	}
+	req.dateLimit = now;
+	next();
+};
+
 const extractPageParams = (req,res,next) => {
 	req.page = req.query.page ? parseInt(req.query.page, 10) : 0;
 	if(isNaN(req.page) || req.page < 0)
@@ -69,6 +93,7 @@ const extractPageParams = (req,res,next) => {
 
 module.exports = {
 	extractPageParams,
+	extractDateParams,
 	extractUserParams,
-	extractPostParams
+	extractPostParams,
 };

@@ -1,4 +1,4 @@
-const { User, Post } = require("../db");
+const { User, Post, Keyword } = require("../db");
 const { to, terr, notEmpty } = require("../middlewares/utils");
 
 const create = async (author, { imageUrl, description, hashtags, mentions }) => {
@@ -26,6 +26,8 @@ const create = async (author, { imageUrl, description, hashtags, mentions }) => 
 	}
 
 	notEmpty(hashtags) || (hashtags = []);
+	for (value of hashtags)
+		addKeyword(value);
 
 	!!description || (description = "");
 
@@ -96,6 +98,8 @@ const update = async (post, { imageUrl, description, hashtags, mentions }, merge
 		} else if (hashtags.length > 0) {
 			post.hashtags.addToSet(...hashtags);
 		}
+		for (value of hashtags)
+			addKeyword(value);
 	}
 	post = await post.save();
 	return post;
@@ -105,11 +109,36 @@ const remove = async post => {
 	return Post.findByIdAndDelete(post._id);
 };
 
+const addKeyword = async (word) => {
+	let keyword = await Keyword.findOne({word: word});
+	if (keyword)
+		keyword.number += 1;
+	else
+		keyword = new Keyword({word: word});
+	keyword.save();
+	return keyword
+};
+
+const getKeyword = async (skip, limit, dateLimit) => {
+	const keywords = await Keyword.find({"createdAt": { $gte: dateLimit}}).sort("-number").skip(skip).limit(limit + 1);
+	const last = keywords.length != limit + 1;
+	if (!last)
+		keywords.pop();
+	return {
+		last,
+		keywords: keywords.map(x => {
+			return x.toWeb();
+		})
+	};
+};
+
 module.exports = {
 	create,
 	getAll,
 	getByUser,
 	getById,
 	update,
+	addKeyword,
+	getKeyword,
 	remove
 };
