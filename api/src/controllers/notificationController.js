@@ -56,16 +56,16 @@ const remove = async (req, res, next) => {
 };
 
 //
-//const create = async (req, res, next) => {
-//    const [err, notification] = await to(notificationService.create(req.refUser, req.body.text));
-//    if (err)
-//        return rerr(next, err, 500);
-//    return res.status(200).json(notification.toWeb());
-//};
+const create = async (req, res, next) => {
+    const [err, notification] = await to(notificationService.create(req.refUser, req.body.text));
+    if (err)
+       return rerr(next, err, 500);
+    return res.status(200).json(notification.toWeb());
+};
 //
 
 module.exports = {
-   // create,
+    create,
     getSelf,
     getByUser,
     markAsRead,
