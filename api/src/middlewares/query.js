@@ -6,23 +6,38 @@ const defaultPageSize = conv < 1 ? 20 : conv;
 conv = parseInt(api.maxPageSize, 10) || 100;
 const maxPageSize = conv < defaultPageSize ? defaultPageSize : conv;
 
-function formatRegKeyValue (key, value, isWildcard) {
+const wildcards = {
+	END: 'end',
+	FULL: 'full',
+	NONE: 'none'
+};
+
+function formatRegKeyValue (key, value, wildCardType) {
 	let obj = {};
-	if (isWildcard)
-		obj[key] = new RegExp(`.*${value}.*`, "i");
-	else
-		obj[key] = value;
+	switch (wildCardType) {
+		case ('none'):
+			obj[key] = value;
+			break;
+		case ('full'):
+			obj[key] = new RegExp(`.*${value}.*`, "i");
+			break;
+		case ('end'):
+			obj[key] = new RegExp(`^${value}`, "i");
+			break;
+	}
 	return obj;
 }
 
 const extractQueryParams = (req, res, next, listParam) => {
 	req.requestParam = [];
+	var wildCardType = req.query.autocomplete === 'true' ? wildcards.END : wildcards.FULL;
 	Object.keys(req.query).forEach(function (key) {
 		for (param of listParam) {
 			if (key === param.name) {
-				req.requestParam.push(formatRegKeyValue(param.name, req.query[key], param.isWild));
+				req.requestParam.push(formatRegKeyValue(param.name, req.query[key],
+					param.isWild ? wildCardType : wildcards.NONE));
 			} else if (key === "content") {
-				req.requestParam.push(formatRegKeyValue(param.name, req.query.content, true));
+				req.requestParam.push(formatRegKeyValue(param.name, req.query.content, wildCardType));
 			}
 		}
 	});
