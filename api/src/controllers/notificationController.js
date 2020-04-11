@@ -55,17 +55,7 @@ const remove = async (req, res, next) => {
     return res.status(204).send();
 };
 
-//
-const create = async (req, res, next) => {
-    const [err, notification] = await to(notificationService.create(req.refUser, req.body.text));
-    if (err)
-       return rerr(next, err, 500);
-    return res.status(200).json(notification.toWeb());
-};
-//
-
 module.exports = {
-    create,
     getSelf,
     getByUser,
     markAsRead,

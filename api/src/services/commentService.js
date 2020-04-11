@@ -1,5 +1,6 @@
 const { Comment } = require("../db");
 const { to, terr, notEmpty } = require("../middlewares/utils");
+const notificationService = require("./notificationService");
 
 const create = async (author, target, { content, hashtags, mentions }) => {
 	if (!content || !content.trim())
@@ -31,6 +32,7 @@ const create = async (author, target, { content, hashtags, mentions }) => {
 		author: { id: author._id, username: author.username },
 		target: target._id, content, hashtags, mentions
 	});
+	notification = await notificationService.create(target, content);
 	comment = await comment.save();
 	return comment;
 };
