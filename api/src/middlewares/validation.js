@@ -2,11 +2,13 @@ const { rerr, to } = require('../middlewares/utils');
 const userService = require('../services/userService');
 const postService = require('../services/postService');
 const commentService = require('../services/commentService');
+const notificationService = require('../services/notificationService');
 
 const funcStore = {
 	isValidUserId: {},
 	isValidPostId: {},
 	isValidCommentId: {},
+	isValidNotificationId: {}
 };
 
 const isValidPostId = (key="id") => {
@@ -60,6 +62,23 @@ const isValidCommentId = (key="id") => {
 	return func;
 };
 
+const isValidNotificationId = (key="id") => {
+	let func = funcStore.isValidNotificationId[key];
+	if (!func) {
+		func = async (req, res, next) => {
+			if (!req.params[key])
+				return rerr(next, "isValidNotificationId should be used on a route with the given key");
+			const [err, notification] = await to(notificationService.getById(req.params[key]));
+			if (err || !notification)
+				return rerr(next, "Notification not found", 404);
+			req.refNotification = notification;
+			next();
+		};
+		funcStore.isValidNotificationId[key] = func;
+	}
+	return func;
+};
+
 // Should be used only after isValidUserId
 const isAdminOrLoggedUser = async (req, res, next) => {
 	if(!req.user._id.equals(req.refUser._id) && !req.user.isadmin)
@@ -83,6 +102,13 @@ const isAdminOrCommentAuthor = async (req, res, next) => {
 	next();
 };
 
+// Should be used only after isValidNotificationId
+const isAdminOrNotificationOwner = async (req, res, next) => {
+	if(!req.user._id.equals(req.refNotification.userId) && !req.user.isadmin)
+		return rerr(next, "Forbidden", 403);
+	next();
+};
+
 const isAdmin = async (req, res, next) => {
 	if(!req.user)
 		return rerr(next, "no user given by passport");
@@ -98,5 +124,7 @@ module.exports = {
 	isValidCommentId,
 	isAdminOrPostAuthor,
 	isAdminOrCommentAuthor,
+	isValidNotificationId,
+	isAdminOrNotificationOwner,
 	isAdmin
 };

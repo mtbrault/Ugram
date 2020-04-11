@@ -20,7 +20,7 @@ const uploadForUser = async (req, res, next) => {
 	return res.status(201).json(post.toWeb());
 };
 
-// use only after extractParams
+// use only after extractPageParams
 const getAll = async (req, res, next) => {
 	const [err, ret] = await to(postService.getAll(req.skip, req.limit, {}, req.requestParam));
 	if (err)
@@ -37,7 +37,7 @@ const getAll = async (req, res, next) => {
 	return res.status(200).json(chunk);
 };
 
-// use only after extractParams
+// use only after extractPageParams
 const getSelf = async (req, res, next) => {
 	const [err, ret] = await to(postService.getByUser(req.user, req.skip, req.limit));
 	if (err)
@@ -54,7 +54,7 @@ const getSelf = async (req, res, next) => {
 	return res.status(200).json(chunk);
 };
 
-// use only after isValidUserId and extractParams
+// use only after isValidUserId and extractPageParams
 const getByUser = async (req, res, next) => {
 	const [err, ret] = await to(postService.getByUser(req.refUser, req.skip, req.limit));
 	if (err)
@@ -68,6 +68,23 @@ const getByUser = async (req, res, next) => {
 	};
 	if (!last)
 		chunk.next = `/user/${req.refUser._id}/post?page=${req.page + 1}&limit=${req.limit}`;
+	return res.status(200).json(chunk);
+};
+
+// use only after extractDateParams and extractPageParams and extractKeywordParams
+const getKeyword = async (req, res, next) => {
+	const [err, ret] = await to(postService.getKeyword(req.skip, req.limit, req.dateLimit));
+	if (err)
+		return rerr(next, err);
+	const {last, keywords} = ret;
+	const chunk = {
+		page: req.page,
+		limit: req.limit,
+		count: keywords.length,
+		keywords
+	};
+	if (!last)
+		chunk.next = `/keyword?page=${req.page + 1}&limit=${req.limit}&date=${req.dateLimit}`;
 	return res.status(200).json(chunk);
 };
 
@@ -90,7 +107,7 @@ const remove = async (req, res, next) => {
 	if (err)
 		return rerr(next, err, 500);
 	return res.status(204).send();
-}
+};
 
 module.exports = {
 	upload,
@@ -99,6 +116,7 @@ module.exports = {
 	getSelf,
 	getByUser,
 	getById,
+	getKeyword,
 	remove,
 	update
 };

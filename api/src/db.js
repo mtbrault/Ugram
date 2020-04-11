@@ -30,5 +30,7 @@ module.exports = {
 	User: require("./models/userModel"),
 	Post: require("./models/postModel"),
 	Comment: require("./models/commentModel"),
+	Notification : require("./models/notificationModel"),
+	Keyword: require("./models/keywordModel"),
 	connection: mongoose.connection
 };

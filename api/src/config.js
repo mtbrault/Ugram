@@ -9,7 +9,7 @@ const config = {
 };
 
 config.app.env             = process.env.APP || 'dev';
-config.app.port            = process.env.PORT || '8080';
+config.app.port            = process.env.PORT || '8081';
 config.api.defaultPageSize = process.env.API_DEFAULT_PAGE_SIZE || '20';
 config.api.maxPageSize     = process.env.API_MAX_PAGE_SIZE || '100';
 config.db.dialect          = process.env.DB_DIALECT || 'mongodb';
