@@ -1,9 +1,6 @@
-*_o*
 data/
 node_modules/
-schemas/
 
-node_modules/
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
