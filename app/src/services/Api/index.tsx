@@ -111,4 +111,13 @@ export default class APIManager {
     const res = await API.get(`/post?description=${search}&limit=100&autocomplete=${autocomplete}`);
     return res.data;
   }
+
+  static async getNotifs() {
+    const res = await API.get('/self/notification');
+    return res.data;
+  }
+
+  static async readNotifs() {
+    const res = await API.patch('/notification/read');
+  }
 }
