@@ -47,6 +47,13 @@ const markAsRead = async (req, res, next) => {
     return res.status(200).json(notification.toWeb());
 };
 
+const markAllAsRead = async (req, res, next) => {
+    const [err, notification] = await to(notificationService.markAllAsRead(req.user));
+    if (err)
+        return rerr(next, err);
+    return res.status(204).send();
+};
+
 // use only after isValidNotificationId
 const remove = async (req, res, next) => {
     const [err, notification] = await to(notificationService.remove(req.refNotification));
@@ -59,5 +66,6 @@ module.exports = {
     getSelf,
     getByUser,
     markAsRead,
+    markAllAsRead,
     remove
 };
