@@ -42,7 +42,7 @@ const getSelf = async (req, res, next) => {
 	const [err, ret] = await to(postService.getByUser(req.user, req.skip, req.limit));
 	if (err)
 		return rerr(next, err);
-	const {last, posts} = ret;
+	const { last, posts } = ret;
 	const chunk = {
 		page: req.page,
 		limit: req.limit,
@@ -72,7 +72,7 @@ const getByUser = async (req, res, next) => {
 };
 
 // use only after isValidPostId
-const getById = async (req, res, next) => {
+const getById = (req, res, next) => {
 	return res.status(200).json(req.refPost.toWeb());
 };
 

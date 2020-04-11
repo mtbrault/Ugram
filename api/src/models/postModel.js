@@ -1,19 +1,6 @@
 const mongoose = require('mongoose');
 const votingPlugin = require('./plugins/votingPlugin');
-
-const NormalizedUserSchema = mongoose.Schema({
-	id: {
-		type: mongoose.Schema.Types.ObjectId,
-		ref: "User",
-		required: true
-	},
-	username: {
-		type: String,
-		required: true,
-		lowercase: true,
-		trim: true
-	}
-}, {_id: false});
+const { NormalizedUserSchema } = require('./schemas/normalizedUser');
 
 const PostSchema = mongoose.Schema({
 	author: {

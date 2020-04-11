@@ -19,6 +19,7 @@ const authRouter = express.Router();
 authRouter.use(passport.authenticate('jwt', {session:false}));
 require('./userRouter')(authRouter);
 require('./postRouter')(authRouter);
+require('./commentRouter')(authRouter);
 
 router.use(baseRouter);
 router.use(authRouter);
