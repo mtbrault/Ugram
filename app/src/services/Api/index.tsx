@@ -118,6 +118,7 @@ export default class APIManager {
   }
 
   static async readNotifs() {
-    const res = await API.patch('/notification/read');
+    const res = await API.patch('/self/notification/read');
+    return res.data;
   }
 }
