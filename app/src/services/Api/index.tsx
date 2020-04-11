@@ -97,18 +97,18 @@ export default class APIManager {
     return res.data;
   }
 
-  static async searchUser(search: string) {
-    const res = await API.get(`/user?username=${search}&limit=100`);
+  static async searchUser(search: string, autocomplete: boolean) {
+    const res = await API.get(`/user?username=${search}&limit=100&autocomplete=${autocomplete}`);
     return res.data;
   }
 
-  static async searchPostHashtag(search: string) {
-    const res = await API.get(`/post?hashtags=${search}&limit=100`);
+  static async searchPostHashtag(search: string, autocomplete: boolean) {
+    const res = await API.get(`/post?hashtags=${search}&limit=100&autocomplete=${autocomplete}`);
     return res.data;
   }
 
-  static async searchPostDesc(search: string) {
-    const res = await API.get(`/post?description=${search}&limit=100`);
+  static async searchPostDesc(search: string, autocomplete: boolean) {
+    const res = await API.get(`/post?description=${search}&limit=100&autocomplete=${autocomplete}`);
     return res.data;
   }
 }
