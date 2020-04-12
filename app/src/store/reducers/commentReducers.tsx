@@ -13,7 +13,7 @@ const SUCCEEDED = 'SUCCEEDED';
 export default handleActions<initialComment>(
 	{
 		[`${GET_COMMENT_BY_ID}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, ...payload }),
-		[`${ADD_COMMENT}_${SUCCEEDED}`]: (state) => ({ ...state }),
+		[`${ADD_COMMENT}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, ...payload }),
 	},
 	initialState,
 );
