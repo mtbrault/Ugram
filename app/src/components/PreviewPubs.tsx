@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Col, List, Modal, Row, Tag, message,
 } from 'antd/es';
 import { useDispatch } from 'react-redux';
 import { publicationType } from '../types';
 import FooterPreviewPubs from './FooterPreviewPubs';
-import { deletePost, getMyProfile } from '../store/actions';
+import { deletePost, getMyProfile, getCommentById, addComment } from '../store/actions';
 
 interface PreviewPubs {
   previewPubs: publicationType;
@@ -18,7 +18,16 @@ interface PreviewPubs {
 const PreviewPubs: React.FC<PreviewPubs> = ({
   previewPubs, toggle, previewVisible, editPubs, isMe,
 }) => {
+  const [newComment, setNewComment] = useState('');
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCommentById(previewPubs.id));
+  }, [dispatch, previewPubs]);
+
+  const addNewComment = () => {
+    dispatch(addComment(previewPubs.id, newComment));
+  }
 
   const deleteThis = () => {
     dispatch(deletePost(previewPubs.id))

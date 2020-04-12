@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import { History } from 'history';
 import { useDispatch } from 'react-redux';
 import {
-  tokenInfo, searchPostByDesc, searchPostByHashtag, searchUserByUsername, getAllPost, getAllUsers, getNotif,
+  tokenInfo, searchPostByDesc, searchPostByHashtag, searchUserByUsername, getAllPost, getAllUsers, getNotif, readNotif
 } from '../store/actions';
 
 interface HeaderProps {
@@ -43,6 +43,10 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
     } else
       message.info("Please enter a string for search");
   };
+
+  const openNotif = () => {
+    dispatch(readNotif());
+  }
 
   return (
     <Row type="flex" align="middle" justify="space-between" className="header-container">
