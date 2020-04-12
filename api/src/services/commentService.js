@@ -32,7 +32,7 @@ const create = async (author, target, { content, hashtags, mentions }) => {
 		author: { id: author._id, username: author.username },
 		target: target._id, content, hashtags, mentions
 	});
-	notification = await notificationService.create(target, content);
+	// notification = await notificationService.create(target, content);
 	comment = await comment.save();
 	return comment;
 };
@@ -40,14 +40,8 @@ const create = async (author, target, { content, hashtags, mentions }) => {
 const getAll = async (skip, limit, query = {}) => {
 	const comments = await Comment.find(query).sort("-createdAt").skip(skip).limit(limit+1);
 	const last = comments.length !== limit + 1;
-	if (!last)
-		comments.pop();
-	return {
-		last,
-		comments: comments.map(x => {
-			return x.toWeb();
-		})
-	};
+	if (!last) comments.pop();
+	return { last, comments };
 };
 
 const getByAuthor = (author, skip, limit) => {

@@ -9,7 +9,7 @@ const upload = async (req, res, next) => {
 	const [err, post] = await to(postService.create(req.user, req.body));
 	if (err)
 		return rerr(next, err);
-	return res.status(201).json(post.toWeb());
+	return res.status(201).json(post.toWeb(req.user));
 };
 
 // use only after isValidUserId
@@ -17,7 +17,7 @@ const uploadForUser = async (req, res, next) => {
 	const [err, post] = await to(postService.create(req.refUser, req.body));
 	if (err)
 		return rerr(next, err);
-	return res.status(201).json(post.toWeb());
+	return res.status(201).json(post.toWeb(req.refUser));
 };
 
 // use only after extractPageParams
@@ -25,12 +25,12 @@ const getAll = async (req, res, next) => {
 	const [err, ret] = await to(postService.getAll(req.skip, req.limit, {}, req.requestParam));
 	if (err)
 		return rerr(next, err);
-	const {last, posts} = ret;
+	const { last, posts } = ret;
 	const chunk = {
 		page: req.page,
 		limit: req.limit,
 		count: posts.length,
-		posts
+		posts: posts.map(x => x.toWeb(req.user))
 	};
 	if (!last)
 		chunk.next = `/post?page=${req.page + 1}&limit=${req.limit}`;
@@ -47,7 +47,7 @@ const getSelf = async (req, res, next) => {
 		page: req.page,
 		limit: req.limit,
 		count: posts.length,
-		posts
+		posts: posts.map(x => x.toWeb(req.user))
 	};
 	if (!last)
 		chunk.next = `/self/post?page=${req.page + 1}&limit=${req.limit}`;
@@ -64,7 +64,7 @@ const getByUser = async (req, res, next) => {
 		page: req.page,
 		limit: req.limit,
 		count: posts.length,
-		posts
+		posts: posts.map(x => x.toWeb(req.user))
 	};
 	if (!last)
 		chunk.next = `/user/${req.refUser._id}/post?page=${req.page + 1}&limit=${req.limit}`;
@@ -90,7 +90,7 @@ const getKeyword = async (req, res, next) => {
 
 // use only after isValidPostId
 const getById = (req, res, next) => {
-	return res.status(200).json(req.refPost.toWeb());
+	return res.status(200).json(req.refPost.toWeb(req.user));
 };
 
 // use only after isValidPostId
@@ -98,7 +98,7 @@ const update = async (req, res, next) => {
 	const [err, post] = await to(postService.update(req.refPost ,req.body, !!parseInt(req.query.merge, 10)));
 	if (err)
 		return rerr(next, err);
-	return res.status(200).json(post.toWeb());
+	return res.status(200).json(post.toWeb(req.user));
 };
 
 // use only after isValidPostId

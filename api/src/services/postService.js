@@ -50,14 +50,8 @@ const getAll = async (skip, limit, query = {}, requestParam = []) => {
 
 	const posts = await Post.find(query).sort("-createdAt").skip(skip).limit(limit + 1);
 	const last = posts.length !== limit + 1;
-	if (!last)
-		posts.pop();
-	return {
-		last,
-		posts: posts.map(x => {
-			return x.toWeb();
-		})
-	};
+	if (!last) posts.pop();
+	return { last, posts };
 };
 
 const getByUser = (user, skip, limit) => {
