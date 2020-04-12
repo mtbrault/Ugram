@@ -113,12 +113,24 @@ export default class APIManager {
   }
 
   static async getNotifs() {
-    const res = await API.get('/self/notification');
+    const res = await API.get('/self/notification&limit=100');
     return res.data;
   }
 
   static async readNotifs() {
     const res = await API.patch('/self/notification/read');
+    return res.data;
+  }
+
+  static async getComments(id: string) {
+    const res = await API.get(`/post/${id}/comment&limit=100`);
+    return res.data;
+  }
+
+  static async addComments(postId: string, content: string) {
+    const res = await API.post(`/post/${postId}/comment`, {
+      content: content,
+    });
     return res.data;
   }
 }

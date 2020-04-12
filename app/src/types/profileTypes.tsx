@@ -53,4 +53,6 @@ export interface publicationType {
   hashtags: string[];
   mentions: mentionType[];
   id: string;
+  upvotes: number;
+  downvotes: number;
 }
