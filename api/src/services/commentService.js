@@ -1,6 +1,5 @@
-const { User, Comment } = require("../db");
+const { User, Comment, Notification } = require("../db");
 const { to, terr, notEmpty } = require("../middlewares/utils");
-// Const notificationService = require("./notificationService");
 
 const create = async (author, target, { content, hashtags, mentions }) => {
 	if (!content || !content.trim()) terr("content field is required", 400);
@@ -25,15 +24,30 @@ const create = async (author, target, { content, hashtags, mentions }) => {
 
 	notEmpty(hashtags) || (hashtags = []);
 
-	let comment = new Comment({
+	const comment = new Comment({
 		author: { id: author._id, username: author.username },
 		target: target._id,
 		content,
 		hashtags,
 		mentions,
 	});
-	// Notification = await notificationService.create(target, content);
-	comment = await comment.save();
+	const session = await Comment.startSession();
+	await session.withTransaction(async () => {
+		await comment.save({ session });
+		if (!author._id.equals(target.author.id)) {
+			await Notification.create(
+				[
+					{
+						userId: target.author.id,
+						text: `${author.displayname} commented on your post`,
+					},
+				],
+				{
+					session,
+				},
+			);
+		}
+	});
 	return comment;
 };
 
