@@ -29,19 +29,16 @@ const CommentSchema = mongoose.Schema({
 
 CommentSchema.plugin(votingPlugin);
 
-CommentSchema.methods.toWeb = function() {
-	const {
-		author, target, content, hashtags, mentions,
-		votes, upvotes, downvotes, tally,
-		createdAt, updatedAt
-	} = this.toObject({virtuals: true});
-	return {
+CommentSchema.methods.toWeb = function(user) {
+	return (({
+		author, target, content, hashtags,
+		mentions, upvotes, downvotes,
+		tally, createdAt, updatedAt
+	}) => ({
 		id: this._id, author, target, content,
-		hashtags, mentions, votes, upvotes,
-		downvotes, tally, createdAt, updatedAt
-	};
+		hashtags, mentions, upvotes, downvotes,
+		tally, ...this.voted(user), createdAt, updatedAt
+	})) (this.toObject({ virtuals: true }));
 }
-
-CommentSchema.index({target: 1, author: 1});
 
 module.exports = mongoose.model('Comment', CommentSchema);

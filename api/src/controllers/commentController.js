@@ -10,7 +10,7 @@ const create = async (req, res, next) => {
 	const [err, comment] = await to(commentService.create(req.user, req.refPost, req.body));
 	if (err)
 		return rerr(next, err);
-	return res.status(201).json(comment.toWeb());
+	return res.status(201).json(comment.toWeb(req.user));
 };
 
 // use only after extractPageParams
@@ -23,7 +23,7 @@ const getSelf = async (req, res, next) => {
 		page: req.page,
 		limit: req.limit,
 		count: comments.length,
-		comments
+		comments: comments.map(x => x.toWeb(req.user))
 	};
 	if (!last)
 		chunk.next = `/self/comment?page=${req.page + 1}&limit=${req.limit}`;
@@ -40,7 +40,7 @@ const getByUser = async (req, res, next) => {
 		page: req.page,
 		limit: req.limit,
 		count: comments.length,
-		comments
+		comments: comments.map(x => x.toWeb(req.user))
 	};
 	if (!last)
 		chunk.next = `/user/${req.refUser._id}/comment?page=${req.page + 1}&limit=${req.limit}`;
@@ -57,7 +57,7 @@ const getByPost = async (req, res, next) => {
 		page: req.page,
 		limit: req.limit,
 		count: comments.length,
-		comments
+		comments: comments.map(x => x.toWeb(req.user))
 	};
 	if (!last)
 		chunk.next = `/post/${req.refPost._id}/comment?page=${req.page + 1}&limit=${req.limit}`;
@@ -66,7 +66,7 @@ const getByPost = async (req, res, next) => {
 
 // use only after isValidCommentId
 const getById = async (req, res, next) => {
-	return res.status(200).json(req.refComment.toWeb());
+	return res.status(200).json(req.refComment.toWeb(req.user));
 };
 
 // use only after isValidCommentId
@@ -74,7 +74,7 @@ const update = async (req, res, next) => {
 	const [err, comment] = await to(commentService.update(req.refComment ,req.body, !!parseInt(req.query.merge, 10)));
 	if (err)
 		return rerr(next, err);
-	return res.status(200).json(comment.toWeb());
+	return res.status(200).json(comment.toWeb(req.user));
 };
 
 // use only after isValidCommentId

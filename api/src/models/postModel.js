@@ -29,17 +29,16 @@ const PostSchema = mongoose.Schema({
 
 PostSchema.plugin(votingPlugin);
 
-PostSchema.methods.toWeb = function() {
-	const {
-		author, imageUrl, hashtags, mentions,
-		votes, upvotes, downvotes, tally,
-		description, createdAt, updatedAt
-	} = this.toObject({virtuals: true});
-	return {
-		id: this._id, author, imageUrl, hashtags,
-		mentions, votes, upvotes, downvotes,
-		tally, description, createdAt, updatedAt
-	};
+PostSchema.methods.toWeb = function(user) {
+	return (({
+		author, imageUrl, description, hashtags,
+		mentions, upvotes, downvotes,
+		tally, createdAt, updatedAt
+	}) => ({
+		id: this._id, author, imageUrl, description,
+		hashtags, mentions, upvotes, downvotes,
+		tally, ...this.voted(user), createdAt, updatedAt
+	})) (this.toObject({ virtuals: true }));
 }
 
 module.exports = mongoose.model('Post', PostSchema);

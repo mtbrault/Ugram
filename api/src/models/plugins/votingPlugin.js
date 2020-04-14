@@ -30,7 +30,14 @@ const votingPlugin = (schema, opts={}) => {
 	};
 
 	schema.methods.voted = function (voter) {
-		return this.upvoted(voter) || this.downvoted(voter);
+		if (!voter) return {};
+		const upvoted = this.upvoted(voter);
+		const downvoted = this.downvoted(voter);
+		return {
+			upvoted,
+			downvoted,
+			voted: upvoted || downvoted
+		};
 	};
 
 	schema.methods.upvote = function (voter) {

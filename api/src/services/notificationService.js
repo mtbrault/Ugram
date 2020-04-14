@@ -36,6 +36,13 @@ const markAsRead = async (notification) => {
     return notification
 };
 
+const markAllAsRead = async (user) => {
+    console.log(user);
+    notification = await Notification.updateMany({"userId": user._id || user, isRead: false },
+        { $set: {isRead: true}});
+    return notification
+};
+
 const remove = async notification => {
     return Notification.findByIdAndDelete(notification._id);
 };
@@ -45,5 +52,6 @@ module.exports = {
     getByUser,
     getById,
     markAsRead,
+    markAllAsRead,
     remove,
 };
