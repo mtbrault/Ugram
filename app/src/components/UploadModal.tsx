@@ -1,23 +1,26 @@
 import React, { useState } from 'react';
 import {
-  Modal, Row, Col, Upload, message, Avatar,
+  Modal, Row, Col, Upload, message, Avatar, Button,
 } from 'antd/es';
 import { useDispatch } from 'react-redux';
 import { UploadFile } from 'antd/es/upload/interface';
 import { uploadPost, getMyProfile } from '../store/actions';
 import InputComponent from './InputComponent';
 import MentionsTagsComponent from './MentionsTagsComponent';
+import WebcamPicture from './WebcamPicture';
 
 interface uploadProps {
   toggleModal(): void;
   visible: boolean;
 }
 
+
 const UploadModal: React.FC<uploadProps> = ({ visible, toggleModal }) => {
   const [image, setImage] = useState();
   const [description, setDescription] = useState('');
   const [usersMentioned, setUsersMentioned] = useState('');
   const [hashtag, setHashtag] = useState('');
+  const [webcamVisible, setWebcamVisible] = useState(false);
   const dispatch = useDispatch();
 
   const beforeUpload = (file: UploadFile): boolean => {
@@ -51,11 +54,17 @@ const UploadModal: React.FC<uploadProps> = ({ visible, toggleModal }) => {
     setImage(info.file.preview);
   };
 
+  const toggleWebcam = () => {
+    setWebcamVisible(!webcamVisible);
+  }
+
   const uploadPicture = () => {
     const mentions: Array<string> = (usersMentioned !== '') ? usersMentioned.split(' ') : [];
     const hashtags: Array<string> = (hashtag !== '')
       ? (hashtag.replace(new RegExp('#', 'g'), '')).split(' ') : [];
 
+    if (image === '')
+      return message.error('You must choose a picture', 3);
     for (const hash in hashtags) {
       if (hashtags[hash].substring(0, 1) !== '#'
         && hashtags[hash].length < 3) {
@@ -78,7 +87,6 @@ const UploadModal: React.FC<uploadProps> = ({ visible, toggleModal }) => {
       });
   };
 
-
   return (
     <Modal
       title="Upload a picture"
@@ -87,6 +95,7 @@ const UploadModal: React.FC<uploadProps> = ({ visible, toggleModal }) => {
       onOk={uploadPicture}
       onCancel={() => toggleModal()}
     >
+      <WebcamPicture setPicture={setImage} visible={webcamVisible} toggleModal={toggleWebcam} />
       <Row type="flex" align="middle" justify="center">
         <Col span={24} className="text-center">
           <Row type="flex" align="middle" justify="center">
@@ -102,6 +111,7 @@ const UploadModal: React.FC<uploadProps> = ({ visible, toggleModal }) => {
               >
                 {image ? <Avatar src={image} size={100} /> : <Avatar size={100} icon="user" />}
               </Upload>
+              <Button onClick={() => toggleWebcam()}>Take with webcam</Button>
             </Col>
           </Row>
         </Col>
