@@ -2,12 +2,30 @@
     "name": "ugram-backend",
     "version": "0.0.1",
     "description": "backend API for the ugram project",
-    "main": "server.js",
+    "main": "src/server.js",
+    "directories": {
+        "test": "test"
+    },
+    "files": [
+        "src/**/*"
+    ],
     "scripts": {
-        "start": "nodemon src/server.js",
-        "dev": "nodemon src/server.js",
-        "debug": "nodemon inspect src/server.js",
-        "test": "jest"
+        "start": "npm run serve",
+        "dev": "npm run serve:watch",
+        "debug": "npm run serve:debug",
+        "serve": "node src/server.js",
+        "serve:watch": "nodemon src/server.js",
+        "serve:debug": "nodemon --inspect src/server.js",
+        "test": "jest --coverage --verbose",
+        "test:force": "npm run test -- --forceExit",
+        "test:watch": "npm run test -- --watch",
+        "test:watchAll": "npm run test -- --watchAll",
+        "lint": "eslint \"**/*.{js}\" --quiet --fix",
+        "clean": "rimraf data coverage"
+    },
+    "engines": {
+        "node": "12.x.x",
+        "npm": "6.x.x"
     },
     "repository": {
         "type": "git",
@@ -33,20 +51,36 @@
         "express": "^4.17.1",
         "google-auth-library": "^6.0.0",
         "jsonwebtoken": "^8.5.1",
-        "mongoose": "^5.9.7",
+        "mongoose": "^5.9.9",
         "morgan": "^1.10.0",
         "parse-error": "^0.2.0",
         "passport": "^0.4.1",
         "passport-jwt": "^4.0.0"
     },
     "devDependencies": {
+        "eslint": "^6.8.0",
+        "eslint-config-prettier": "^6.10.1",
+        "eslint-plugin-prettier": "^3.1.3",
+        "husky": "^4.2.5",
         "jest": "^25.3.0",
-        "nodemon": "^2.0.3"
+        "lint-staged": "^10.1.3",
+        "nodemon": "^2.0.3",
+        "prettier": "^2.0.4",
+        "rimraf": "^3.0.2"
     },
     "nodemonConfig": {
         "ignore": [
-            "node_modules/*",
-            "tests/*"
-        ]
+            "node_modules",
+            "tests"
+        ],
+        "ext": "js,json"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.js": "eslint --cache --fix"
     }
 }
