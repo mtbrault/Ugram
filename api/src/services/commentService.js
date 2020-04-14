@@ -1,25 +1,22 @@
-const { Comment } = require("../db");
+const { User, Comment } = require("../db");
 const { to, terr, notEmpty } = require("../middlewares/utils");
-const notificationService = require("./notificationService");
+// Const notificationService = require("./notificationService");
 
 const create = async (author, target, { content, hashtags, mentions }) => {
-	if (!content || !content.trim())
-		terr("content field is required", 400);
+	if (!content || !content.trim()) terr("content field is required", 400);
 
 	if (notEmpty(mentions)) {
-		mentions = mentions.map(x => {
+		mentions = mentions.map((x) => {
 			const username = x.toLowerCase();
-			if (username === author.username)
-				terr("User cannot mention himself", 400);
+			if (username === author.username) terr("User cannot mention himself", 400);
 			return username;
 		});
 		const [err, users] = await to(User.find({ username: { $in: mentions } }).lean());
-		if (err || users.length !== mentions.length)
-			terr("Unknown Username in mentions", 400);
-		mentions = users.map(x => {
+		if (err || users.length !== mentions.length) terr("Unknown Username in mentions", 400);
+		mentions = users.map((x) => {
 			return {
 				id: x._id,
-				username: x.username
+				username: x.username,
 			};
 		});
 	} else {
@@ -30,15 +27,21 @@ const create = async (author, target, { content, hashtags, mentions }) => {
 
 	let comment = new Comment({
 		author: { id: author._id, username: author.username },
-		target: target._id, content, hashtags, mentions
+		target: target._id,
+		content,
+		hashtags,
+		mentions,
 	});
-	// notification = await notificationService.create(target, content);
+	// Notification = await notificationService.create(target, content);
 	comment = await comment.save();
 	return comment;
 };
 
 const getAll = async (skip, limit, query = {}) => {
-	const comments = await Comment.find(query).sort("-createdAt").skip(skip).limit(limit+1);
+	const comments = await Comment.find(query)
+		.sort("-createdAt")
+		.skip(skip)
+		.limit(limit + 1);
 	const last = comments.length !== limit + 1;
 	if (!last) comments.pop();
 	return { last, comments };
@@ -46,38 +49,38 @@ const getAll = async (skip, limit, query = {}) => {
 
 const getByAuthor = (author, skip, limit) => {
 	return getAll(skip, limit, { "author.id": author._id || author });
-}
+};
 
-const getByPost =  (post, skip, limit) => {
-	return getAll(skip, limit, { "target": post._id || post });
+const getByPost = (post, skip, limit) => {
+	return getAll(skip, limit, { target: post._id || post });
 };
 
 const getById = (id) => {
 	return Comment.findById(id);
 };
 
-const update = async (comment, { content, hashtags, mentions }, merge=false) => {
+const update = async (comment, { content, hashtags, mentions }, merge = false) => {
 	if (Array.isArray(mentions)) {
 		if (mentions.length > 0) {
-			mentions = mentions.map(x => x.toLowerCase());
+			mentions = mentions.map((x) => x.toLowerCase());
 			const [err, users] = await to(User.find({ username: { $in: mentions } }).lean());
-			if (err || users.length !== mentions.length)
-				terr("Unknown Username in mentions", 400);
-			mentions = users.map(x => {
-				if (comment.author.id.equals(x._id))
-					terr("User cannot mention himself", 400);
+			if (err || users.length !== mentions.length) terr("Unknown Username in mentions", 400);
+			mentions = users.map((x) => {
+				if (comment.author.id.equals(x._id)) terr("User cannot mention himself", 400);
 				return {
 					id: x._id,
-					username: x.username
+					username: x.username,
 				};
 			});
 		}
+
 		if (!merge) {
 			comment.mentions = mentions;
 		} else if (mentions.length > 0) {
 			comment.mentions.addToSet(...mentions);
 		}
 	}
+
 	if (content && content.trim()) comment.content = content;
 	if (Array.isArray(hashtags)) {
 		if (!merge) {
@@ -86,11 +89,12 @@ const update = async (comment, { content, hashtags, mentions }, merge=false) => 
 			comment.hashtags.addToSet(...hashtags);
 		}
 	}
+
 	comment = await comment.save();
 	return comment;
 };
 
-const remove = async comment => {
+const remove = async (comment) => {
 	return Comment.findByIdAndDelete(comment._id);
 };
 
@@ -100,5 +104,5 @@ module.exports = {
 	getByPost,
 	getById,
 	update,
-	remove
-}
+	remove,
+};
