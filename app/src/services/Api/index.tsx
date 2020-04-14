@@ -113,7 +113,7 @@ export default class APIManager {
   }
 
   static async getNotifs() {
-    const res = await API.get('/self/notification&limit=100');
+    const res = await API.get('/self/notification&limit=20');
     return res.data;
   }
 
@@ -131,6 +131,11 @@ export default class APIManager {
     const res = await API.post(`/post/${postId}/comment`, {
       content: content,
     });
+    return res.data;
+  }
+
+  static async getTopHashtag() {
+    const res = await API.get('/keyword');
     return res.data;
   }
 }

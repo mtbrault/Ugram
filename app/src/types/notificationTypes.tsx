@@ -5,6 +5,12 @@ export interface notificationType {
 	isRead: boolean;
 }
 
+export interface keywordType {
+	word: string;
+	number: number;
+}
+
 export interface initialNotif {
 	notifications: notificationType[];
+	keywords: keywordType[];
 }

@@ -120,7 +120,7 @@ const Search: React.FC<SearchProps> = ({ history }) => {
               itemLayout="horizontal"
               dataSource={search.users_list}
               renderItem={(user: profileType) => (
-                <List.Item onClick={() => history.push('/profile', user)} className="list-item">
+                <List.Item onClick={() => history.push('/profile', data.users.filter((author) => author.id === user.id)[0])} className="list-item" >
                   <Card
                     bordered
                     className="card-user"
@@ -136,7 +136,7 @@ const Search: React.FC<SearchProps> = ({ history }) => {
             />
           )}
       </Col>
-    </Row>
+    </Row >
   );
 };
 

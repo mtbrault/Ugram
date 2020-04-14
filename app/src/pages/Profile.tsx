@@ -149,15 +149,15 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
               )}
             />
             {previewPubs && previewVisible
-            && (
-              <PreviewPubs
-                previewPubs={previewPubs}
-                previewVisible={previewVisible}
-                toggle={() => setPreviewVisible(!previewVisible)}
-                editPubs={() => editPubs()}
-                isMe={isMe}
-              />
-            )}
+              && (
+                <PreviewPubs
+                  previewPubs={previewPubs}
+                  previewVisible={previewVisible}
+                  toggle={() => setPreviewVisible(!previewVisible)}
+                  editPubs={() => editPubs()}
+                  isMe={isMe}
+                />
+              )}
           </Col>
         </Col>
       </Row>

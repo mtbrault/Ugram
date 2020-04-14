@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import { History } from 'history';
 import { useDispatch } from 'react-redux';
 import {
-  tokenInfo, searchPostByDesc, searchPostByHashtag, searchUserByUsername, getAllPost, getAllUsers, getNotif, readNotif
+  tokenInfo, searchPostByDesc, searchPostByHashtag, searchUserByUsername, getAllPost, getAllUsers, getNotif, readNotif, getTopHashtag
 } from '../store/actions';
 
 interface HeaderProps {
@@ -27,6 +27,7 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
         dispatch(getAllPost());
         dispatch(getAllUsers());
         dispatch(getNotif());
+        dispatch(getTopHashtag());
       })
       .catch(() => {
         Cookies.remove('token');
@@ -35,6 +36,9 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
   }, [dispatch, history]);
 
   const search = (val: string) => {
+    if (val.substring(0, 1) === "#") {
+      val = val.substring(1);
+    }
     if (val.length !== 0) {
       dispatch(searchPostByDesc(val, false));
       dispatch(searchPostByHashtag(val, false));
