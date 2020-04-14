@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Col, List, Modal, Row, Tag, message,
+  Col, List, Modal, Row, Tag, message, Comment, Avatar, Form, Button,
 } from 'antd/es';
-import { useDispatch } from 'react-redux';
-import { publicationType } from '../types';
+import TextArea from 'antd/es/input/TextArea';
+import { useDispatch, useSelector } from 'react-redux';
+import { commentType, publicationType, storeTypes } from '../types';
 import FooterPreviewPubs from './FooterPreviewPubs';
-import { deletePost, getMyProfile, getCommentById, addComment } from '../store/actions';
+import {
+  deletePost, getMyProfile, getCommentById, addComment,
+} from '../store/actions';
 
 interface PreviewPubs {
   previewPubs: publicationType;
@@ -15,11 +18,57 @@ interface PreviewPubs {
   isMe?: boolean;
 }
 
+interface EditorProps {
+  onChange(e: any): void;
+  onSubmit(): void;
+  value: string;
+}
+
+interface CommentListProps {
+  comments: commentType[];
+}
+
+const Editor: React.FC<EditorProps> = ({
+  onChange, onSubmit, value,
+}) => (
+  <div>
+    <Form.Item>
+      <TextArea rows={2} onChange={onChange} value={value} />
+    </Form.Item>
+    <Form.Item>
+      <Button htmlType="submit" onClick={onSubmit} type="primary">
+        Add Comment
+      </Button>
+    </Form.Item>
+  </div>
+);
+
+const formatDate = (createdAtDate: string): string => {
+  const newDate = new Date(createdAtDate);
+  return `${newDate.getDate()}/${newDate.getMonth() + 1}/${newDate.getFullYear()}`;
+};
+
+const CommentList: React.FC<CommentListProps> = ({ comments }) => (
+  <List
+    dataSource={comments}
+    header={`${comments.length} ${comments.length > 1 ? 'replies' : 'reply'}`}
+    itemLayout="horizontal"
+    renderItem={(comment) => (
+      <Comment
+        author={comment.author.username}
+        content={comment.content}
+        datetime={formatDate(comment.createdAt)}
+      />
+    )}
+  />
+);
+
 const PreviewPubs: React.FC<PreviewPubs> = ({
   previewPubs, toggle, previewVisible, editPubs, isMe,
 }) => {
   const [newComment, setNewComment] = useState('');
   const dispatch = useDispatch();
+  const comments = useSelector<storeTypes, commentType[]>((store) => store.commentReducers.comments);
 
   useEffect(() => {
     dispatch(getCommentById(previewPubs.id));
@@ -27,7 +76,7 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
 
   const addNewComment = () => {
     dispatch(addComment(previewPubs.id, newComment));
-  }
+  };
 
   const deleteThis = () => {
     dispatch(deletePost(previewPubs.id))
@@ -49,6 +98,13 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
       mentionArray.push(element.username);
     });
     return mentionArray;
+  };
+
+  const handleChange = (e: any) => setNewComment(e.target.value || '');
+
+  const handleSubmitComment = () => {
+    if (newComment.length === 0) return;
+    addNewComment();
   };
 
   return (
@@ -102,6 +158,18 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
             )}
           </Col>
         )}
+        <Col span={24}>
+          {comments.length > 0 && <CommentList comments={comments} />}
+          <Comment
+            content={(
+              <Editor
+                onChange={handleChange}
+                onSubmit={handleSubmitComment}
+                value={newComment}
+              />
+            )}
+          />
+        </Col>
       </Row>
     </Modal>
   );

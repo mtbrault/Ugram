@@ -113,7 +113,7 @@ export default class APIManager {
   }
 
   static async getNotifs() {
-    const res = await API.get('/self/notification&limit=20');
+    const res = await API.get('/self/notification?limit=20');
     return res.data;
   }
 
@@ -123,13 +123,13 @@ export default class APIManager {
   }
 
   static async getComments(id: string) {
-    const res = await API.get(`/post/${id}/comment&limit=100`);
+    const res = await API.get(`/post/${id}/comment?page=0&limit=100`);
     return res.data;
   }
 
   static async addComments(postId: string, content: string) {
     const res = await API.post(`/post/${postId}/comment`, {
-      content: content,
+      content,
     });
     return res.data;
   }

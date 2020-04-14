@@ -9,7 +9,7 @@ export const getCommentById = createActionThunk(GET_COMMENT_BY_ID, async (id: st
 
 export const addComment = createActionThunk(ADD_COMMENT, async (postId: string, content: string) => {
 	const add = await APIManager.addComments(postId, content);
-	if (add) {
+  if (add !== undefined) {
 		const res = await APIManager.getComments(postId);
 		return res;
 	}

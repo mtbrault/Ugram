@@ -1,6 +1,10 @@
 
 export interface commentType {
-	content: string;
+  author: {
+    username: string;
+  }
+  content: string;
+  createdAt: string;
 }
 
 export interface initialComment {
