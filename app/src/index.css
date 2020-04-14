@@ -125,3 +125,7 @@ code {
 .ant-comment .ant-comment-inner {
     border-top: 1px solid #e8e8e8;
 }
+
+.modal-webcam .ant-modal-body {
+    padding: 0;
+}

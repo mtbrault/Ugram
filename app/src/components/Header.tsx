@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import {
-  Col, Input, Row, message, Badge, Icon, Dropdown, Menu,
+  Col, Input, Row, message, Badge, Icon, Dropdown, Menu, Tag,
 } from 'antd/es';
 import { Button } from 'antd';
 import Cookies from 'js-cookie';
@@ -59,15 +59,15 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
     dispatch(readNotif());
   };
 
-  const notificationList = notifs.map((notif) => (
-    <Menu.Item>
+  const notificationList = notifs.map((notif, key) => (
+    <Menu.Item key={key}>
       <a href="#" onClick={openNotif}>{notif.text}</a>
     </Menu.Item>
   ));
 
-  const keywordList = keywords.map((keyword) => (
-    <Menu.Item>
-      <a href="#" onClick={openNotif}>{keyword}</a>
+  const keywordList = keywords.map((keyword, key) => (
+    <Menu.Item key={key}>
+      <a href="#">{keyword.word} appeared <Tag>{keyword.number}</Tag></a>
     </Menu.Item>
   ));
 
@@ -86,7 +86,7 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
         />
       </Col>
       <Col md={3} lg={2}>
-        <Badge count={5}>
+        <Badge count={notificationList.length}>
           <Dropdown overlay={<Menu>{notificationList}</Menu>}>
             <Button>
               <Icon type="notification" />
@@ -95,12 +95,8 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
         </Badge>
       </Col>
       <Col md={3} lg={2}>
-        <Badge count={5}>
-          <Dropdown overlay={(
-            <Menu>
-              <Menu.Item><a>Mots populaire</a></Menu.Item>
-            </Menu>
-          )}
+        <Badge count={keywordList.length}>
+          <Dropdown overlay={(<Menu>{keywordList}</Menu>)}
           >
             <Button>
               <Icon type="star" />

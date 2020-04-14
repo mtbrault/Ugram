@@ -56,7 +56,7 @@ const UploadModal: React.FC<uploadProps> = ({ visible, toggleModal }) => {
 
   const toggleWebcam = () => {
     setWebcamVisible(!webcamVisible);
-  }
+  };
 
   const uploadPicture = () => {
     const mentions: Array<string> = (usersMentioned !== '') ? usersMentioned.split(' ') : [];
@@ -95,7 +95,7 @@ const UploadModal: React.FC<uploadProps> = ({ visible, toggleModal }) => {
       onOk={uploadPicture}
       onCancel={() => toggleModal()}
     >
-      <WebcamPicture setPicture={setImage} visible={webcamVisible} toggleModal={toggleWebcam} />
+      {webcamVisible && <WebcamPicture setPicture={setImage} visible={webcamVisible} toggleModal={toggleWebcam} />}
       <Row type="flex" align="middle" justify="center">
         <Col span={24} className="text-center">
           <Row type="flex" align="middle" justify="center">
@@ -111,6 +111,9 @@ const UploadModal: React.FC<uploadProps> = ({ visible, toggleModal }) => {
               >
                 {image ? <Avatar src={image} size={100} /> : <Avatar size={100} icon="user" />}
               </Upload>
+            </Col>
+            <Col span={24} className="text-center">
+              <p>or</p>
               <Button onClick={() => toggleWebcam()}>Take with webcam</Button>
             </Col>
           </Row>

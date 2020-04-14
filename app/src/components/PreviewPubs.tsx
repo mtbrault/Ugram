@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Col, List, Modal, Row, Tag, message, Comment, Avatar, Form, Button,
+  Col, List, Modal, Row, Tag, message, Comment, Form, Button,
 } from 'antd/es';
 import TextArea from 'antd/es/input/TextArea';
 import { useDispatch, useSelector } from 'react-redux';
@@ -160,14 +160,10 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
         )}
         <Col span={24}>
           {comments.length > 0 && <CommentList comments={comments} />}
-          <Comment
-            content={(
-              <Editor
-                onChange={handleChange}
-                onSubmit={handleSubmitComment}
-                value={newComment}
-              />
-            )}
+          <Editor
+            onChange={handleChange}
+            onSubmit={handleSubmitComment}
+            value={newComment}
           />
         </Col>
       </Row>
