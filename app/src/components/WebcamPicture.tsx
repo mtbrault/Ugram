@@ -21,9 +21,6 @@ const WebcamPicture: React.FC<webcamProps> = ({ setPicture, visible, toggleModal
 		setWebcam(value);
 	}
 
-	useEffect(() => {
-		console.log(visible);
-	}, [visible])
 	const capture = () => {
 		if (webcam !== undefined) {
 			setPicture(webcam.getScreenshot() as string);
