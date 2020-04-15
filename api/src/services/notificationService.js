@@ -28,7 +28,7 @@ const getById = async (id) => {
 };
 
 const getByUser = (user, skip, limit) => {
-	return getAll(skip, limit, { userId: user._id || user, isRead: false });
+	return getAll(skip, limit, { userId: user._id || user });
 };
 
 const markAsRead = async (notification) => {

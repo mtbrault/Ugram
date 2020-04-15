@@ -1,5 +1,7 @@
 const auth = require("../controllers/authController");
 const user = require("../controllers/userController");
+const autocomplete = require("../controllers/autocompleteController");
+
 const { isValidUserId, isAdminOrLoggedUser } = require("../middlewares/validation");
 const { extractPageParams, extractUserParams } = require("../middlewares/query");
 
@@ -14,6 +16,7 @@ const userRouter = (router) => {
 	router.patch("/user/:id", isValidUserId("id"), isAdminOrLoggedUser, user.updateById); // U
 	router.delete("/self", user.remove); // D
 	router.delete("/user/:id", isValidUserId("id"), isAdminOrLoggedUser, user.removeById); // D
+	router.get("/autocomplete/:string", autocomplete.getAll);
 	return router;
 };
 
