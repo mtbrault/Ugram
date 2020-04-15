@@ -159,18 +159,25 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
             )}
           </Col>
         )}
+        {/*
+          Ici c'est le onclick sur un like qui va add un like ou dislike
+          l'attribut `theme` en filled c'est que le user a deja reagi
+          faut juste faire en sorte qu'il puisse pas mettre like et dislike en meme temps ^^
+          Genre si ya un like et quon dislike faut sa change inverse le filled sur l'icon
+          si tu fais un truc de gbz avec les actions sa sera a laide dun check d'une variable en tenaire jpense
+        */}
         <Col span={12}>
           <Statistic
             title="Likes"
             value={420}
-            prefix={<Icon type="like" theme="filled" className="cursor-pointer" />}
+            prefix={<Icon onClick={() => console.log('Like')} type="like" theme="filled" className="cursor-pointer" />}
           />
         </Col>
         <Col span={12}>
           <Statistic
             title="Dislikes"
             value={93}
-            prefix={<Icon type="dislike" theme="outlined" className="cursor-pointer" />}
+            prefix={<Icon onClick={() => console.log('Dislike')} type="dislike" theme="outlined" className="cursor-pointer" />}
             className="cursor-pointer"
           />
         </Col>
