@@ -85,6 +85,33 @@ const getById = (req, res, _next) => {
 };
 
 // Use only after isValidPostId
+const upvote = async (req, res, next) => {
+	const [err, ret] = await to(postService.upvote(req.refPost, req.user));
+	if (err) return rerr(next, err);
+	const { modified, post } = ret;
+	if (!modified) return rerr(next, "post already upvoted by user", 400);
+	return res.status(200).json(post.toWeb(req.user));
+};
+
+// Use only after isValidPostId
+const downvote = async (req, res, next) => {
+	const [err, ret] = await to(postService.downvote(req.refPost, req.user));
+	if (err) return rerr(next, err);
+	const { modified, post } = ret;
+	if (!modified) return rerr(next, "post already downvoted by user", 400);
+	return res.status(200).json(post.toWeb(req.user));
+};
+
+// Use only after isValidPostId
+const unvote = async (req, res, next) => {
+	const [err, ret] = await to(postService.unvote(req.refPost, req.user));
+	if (err) return rerr(next, err);
+	const { modified, post } = ret;
+	if (!modified) return rerr(next, "user never voted on this post", 400);
+	return res.status(200).json(post.toWeb(req.user));
+};
+
+// Use only after isValidPostId
 const update = async (req, res, next) => {
 	const [err, post] = await to(
 		postService.update(req.refPost, req.body, !!parseInt(req.query.merge, 10)),
@@ -107,6 +134,9 @@ module.exports = {
 	getSelf,
 	getByUser,
 	getById,
+	upvote,
+	downvote,
+	unvote,
 	getKeyword,
 	remove,
 	update,

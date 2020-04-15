@@ -65,6 +65,33 @@ const getById = async (req, res, _next) => {
 };
 
 // Use only after isValidCommentId
+const upvote = async (req, res, next) => {
+	const [err, ret] = await to(commentService.upvote(req.refComment, req.user));
+	if (err) return rerr(next, err);
+	const { modified, comment } = ret;
+	if (!modified) return rerr(next, "comment already upvoted by user", 400);
+	return res.status(200).json(comment.toWeb(req.user));
+};
+
+// Use only after isValidCommentId
+const downvote = async (req, res, next) => {
+	const [err, ret] = await to(commentService.downvote(req.refComment, req.user));
+	if (err) return rerr(next, err);
+	const { modified, comment } = ret;
+	if (!modified) return rerr(next, "comment already downvoted by user", 400);
+	return res.status(200).json(comment.toWeb(req.user));
+};
+
+// Use only after isValidCommentId
+const unvote = async (req, res, next) => {
+	const [err, ret] = await to(commentService.unvote(req.refComment, req.user));
+	if (err) return rerr(next, err);
+	const { modified, comment } = ret;
+	if (!modified) return rerr(next, "user never voted on this comment", 400);
+	return res.status(200).json(comment.toWeb(req.user));
+};
+
+// Use only after isValidCommentId
 const update = async (req, res, next) => {
 	const [err, comment] = await to(
 		commentService.update(req.refComment, req.body, !!parseInt(req.query.merge, 10)),
@@ -86,6 +113,9 @@ module.exports = {
 	getByUser,
 	getByPost,
 	getById,
+	upvote,
+	downvote,
+	unvote,
 	update,
 	remove,
 };

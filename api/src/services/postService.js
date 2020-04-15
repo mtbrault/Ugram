@@ -1,4 +1,4 @@
-const { User, Post, Keyword } = require("../db");
+const { User, Post, Keyword, Notification } = require("../db");
 const { to, terr, notEmpty } = require("../middlewares/utils");
 
 const create = async (author, { imageUrl, description, hashtags, mentions }) => {
@@ -62,6 +62,60 @@ const getByUser = (user, skip, limit) => {
 
 const getById = (id) => {
 	return Post.findById(id);
+};
+
+const upvote = async (post, user) => {
+	if (user._id.equals(post.author.id)) terr("User cannot upvote his own posts", 400);
+	if (post.upvoted(user)) return { modified: false, post };
+	const session = await Post.startSession();
+	post.upvote(user);
+	await session.withTransaction(async () => {
+		await post.save({ session });
+		await Notification.create(
+			[
+				{
+					userId: post.author.id,
+					text: `${user.displayname} upvoted one of your posts`,
+				},
+			],
+			{
+				session,
+			},
+		);
+	});
+	await session.endSession();
+	return { modified: true, post };
+};
+
+const downvote = async (post, user) => {
+	if (user._id.equals(post.author.id)) terr("User cannot downvote his own posts", 400);
+	if (post.downvoted(user)) return { modified: false, post };
+	const session = await Post.startSession();
+	post.downvote(user);
+	await session.withTransaction(async () => {
+		await post.save({ session });
+		await Notification.create(
+			[
+				{
+					userId: post.author.id,
+					text: `${user.displayname} downvoted one of your posts`,
+				},
+			],
+			{
+				session,
+			},
+		);
+	});
+	await session.endSession();
+	return { modified: true, post };
+};
+
+const unvote = async (post, user) => {
+	if (user._id.equals(post.author.id)) terr("User cannot vote on his own posts", 400);
+	if (!post.voted(user).voted) return { modified: false, post };
+	post.unvote(user);
+	await post.save();
+	return { modified: true, post };
 };
 
 const update = async (post, { imageUrl, description, hashtags, mentions }, merge = false) => {
@@ -134,6 +188,9 @@ module.exports = {
 	getAll,
 	getByUser,
 	getById,
+	upvote,
+	downvote,
+	unvote,
 	update,
 	addKeyword,
 	getKeyword,

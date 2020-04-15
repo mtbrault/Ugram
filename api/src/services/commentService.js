@@ -39,7 +39,7 @@ const create = async (author, target, { content, hashtags, mentions }) => {
 				[
 					{
 						userId: target.author.id,
-						text: `${author.displayname} commented on your post`,
+						text: `${author.displayname} commented one of your posts`,
 					},
 				],
 				{
@@ -48,6 +48,7 @@ const create = async (author, target, { content, hashtags, mentions }) => {
 			);
 		}
 	});
+	await session.endSession();
 	return comment;
 };
 
@@ -71,6 +72,30 @@ const getByPost = (post, skip, limit) => {
 
 const getById = (id) => {
 	return Comment.findById(id);
+};
+
+const upvote = async (comment, user) => {
+	if (user._id.equals(comment.author.id)) terr("User cannot upvote his own comments", 400);
+	if (comment.upvoted(user)) return { modified: false, comment };
+	comment.upvote(user);
+	await comment.save();
+	return { modified: true, comment };
+};
+
+const downvote = async (comment, user) => {
+	if (user._id.equals(comment.author.id)) terr("User cannot downvote his own comments", 400);
+	if (comment.downvoted(user)) return { modified: false, comment };
+	comment.downvote(user);
+	await comment.save();
+	return { modified: true, comment };
+};
+
+const unvote = async (comment, user) => {
+	if (user._id.equals(comment.author.id)) terr("User cannot vote on his own comments", 400);
+	if (!comment.voted(user).voted) return { modified: false, comment };
+	comment.unvote(user);
+	await comment.save();
+	return { modified: true, comment };
 };
 
 const update = async (comment, { content, hashtags, mentions }, merge = false) => {
@@ -117,6 +142,9 @@ module.exports = {
 	getByAuthor,
 	getByPost,
 	getById,
+	upvote,
+	downvote,
+	unvote,
 	update,
 	remove,
 };

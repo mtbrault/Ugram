@@ -44,21 +44,18 @@ const votingPlugin = (schema, opts = {}) => {
 		const id = voter._id || voter;
 		this.votes.down.pull(id);
 		this.votes.up.addToSet(id);
-		return this.save();
 	};
 
 	schema.methods.downvote = function (voter) {
 		const id = voter._id || voter;
 		this.votes.up.pull(id);
 		this.votes.down.addToSet(id);
-		return this.save();
 	};
 
 	schema.methods.unvote = function (voter) {
 		const id = voter._id || voter;
 		const path = this.upvoted(id) ? "up" : "down";
 		this.votes[path].pull(id);
-		return this.save();
 	};
 };
 
