@@ -165,6 +165,7 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
           faut juste faire en sorte qu'il puisse pas mettre like et dislike en meme temps ^^
           Genre si ya un like et quon dislike faut sa change inverse le filled sur l'icon
           si tu fais un truc de gbz avec les actions sa sera a laide dun check d'une variable en tenaire jpense
+          genre like ? 'filled' : 'outlined'
         */}
         <Col span={12}>
           <Statistic
