@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import {
   Col, Input, Row, message, Badge, Icon, Dropdown, Menu, Tag, AutoComplete,
@@ -11,6 +11,7 @@ import {
   tokenInfo, searchPostByDesc, searchPostByHashtag, searchUserByUsername, getAllPost, getAllUsers,
   getNotif, readNotif, getTopHashtag,
 } from '../store/actions';
+import APIManager from '../services/Api';
 import { keywordType, notificationType, storeTypes } from '../types';
 
 interface HeaderProps {
@@ -18,6 +19,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ history }) => {
+  const [autofill, setAutofill] = useState([]);
   const dispatch = useDispatch();
   const notifs = useSelector<storeTypes, notificationType[]>((store) => store.notificationReducers.notifications);
   const keywords = useSelector<storeTypes, keywordType[]>((store) => store.notificationReducers.keywords);
@@ -41,14 +43,14 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
       });
   }, [dispatch, history]);
 
-  const search = (val: string, type: boolean) => {
+  const search = (val: string) => {
     if (val.substring(0, 1) === '#') {
       val = val.substring(1);
     }
     if (val.length !== 0) {
-      dispatch(searchPostByDesc(val, type));
-      dispatch(searchPostByHashtag(val, type));
-      dispatch(searchUserByUsername(val, type));
+      dispatch(searchPostByDesc(val));
+      dispatch(searchPostByHashtag(val));
+      dispatch(searchUserByUsername(val));
       history.push('/search');
     } else message.info('Please enter a string for search');
   };
@@ -56,6 +58,13 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
   const openNotif = () => {
     dispatch(readNotif());
   };
+
+  const autocomplete = async (value: string) => {
+    if (value === '')
+      return;
+    const res = await APIManager.autocomplete(value);
+    setAutofill(res);
+  }
 
   const notificationList = notifs.map((notif, key) => (
     <Menu.Item key={key}>
@@ -70,7 +79,7 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
 
   const keywordList = keywords.map((keyword, key) => (
     <Menu.Item key={key}>
-      <a href="#" onClick={() => search(keyword.word, false)}>
+      <a href="#" onClick={() => search(keyword.word)}>
         {keyword.word} appeared <Tag>{keyword.number}</Tag>
       </a>
     </Menu.Item>
@@ -92,8 +101,8 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
       <Col xs={11} md={10}>
         <AutoComplete
           placeholder="Search by username or hashtag here"
-          onSearch={(value) => search(value, false)}
-          dataSource={keywords.map((word) => word.word)}
+          onSearch={(value) => autocomplete(value)}
+          dataSource={autofill.map((word) => word)}
         />
       </Col>
       <Col md={3} lg={2}>

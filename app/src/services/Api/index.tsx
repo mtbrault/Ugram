@@ -97,18 +97,18 @@ export default class APIManager {
     return res.data;
   }
 
-  static async searchUser(search: string, autocomplete: boolean) {
-    const res = await API.get(`/user?username=${search}&limit=100&autocomplete=${autocomplete}`);
+  static async searchUser(search: string) {
+    const res = await API.get(`/user?username=${search}&limit=100`);
     return res.data;
   }
 
-  static async searchPostHashtag(search: string, autocomplete: boolean) {
-    const res = await API.get(`/post?hashtags=${search}&limit=100&autocomplete=${autocomplete}`);
+  static async searchPostHashtag(search: string) {
+    const res = await API.get(`/post?hashtags=${search}&limit=100`);
     return res.data;
   }
 
-  static async searchPostDesc(search: string, autocomplete: boolean) {
-    const res = await API.get(`/post?description=${search}&limit=100&autocomplete=${autocomplete}`);
+  static async searchPostDesc(search: string) {
+    const res = await API.get(`/post?description=${search}&limit=100`);
     return res.data;
   }
 
@@ -151,6 +151,11 @@ export default class APIManager {
 
   static async unreact(postId: string) {
     const res = await API.patch(`/post/${postId}/unvote`);
+    return res.data;
+  }
+
+  static async autocomplete(query: string) {
+    const res = await API.get(`/autocomplete/${query}`);
     return res.data;
   }
 }
