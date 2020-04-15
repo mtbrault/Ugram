@@ -57,7 +57,7 @@ code {
     margin-bottom: auto;
 }
 
-.title-header {
+.cursor-pointer {
     cursor: pointer;
 }
 
@@ -128,4 +128,13 @@ code {
 
 .modal-webcam .ant-modal-body {
     padding: 0;
+}
+
+.no-notification {
+    padding: 4px;
+}
+
+.ant-statistic-content {
+    display: flex;
+    align-items: center;
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Col, List, Modal, Row, Tag, message, Comment, Form, Button,
+  Col, List, Modal, Row, Tag, message, Comment, Form, Button, Statistic, Icon,
 } from 'antd/es';
 import TextArea from 'antd/es/input/TextArea';
 import { useDispatch, useSelector } from 'react-redux';
@@ -158,6 +158,21 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
             )}
           </Col>
         )}
+        <Col span={12}>
+          <Statistic
+            title="Likes"
+            value={420}
+            prefix={<Icon type="like" theme="filled" className="cursor-pointer" />}
+          />
+        </Col>
+        <Col span={12}>
+          <Statistic
+            title="Dislikes"
+            value={93}
+            prefix={<Icon type="dislike" theme="outlined" className="cursor-pointer" />}
+            className="cursor-pointer"
+          />
+        </Col>
         <Col span={24}>
           {comments.length > 0 && <CommentList comments={comments} />}
           <Editor

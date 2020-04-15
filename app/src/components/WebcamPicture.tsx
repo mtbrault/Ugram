@@ -19,7 +19,7 @@ const WebcamPicture: React.FC<webcamProps> = ({ setPicture, visible, toggleModal
 
   const setRef = (value: any) => {
     setWebcam(value);
-  }
+  };
 
   const capture = () => {
     if (webcam !== undefined) {
