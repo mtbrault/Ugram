@@ -1,6 +1,12 @@
 data/
 node_modules/
 
+# Optional eslint cache
+.eslintcache
+
+# Logs
+*.log
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml

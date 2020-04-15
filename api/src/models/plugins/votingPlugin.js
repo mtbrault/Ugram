@@ -1,12 +1,12 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const votingPlugin = (schema, opts={}) => {
-	ref = opts.ref || "User";
+const votingPlugin = (schema, opts = {}) => {
+	const ref = opts.ref || "User";
 	schema.add({
 		votes: {
-			up: [{type: mongoose.Schema.Types.ObjectId, ref}],
-			down: [{type: mongoose.Schema.Types.ObjectId, ref}]
-		}
+			up: [{ type: mongoose.Schema.Types.ObjectId, ref }],
+			down: [{ type: mongoose.Schema.Types.ObjectId, ref }],
+		},
 	});
 
 	schema.virtual("upvotes").get(function () {
@@ -36,31 +36,27 @@ const votingPlugin = (schema, opts={}) => {
 		return {
 			upvoted,
 			downvoted,
-			voted: upvoted || downvoted
+			voted: upvoted || downvoted,
 		};
 	};
 
 	schema.methods.upvote = function (voter) {
-		const id = voter._id || voter;
+		const id = voter._id || voter;
 		this.votes.down.pull(id);
 		this.votes.up.addToSet(id);
-		return this.save();
 	};
 
 	schema.methods.downvote = function (voter) {
-		const id = voter._id || voter;
+		const id = voter._id || voter;
 		this.votes.up.pull(id);
 		this.votes.down.addToSet(id);
-		return this.save();
 	};
 
 	schema.methods.unvote = function (voter) {
-		const id = voter._id || voter;
+		const id = voter._id || voter;
 		const path = this.upvoted(id) ? "up" : "down";
 		this.votes[path].pull(id);
-		return this.save();
 	};
-
 };
 
 module.exports = votingPlugin;
