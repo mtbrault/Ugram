@@ -22,8 +22,6 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
   const notifs = useSelector<storeTypes, notificationType[]>((store) => store.notificationReducers.notifications);
   const keywords = useSelector<storeTypes, keywordType[]>((store) => store.notificationReducers.keywords);
 
-  console.log(notifs);
-  console.log(keywords);
   const logout = () => {
     Cookies.remove('token');
     history.push('/login');

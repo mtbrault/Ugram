@@ -55,4 +55,7 @@ export interface publicationType {
   id: string;
   upvotes: number;
   downvotes: number;
+  upvoted: boolean;
+  downvoted: boolean;
+  voted: boolean;
 }

@@ -6,12 +6,14 @@ const initialState: postList = {
 }
 
 export const GET_ALL_POST = 'GET_ALL_POST';
+export const REACT_TO_POST = 'REACT_TO_POST';
 
 const SUCCEEDED = 'SUCCEEDED';
 
 export default handleActions<postList>(
 	{
 		[`${GET_ALL_POST}_${SUCCEEDED}`]: (state, { payload }) => ({ ...state, ...payload }),
+		[`${REACT_TO_POST}_${SUCCEEDED}`]: (state) => ({ ...state }),
 	},
 	initialState,
 )

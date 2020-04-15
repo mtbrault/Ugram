@@ -138,4 +138,19 @@ export default class APIManager {
     const res = await API.get('/keyword');
     return res.data;
   }
+
+  static async reactUp(postId: string) {
+    const res = await API.get(`/post/${postId}/up`);
+    return res.data;
+  }
+
+  static async reactDown(postId: string) {
+    const res = await API.patch(`/post/${postId}/down`);
+    return res.data;
+  }
+
+  static async unreact(postId: string) {
+    const res = await API.patch(`/post/${postId}/unvote`);
+    return res.data;
+  }
 }
