@@ -20,6 +20,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ history }) => {
   const [autofill, setAutofill] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
   const dispatch = useDispatch();
   const notifs = useSelector<storeTypes, notificationType[]>((store) => store.notificationReducers.notifications);
   const keywords = useSelector<storeTypes, keywordType[]>((store) => store.notificationReducers.keywords);
@@ -44,8 +45,9 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
   }, [dispatch, history]);
 
   const search = (val: string) => {
-    if (val.substring(0, 1) === '#') {
-      val = val.substring(1);
+    if (val[0] === '#') {
+      val.replace('#', '');
+      console.log(val);
     }
     if (val.length !== 0) {
       dispatch(searchPostByDesc(val));
@@ -57,31 +59,26 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
 
   const openNotif = () => {
     dispatch(readNotif());
+    dispatch(getNotif());
   };
 
   const autocomplete = async (value: string) => {
-    if (value === '')
-      return;
+    if (value === '' || value === '#') return;
     const res = await APIManager.autocomplete(value);
     setAutofill(res);
-  }
+  };
 
   const notificationList = notifs.map((notif, key) => (
     <Menu.Item key={key}>
-      {!notif.isRead
-        ? (
-          <Badge status="success">
-            <a href="#" onClick={openNotif}>{notif.text}</a>
-          </Badge>
-        ) : <a href="#" onClick={openNotif}>{notif.text}</a>}
+      <Badge status={notif.isRead ? 'default' : 'success'} text={notif.text} />
     </Menu.Item>
   ));
 
   const keywordList = keywords.map((keyword, key) => (
     <Menu.Item key={key}>
-      <a href="#" onClick={() => search(keyword.word)}>
-        {keyword.word} appeared <Tag>{keyword.number}</Tag>
-      </a>
+      <Button type="link" onClick={() => search(keyword.word)}>
+        {`#${keyword.word} appeared `}<Tag className="span-icon">{keyword.number}</Tag>
+      </Button>
     </Menu.Item>
   ));
 
@@ -92,39 +89,47 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
 
   return (
     <Row type="flex" align="middle" justify="space-between" className="header-container">
-      <Col xs={0} md={3} lg={5} onClick={() => history.push('/home')}>
+      <Col xs={0} md={4} lg={3} onClick={() => history.push('/home')}>
         <h1 className="title-h1 cursor-pointer">Ugram</h1>
       </Col>
       <Col xs={2} md={0} onClick={() => history.push('/home')}>
         <h1 className="title-h1 cursor-pointer">U</h1>
       </Col>
-      <Col xs={11} md={10}>
+      <Col xs={8} md={10} lg={14}>
         <AutoComplete
           placeholder="Search by username or hashtag here"
           onSearch={(value) => autocomplete(value)}
+          onChange={(value) => setSearchValue(value.toString())}
+          onSelect={() => search(searchValue)}
           dataSource={autofill.map((word) => word)}
+          style={{ width: '100%' }}
         />
       </Col>
-      <Col md={3} lg={2}>
+      <Col xs={3} md={2} lg={1}>
         <Badge count={notifsLength()}>
-          <Dropdown overlay={notifsLength() > 0 ? <Menu>{notificationList}</Menu>
-            : (
-              <Menu>
-                <Menu.Item>
-                  No notification
-                </Menu.Item>
-              </Menu>
-            )}
+          <Dropdown
+            trigger={['click']}
+            overlay={notifs.length > 0 ? <Menu>{notificationList.reverse()}</Menu>
+              : (
+                <Menu>
+                  <Menu.Item>
+                    No notification
+                  </Menu.Item>
+                </Menu>
+              )}
           >
-            <Button>
+            <Button onClick={openNotif}>
               <Icon type="notification" />
             </Button>
           </Dropdown>
         </Badge>
       </Col>
-      <Col md={3} lg={2}>
+      <Col xs={3} md={2} lg={1}>
         <Badge count={keywords.length}>
-          <Dropdown overlay={<Menu>{keywordList}</Menu>}>
+          <Dropdown
+            trigger={['click']}
+            overlay={<Menu>{keywordList}</Menu>}
+          >
             <Button>
               <Icon type="star" />
             </Button>
@@ -136,7 +141,7 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
           Profil
         </Button>
       </Col>
-      <Col xs={0} md={4} lg={2}>
+      <Col xs={0} md={3} lg={2}>
         <Button type="danger" icon="logout" onClick={logout}>
           Logout
         </Button>
