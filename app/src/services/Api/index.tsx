@@ -140,7 +140,7 @@ export default class APIManager {
   }
 
   static async reactUp(postId: string) {
-    const res = await API.get(`/post/${postId}/up`);
+    const res = await API.patch(`/post/${postId}/up`);
     return res.data;
   }
 
