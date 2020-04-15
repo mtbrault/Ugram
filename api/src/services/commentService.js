@@ -75,7 +75,6 @@ const getById = (id) => {
 };
 
 const upvote = async (comment, user) => {
-	if (user._id.equals(comment.author.id)) terr("User cannot upvote his own comments", 400);
 	if (comment.upvoted(user)) return { modified: false, comment };
 	comment.upvote(user);
 	await comment.save();
@@ -83,7 +82,6 @@ const upvote = async (comment, user) => {
 };
 
 const downvote = async (comment, user) => {
-	if (user._id.equals(comment.author.id)) terr("User cannot downvote his own comments", 400);
 	if (comment.downvoted(user)) return { modified: false, comment };
 	comment.downvote(user);
 	await comment.save();
@@ -91,7 +89,6 @@ const downvote = async (comment, user) => {
 };
 
 const unvote = async (comment, user) => {
-	if (user._id.equals(comment.author.id)) terr("User cannot vote on his own comments", 400);
 	if (!comment.voted(user).voted) return { modified: false, comment };
 	comment.unvote(user);
 	await comment.save();
