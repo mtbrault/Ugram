@@ -104,6 +104,7 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
 
   const handleSubmitComment = () => {
     if (newComment.length === 0) return;
+    setNewComment('');
     addNewComment();
   };
 
