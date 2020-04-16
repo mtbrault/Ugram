@@ -7,6 +7,8 @@ const passport = require("passport");
 
 const app = express();
 const config = require("./config");
+const swaggerUi = require('swagger-ui-express');
+const swaggerOption = require('../openapi.json');
 
 const CORS_OPTIONS = {
 	Origin: "*",
@@ -20,6 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors(CORS_OPTIONS));
 
 app.use(passport.initialize());
+app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerOption))
 
 console.log("Environnement:", config.app.env || "dev");
 

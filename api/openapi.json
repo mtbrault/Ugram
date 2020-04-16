@@ -1,0 +1,2393 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Ugram API documentation",
+    "description": "Ugram API",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "User"
+    },
+    {
+      "name": "Post"
+    },
+    {
+      "name": "Notification"
+    },
+    {
+      "name": "Comment"
+    },
+    {
+      "name": "Autocomplete"
+    }
+  ],
+  "paths": {
+    "/auth/tokeninfo": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Checks if given JWT token is valid",
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "example": "Unauthorized"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Checks the credentials given and returns a JWT token to use for subsequent calls to the API",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostAuthLoginBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostAuthLogin200"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "missing username or password field",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error400"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Bad credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error401"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Creates a new User",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostAuthRegisterBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostAuthRegister200"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "missing required field or username/email/phoneNumber taken",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error400"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/self": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Returns the authenticated user",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Updates the authenticated user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "username/email/phoneNumber taken",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error400"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Delete the authenticated user",
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Returns the user with id 'id'",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Updates the authenticated user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "username/email/phoneNumber taken",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error400"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Deletes the user with id 'id' if the authenticated user has this id or if he has an admin account",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      }
+    },
+    "/user": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Returns a paginated list of all the users",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          },
+          {
+            "name": "noself",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "username",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageUserModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      }
+    },
+    "/post": {
+      "post": {
+        "tags": [
+          "Post"
+        ],
+        "summary": "Upload a post containing a picture for the current logged user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ImageUrl Requird or User tried to mention himself or bad username in mentions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error400"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "summary": "Upload a post containing a picture for the user with id 'id' if the authenticated user has this id or if he has an admin account",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          },
+          {
+            "name": "hashtags",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagePostModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      }
+    },
+    "/user/{id}/post": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "summary": "Returns a paginated list of all the posts created by the user with id 'id' ordered by most recent first",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagePostModel"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Post"
+        ],
+        "summary": "Upload a post containing a picture for the user with id 'id' if the authenticated user has this id or if he has an admin account",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PostBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ImageUrl Requird or User tried to mention himself or bad username in mentions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error400"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      }
+    },
+    "/self/post": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "summary": "Returns a paginated list of all the logged user's posts ordered by most recent first",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagePostModel"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      }
+    },
+    "/post/{id}": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "summary": "Returns the post with id 'id'",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostModel"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Post not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Post"
+        ],
+        "summary": "Updates the post with id 'id' if the authenticated user is the author of the post or if he has an admin account",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "merge",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "User tried to mention himself or bad username in mentions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Post not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Post"
+        ],
+        "summary": "Delete the post with id 'id' if the authenticated user is the author of the post or if he has an admin account",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Post not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      }
+    },
+    "/keyword": {
+      "get": {
+        "tags": [
+          "Post"
+        ],
+        "summary": "Returns a paginated list of all the keyword used when a post contained hashtag ordered by most occurence.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "default": "year",
+              "example": "month"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "page": {
+                      "type": "integer",
+                      "example": 0
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "count": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "keywords": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "example": "5e92240150dfb35334606939"
+                          },
+                          "word": {
+                            "type": "string",
+                            "example": "Macron"
+                          },
+                          "number": {
+                            "type": "integer",
+                            "example": 4
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "example": "2020-02-10T18:06:12.604Z"
+                          },
+                          "updtatedAt": {
+                            "type": "string",
+                            "example": "2020-02-10T18:06:12.604Z"
+                          }
+                        }
+                      }
+                    },
+                    "next": {
+                      "type": "string",
+                      "example": "/keyword?page=1&limit=1"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      }
+    },
+    "/self/notification": {
+      "get": {
+        "summary": "Returns a paginated list of all the user's notifcation which are not read",
+        "tags": [
+          "Notification"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "page": {
+                      "type": "integer",
+                      "example": 0
+                    },
+                    "limit": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "count": {
+                      "type": "integer",
+                      "example": 1
+                    },
+                    "notifications": {
+                      "$ref": "#/components/schemas/NotificationModel"
+                    },
+                    "next": {
+                      "type": "string",
+                      "example": "/notifications?page=1&limit=1"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      }
+    },
+    "/notification/read/{id}": {
+      "patch": {
+        "summary": "Updates the isRead field as true of the notification with id 'id' if the authenticated user is the owner of the notification or if he has an admin account",
+        "tags": [
+          "Notification"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotificationModel"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Notification not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      }
+    },
+    "/self/notification/read": {
+      "patch": {
+        "summary": "Updates the isRead field as true of the authenticated user notification",
+        "tags": [
+          "Notification"
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      }
+    },
+    "/notification/{id}": {
+      "delete": {
+        "tags": [
+          "Notification"
+        ],
+        "summary": "Delete the notification with id 'id' if the authenticated user is the owner of the notification or if he has an admin account",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Notification not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      }
+    },
+    "/post/{id}/comment": {
+      "get": {
+        "tags": [
+          "Comment"
+        ],
+        "summary": "Get all the commentary of the post id 'id'",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageComment"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Post not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Comment"
+        ],
+        "summary": "Create a commentary on the id 'id'",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "content"
+                ],
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string",
+                    "example": "A new comment"
+                  },
+                  "hashtags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "example": "stuff"
+                    }
+                  },
+                  "mentions": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "example": "Bob"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "content field is required or user cannot mention himself or unknown username in mentions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error400"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Post not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      }
+    },
+    "/self/comment": {
+      "get": {
+        "tags": [
+          "Comment"
+        ],
+        "summary": "Get all the commentary of the authenticated user paginated",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageComment"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      }
+    },
+    "/user/{id}/comment": {
+      "get": {
+        "tags": [
+          "Comment"
+        ],
+        "summary": "Get all the commentary of the user id 'id'",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageComment"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerToken": []
+          }
+        ]
+      }
+    },
+    "/comment/{id}": {
+      "get": {
+        "tags": [
+          "Comment"
+        ],
+        "summary": "Get a commenty by it's id 'id'",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentModel"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Comment"
+        ],
+        "summary": "Update the comment with id 'id'",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "content"
+                ],
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "type": "string",
+                    "example": "A new comment"
+                  },
+                  "hashtags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "example": "stuff"
+                    }
+                  },
+                  "mentions": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "example": "Bob"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "user cannot mention himself or unknown username in mentions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error400"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Comment not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Comment"
+        ],
+        "summary": "delete the comment with id 'id'",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No content"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Comment not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comment/{id}/up": {
+      "patch": {
+        "tags": [
+          "Comment"
+        ],
+        "summary": "Upvote the comment with id 'id'",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "comment already upvoted by user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error400"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Comment not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comment/{id}/down": {
+      "patch": {
+        "tags": [
+          "Comment"
+        ],
+        "summary": "Downvote the comment with id 'id'",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "comment already downvoted by user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error400"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Comment not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comment/{id}/unvote": {
+      "patch": {
+        "tags": [
+          "Comment"
+        ],
+        "summary": "Unvote the comment with id 'id'",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "user has no vote on this comment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error400"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error403"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Comment not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error404"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/autocomplete/{string}": {
+      "get": {
+        "summary": "Get 10 first username or keywords begining by string 'string'",
+        "tags": [
+          "Autocomplete"
+        ],
+        "parameters": [
+          {
+            "name": "string",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "example": "Jul"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Error400": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "properties": {
+              "status": {
+                "type": "integer",
+                "example": 400
+              }
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Error401": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "properties": {
+              "status": {
+                "type": "integer",
+                "example": 401
+              }
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Error403": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "properties": {
+              "status": {
+                "type": "integer",
+                "example": 403
+              }
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Error404": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "properties": {
+              "status": {
+                "type": "integer",
+                "example": 404
+              }
+            }
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "PostAuthLoginBody": {
+        "type": "object",
+        "required": [
+          "username",
+          "password"
+        ],
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "username, email or phone number of the user"
+          },
+          "password": {
+            "description": "user password",
+            "type": "string"
+          }
+        }
+      },
+      "PostAuthLogin200": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6..."
+          },
+          "id": {
+            "type": "string",
+            "example": "5e419b947d94622a8835446f"
+          },
+          "username": {
+            "type": "string",
+            "example": "Kronos"
+          },
+          "email": {
+            "type": "string",
+            "example": "plop@lol.org"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "example": "+4378459321"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2020-02-10T18:06:12.604Z"
+          },
+          "updtatedAt": {
+            "type": "string",
+            "example": "2020-02-10T18:06:12.604Z"
+          }
+        }
+      },
+      "PostAuthRegisterBody": {
+        "type": "object",
+        "required": [
+          "username",
+          "password",
+          "email",
+          "phoneNumber"
+        ],
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "Bill54"
+          },
+          "password": {
+            "type": "string",
+            "example": "adfte_z21"
+          },
+          "email": {
+            "type": "string",
+            "example": "plop@gmail.fr"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "example": "0600000000"
+          },
+          "firstname": {
+            "type": "string",
+            "example": "Bill"
+          },
+          "lastname": {
+            "type": "string",
+            "example": "Murray"
+          },
+          "profilePic": {
+            "type": "string",
+            "example": "http://photo.png"
+          }
+        }
+      },
+      "PostAuthRegister200": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVC..."
+          },
+          "id": {
+            "type": "string",
+            "example": "5e41d162ceba414f8743f0aa"
+          },
+          "username": {
+            "type": "string",
+            "example": "Bill54"
+          },
+          "email": {
+            "type": "string",
+            "example": "plop@gmail.fr"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "example": "0600000000"
+          },
+          "firstname": {
+            "type": "string",
+            "example": "Bill"
+          },
+          "lastname": {
+            "type": "string",
+            "example": "Murray"
+          },
+          "profilePic": {
+            "type": "string",
+            "example": "http://photo.png"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2020-02-10T21:55:46.325Z"
+          },
+          "updtaedAt": {
+            "type": "string",
+            "example": "2020-02-10T21:55:46.325Z"
+          }
+        }
+      },
+      "UserModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "5e41d162ceba414f8743f0aa"
+          },
+          "username": {
+            "type": "string",
+            "example": "Bill54"
+          },
+          "email": {
+            "type": "string",
+            "example": "plop@gmail.fr"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "example": "0600000000"
+          },
+          "firstname": {
+            "type": "string",
+            "example": "Bill"
+          },
+          "lastname": {
+            "type": "string",
+            "example": "Murray"
+          },
+          "profilePic": {
+            "type": "string",
+            "example": "http://photo.png"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2020-02-10T21:55:46.325Z"
+          },
+          "updtaedAt": {
+            "type": "string",
+            "example": "2020-02-10T21:55:46.325Z"
+          }
+        }
+      },
+      "PageUserModel": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "example": 0
+          },
+          "limit": {
+            "type": "integer",
+            "example": 2
+          },
+          "count": {
+            "type": "integer",
+            "example": 1
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserModel"
+            }
+          },
+          "next": {
+            "type": "string",
+            "example": "/user?page=1&limit=1"
+          }
+        }
+      },
+      "PostModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "5e53198aa4806c4a8841f900"
+          },
+          "author": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "5e419b947d94622a8835446f"
+              },
+              "username": {
+                "type": "string",
+                "example": "kronos"
+              }
+            }
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "https://test.img/stuff"
+          },
+          "hashtags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "stuff"
+            }
+          },
+          "mentions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "5e4197bf7d94622a8835446e"
+                },
+                "username": {
+                  "type": "string",
+                  "example": "akros"
+                }
+              }
+            }
+          },
+          "description": {
+            "type": "string",
+            "example": "yeah"
+          },
+          "upvotes": {
+            "type": "integer",
+            "example": 2
+          },
+          "downvotes": {
+            "type": "integer",
+            "example": 0
+          },
+          "tally": {
+            "type": "integer",
+            "example": 0
+          },
+          "upvoted": {
+            "type": "boolean",
+            "example": false
+          },
+          "downvoted": {
+            "type": "boolean",
+            "example": false
+          },
+          "voted": {
+            "type": "boolean",
+            "example": false
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2020-02-10T21:55:46.325Z"
+          },
+          "updtaedAt": {
+            "type": "string",
+            "example": "2020-02-10T21:55:46.325Z"
+          }
+        }
+      },
+      "PostBody": {
+        "type": "object",
+        "required": [
+          "imageUrl"
+        ],
+        "properties": {
+          "imageUrl": {
+            "type": "string",
+            "example": "http://photo.png"
+          },
+          "description": {
+            "type": "string",
+            "example": "my new photo"
+          },
+          "mentions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Billy"
+            }
+          },
+          "hashtags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "juillet"
+            }
+          }
+        }
+      },
+      "PagePostModel": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "example": 0
+          },
+          "limit": {
+            "type": "integer",
+            "example": 2
+          },
+          "count": {
+            "type": "integer",
+            "example": 1
+          },
+          "posts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PostModel"
+            }
+          },
+          "next": {
+            "type": "string",
+            "example": "/post?page=1&limit=1"
+          }
+        }
+      },
+      "NotificationModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "5e922fc3bed82a538e2e3095"
+          },
+          "isRead": {
+            "type": "boolean",
+            "example": true
+          },
+          "userId": {
+            "type": "string",
+            "example": "5e922fc3bed82a538e2e3092"
+          },
+          "text": {
+            "type": "string",
+            "example": "Someone reacted to your comment"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2020-02-10T21:55:46.325Z"
+          },
+          "updtaedAt": {
+            "type": "string",
+            "example": "2020-02-10T21:55:46.325Z"
+          }
+        }
+      },
+      "PageComment": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "example": 0
+          },
+          "limit": {
+            "type": "integer",
+            "example": 2
+          },
+          "count": {
+            "type": "integer",
+            "example": 1
+          },
+          "posts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommentModel"
+            }
+          }
+        }
+      },
+      "CommentModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "5e53198aa4806c4a8841f900"
+          },
+          "author": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "5e419b947d94622a8835446f"
+              },
+              "username": {
+                "type": "string",
+                "example": "kronos"
+              }
+            }
+          },
+          "target": {
+            "type": "string",
+            "example": "5e9214066e1d2418f5bfd5ed"
+          },
+          "hashtags": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "stuff"
+            }
+          },
+          "mentions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "5e4197bf7d94622a8835446e"
+                },
+                "username": {
+                  "type": "string",
+                  "example": "akros"
+                }
+              }
+            }
+          },
+          "content": {
+            "type": "string",
+            "example": "yeah"
+          },
+          "upvotes": {
+            "type": "integer",
+            "example": 2
+          },
+          "downvotes": {
+            "type": "integer",
+            "example": 0
+          },
+          "tally": {
+            "type": "integer",
+            "example": 0
+          },
+          "upvoted": {
+            "type": "boolean",
+            "example": false
+          },
+          "downvoted": {
+            "type": "boolean",
+            "example": false
+          },
+          "voted": {
+            "type": "boolean",
+            "example": false
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2020-02-10T21:55:46.325Z"
+          },
+          "updtaedAt": {
+            "type": "string",
+            "example": "2020-02-10T21:55:46.325Z"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerToken": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

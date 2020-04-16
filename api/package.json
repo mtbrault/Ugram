@@ -55,7 +55,8 @@
         "morgan": "^1.10.0",
         "parse-error": "^0.2.0",
         "passport": "^0.4.1",
-        "passport-jwt": "^4.0.0"
+        "passport-jwt": "^4.0.0",
+        "swagger-ui-express": "^4.1.4"
     },
     "devDependencies": {
         "eslint": "^6.8.0",
