@@ -65,23 +65,24 @@ const getById = (id) => {
 };
 
 const upvote = async (post, user) => {
-	if (user._id.equals(post.author.id)) terr("User cannot upvote his own posts", 400);
 	if (post.upvoted(user)) return { modified: false, post };
 	const session = await Post.startSession();
 	post.upvote(user);
 	await session.withTransaction(async () => {
 		await post.save({ session });
-		await Notification.create(
-			[
+		if (!user._id.equals(post.author.id)) {
+			await Notification.create(
+				[
+					{
+						userId: post.author.id,
+						text: `${user.displayname} upvoted one of your posts`,
+					},
+				],
 				{
-					userId: post.author.id,
-					text: `${user.displayname} upvoted one of your posts`,
+					session,
 				},
-			],
-			{
-				session,
-			},
-		);
+			);
+		}
 	});
 	await session.endSession();
 	return { modified: true, post };
@@ -94,17 +95,19 @@ const downvote = async (post, user) => {
 	post.downvote(user);
 	await session.withTransaction(async () => {
 		await post.save({ session });
-		await Notification.create(
-			[
+		if (!user._id.equals(post.author.id)) {
+			await Notification.create(
+				[
+					{
+						userId: post.author.id,
+						text: `${user.displayname} downvoted one of your posts`,
+					},
+				],
 				{
-					userId: post.author.id,
-					text: `${user.displayname} downvoted one of your posts`,
+					session,
 				},
-			],
-			{
-				session,
-			},
-		);
+			);
+		}
 	});
 	await session.endSession();
 	return { modified: true, post };
