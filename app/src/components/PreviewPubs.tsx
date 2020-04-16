@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Col, List, Modal, Row, Tag, message, Comment, Form, Button, Statistic, Icon,
+  Col, List, Modal, Row, Tag, message, Comment, Button, Statistic, Icon,
 } from 'antd/es';
 import TextArea from 'antd/es/input/TextArea';
 import { useDispatch, useSelector } from 'react-redux';
 import { commentType, publicationType, storeTypes } from '../types';
 import FooterPreviewPubs from './FooterPreviewPubs';
 import {
-  deletePost, getMyProfile, getCommentById, addComment,
+  deletePost, getMyProfile, getCommentById, addComment, upVote, downVote, unvote,
 } from '../store/actions';
 
 interface PreviewPubs {
@@ -31,22 +31,17 @@ interface CommentListProps {
 const Editor: React.FC<EditorProps> = ({
   onChange, onSubmit, value,
 }) => (
-  <div>
-    <Form.Item>
-      <TextArea rows={2} onChange={onChange} value={value} />
-    </Form.Item>
-    <Form.Item>
+  <Row type="flex" align="middle" justify="space-between" className="stats-container">
+    <Col xs={24} md={16}>
+      <TextArea rows={1} onChange={onChange} value={value} />
+    </Col>
+    <Col>
       <Button htmlType="submit" onClick={onSubmit} type="primary">
         Add Comment
       </Button>
-    </Form.Item>
-  </div>
+    </Col>
+  </Row>
 );
-
-const formatDate = (createdAtDate: string): string => {
-  const newDate = new Date(createdAtDate);
-  return `${newDate.getDate()}/${newDate.getMonth() + 1}/${newDate.getFullYear()}`;
-};
 
 const CommentList: React.FC<CommentListProps> = ({ comments }) => (
   <List
@@ -63,12 +58,19 @@ const CommentList: React.FC<CommentListProps> = ({ comments }) => (
   />
 );
 
+const formatDate = (createdAtDate: string): string => {
+  const newDate = new Date(createdAtDate);
+  return `${newDate.getDate()}/${newDate.getMonth() + 1}/${newDate.getFullYear()}`;
+};
+
 const PreviewPubs: React.FC<PreviewPubs> = ({
   previewPubs, toggle, previewVisible, editPubs, isMe,
 }) => {
   const [newComment, setNewComment] = useState('');
   const dispatch = useDispatch();
   const comments = useSelector<storeTypes, commentType[]>((store) => store.commentReducers.comments);
+
+  console.log(previewPubs);
 
   useEffect(() => {
     dispatch(getCommentById(previewPubs.id));
@@ -108,6 +110,16 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
     addNewComment();
   };
 
+  const postActions = (mode: string) => {
+    if (mode === 'like') {
+      previewPubs.upvoted ? dispatch(unvote(previewPubs.id)) : dispatch(upVote(previewPubs.id));
+    } else if (mode === 'dislike') {
+      previewPubs.downvoted ? dispatch(unvote(previewPubs.id)) : dispatch(downVote(previewPubs.id));
+    }
+  };
+
+  const resize = (): number => ((previewPubs?.description || previewPubs?.hashtags.length !== 0 || previewPubs?.mentions.length !== 0) ? 12 : 24);
+
   return (
     <Modal
       width={
@@ -118,7 +130,7 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
       onCancel={toggle}
     >
       <Row type="flex" align="middle">
-        <Col xs={24} md={12} className="text-center">
+        <Col xs={24} md={resize()} className="text-center">
           <img src={previewPubs.imageUrl || ''} width={200} height={200} alt="" />
         </Col>
         {(previewPubs?.description || previewPubs?.hashtags.length !== 0 || previewPubs?.mentions.length !== 0) && (
@@ -159,33 +171,39 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
             )}
           </Col>
         )}
-        {/*
-          Ici c'est le OnClick sur un like qui va add un like ou dislike
-          l'attribut theme="filled" c'est que le user a deja reagi
-          faut juste faire en sorte qu'il puisse pas mettre like et dislike en meme temps ^^
-          Genre si ya un like et quon dislike faut sa change inverse le filled sur l'icon
-          si tu fais un truc de gbz avec les actions sa sera a laide dun check d'une variable en tenaire jpense
-          genre like ? 'filled' : 'outlined'
-
-          - Faut aussi disable toute la div react <></> qd c'est l'une des pubs de l'user
-        */}
-        <>
-          <Col span={12}>
-            <Statistic
-              title="Likes"
-              value={420}
-              prefix={<Icon onClick={() => console.log('Like')} type="like" theme="filled" className="cursor-pointer" />}
-            />
-          </Col>
-          <Col span={12}>
-            <Statistic
-              title="Dislikes"
-              value={93}
-              prefix={<Icon onClick={() => console.log('Dislike')} type="dislike" theme="outlined" className="cursor-pointer" />}
-              className="cursor-pointer"
-            />
-          </Col>
-        </>
+        <Col span={24} className="stats-container">
+          <Row type="flex" justify="space-around">
+            <Col>
+              <Statistic
+                title="Likes"
+                value={previewPubs.upvotes}
+                prefix={(
+                  <Icon
+                    onClick={() => postActions('like')}
+                    type="like"
+                    theme={previewPubs.upvoted ? 'filled' : 'outlined'}
+                    className="cursor-pointer"
+                  />
+                )}
+              />
+            </Col>
+            <Col>
+              <Statistic
+                title="Dislikes"
+                value={previewPubs.downvotes}
+                prefix={(
+                  <Icon
+                    onClick={() => postActions('dislike')}
+                    type="dislike"
+                    theme={previewPubs.downvoted ? 'filled' : 'outlined'}
+                    className="cursor-pointer"
+                  />
+                )}
+                className="cursor-pointer"
+              />
+            </Col>
+          </Row>
+        </Col>
         <Col span={24}>
           {comments.length > 0 && <CommentList comments={comments} />}
           <Editor
