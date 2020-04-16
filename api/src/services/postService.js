@@ -89,7 +89,6 @@ const upvote = async (post, user) => {
 };
 
 const downvote = async (post, user) => {
-	if (user._id.equals(post.author.id)) terr("User cannot downvote his own posts", 400);
 	if (post.downvoted(user)) return { modified: false, post };
 	const session = await Post.startSession();
 	post.downvote(user);
@@ -114,7 +113,6 @@ const downvote = async (post, user) => {
 };
 
 const unvote = async (post, user) => {
-	if (user._id.equals(post.author.id)) terr("User cannot vote on his own posts", 400);
 	if (!post.voted(user).voted) return { modified: false, post };
 	post.unvote(user);
 	await post.save();
