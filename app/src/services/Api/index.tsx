@@ -154,6 +154,20 @@ export default class APIManager {
     return res.data;
   }
 
+  static async getReactionById(postId: string) {
+    const res = await API.get(`/post/${postId}`);
+    if (res.data) {
+      return {
+        upvotes: res.data.upvotes,
+        downvotes: res.data.downvotes,
+        upvoted: res.data.upvoted,
+        downvoted: res.data.downvoted,
+        voted: res.data.voted,
+      }
+    }
+    return res;
+  }
+
   static async autocomplete(query: string) {
     const res = await API.get(`/autocomplete/${query}`);
     return res.data;

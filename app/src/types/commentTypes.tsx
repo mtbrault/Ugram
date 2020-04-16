@@ -7,6 +7,15 @@ export interface commentType {
   createdAt: string;
 }
 
+export interface reactionType {
+  upvotes: number;
+  downvotes: number;
+  upvoted: boolean;
+  downvoted: boolean;
+  voted: boolean;
+}
+
 export interface initialComment {
-	comments: commentType[];
+  comments: commentType[];
+  reaction: reactionType;
 }

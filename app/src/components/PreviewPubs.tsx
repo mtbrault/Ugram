@@ -4,10 +4,10 @@ import {
 } from 'antd/es';
 import TextArea from 'antd/es/input/TextArea';
 import { useDispatch, useSelector } from 'react-redux';
-import { commentType, publicationType, storeTypes } from '../types';
+import { commentType, publicationType, storeTypes, reactionType } from '../types';
 import FooterPreviewPubs from './FooterPreviewPubs';
 import {
-  deletePost, getMyProfile, getCommentById, addComment, upVote, downVote, unvote,
+  deletePost, getMyProfile, getCommentById, addComment, upVote, downVote, unvote, getReactionById,
 } from '../store/actions';
 
 interface PreviewPubs {
@@ -31,17 +31,17 @@ interface CommentListProps {
 const Editor: React.FC<EditorProps> = ({
   onChange, onSubmit, value,
 }) => (
-  <Row type="flex" align="middle" justify="space-between" className="stats-container">
-    <Col xs={24} md={16}>
-      <TextArea rows={1} onChange={onChange} value={value} />
-    </Col>
-    <Col>
-      <Button htmlType="submit" onClick={onSubmit} type="primary">
-        Add Comment
+    <Row type="flex" align="middle" justify="space-between" className="stats-container">
+      <Col xs={24} md={16}>
+        <TextArea rows={1} onChange={onChange} value={value} />
+      </Col>
+      <Col>
+        <Button htmlType="submit" onClick={onSubmit} type="primary">
+          Add Comment
       </Button>
-    </Col>
-  </Row>
-);
+      </Col>
+    </Row>
+  );
 
 const CommentList: React.FC<CommentListProps> = ({ comments }) => (
   <List
@@ -69,11 +69,11 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
   const [newComment, setNewComment] = useState('');
   const dispatch = useDispatch();
   const comments = useSelector<storeTypes, commentType[]>((store) => store.commentReducers.comments);
-
-  console.log(previewPubs);
+  const reactions = useSelector<storeTypes, reactionType>(store => store.commentReducers.reaction);
 
   useEffect(() => {
     dispatch(getCommentById(previewPubs.id));
+    dispatch(getReactionById(previewPubs.id));
   }, [dispatch, previewPubs]);
 
   const addNewComment = () => {
@@ -112,9 +112,9 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
 
   const postActions = (mode: string) => {
     if (mode === 'like') {
-      previewPubs.upvoted ? dispatch(unvote(previewPubs.id)) : dispatch(upVote(previewPubs.id));
+      reactions.upvoted ? dispatch(unvote(previewPubs.id)).then(() => dispatch(getReactionById(previewPubs.id))) : dispatch(upVote(previewPubs.id)).then(() => dispatch(getReactionById(previewPubs.id)));
     } else if (mode === 'dislike') {
-      previewPubs.downvoted ? dispatch(unvote(previewPubs.id)) : dispatch(downVote(previewPubs.id));
+      reactions.downvoted ? dispatch(unvote(previewPubs.id)).then(() => dispatch(getReactionById(previewPubs.id))) : dispatch(downVote(previewPubs.id)).then(() => dispatch(getReactionById(previewPubs.id)));
     }
   };
 
@@ -176,12 +176,12 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
             <Col>
               <Statistic
                 title="Likes"
-                value={previewPubs.upvotes}
+                value={reactions.upvotes}
                 prefix={(
                   <Icon
                     onClick={() => postActions('like')}
                     type="like"
-                    theme={previewPubs.upvoted ? 'filled' : 'outlined'}
+                    theme={reactions.upvoted ? 'filled' : 'outlined'}
                     className="cursor-pointer"
                   />
                 )}
@@ -190,12 +190,12 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
             <Col>
               <Statistic
                 title="Dislikes"
-                value={previewPubs.downvotes}
+                value={reactions.downvotes}
                 prefix={(
                   <Icon
                     onClick={() => postActions('dislike')}
                     type="dislike"
-                    theme={previewPubs.downvoted ? 'filled' : 'outlined'}
+                    theme={reactions.downvoted ? 'filled' : 'outlined'}
                     className="cursor-pointer"
                   />
                 )}
