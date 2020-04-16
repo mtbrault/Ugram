@@ -138,3 +138,7 @@ code {
     display: flex;
     align-items: center;
 }
+
+.stats-container {
+    margin-top: 10px;
+}

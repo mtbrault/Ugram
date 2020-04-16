@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Col, List, Modal, Row, Tag, message, Comment, Form, Button, Statistic, Icon,
+  Col, List, Modal, Row, Tag, message, Comment, Button, Statistic, Icon,
 } from 'antd/es';
 import TextArea from 'antd/es/input/TextArea';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,16 +31,16 @@ interface CommentListProps {
 const Editor: React.FC<EditorProps> = ({
   onChange, onSubmit, value,
 }) => (
-  <div>
-    <Form.Item>
-      <TextArea rows={2} onChange={onChange} value={value} />
-    </Form.Item>
-    <Form.Item>
+  <Row type="flex" align="middle" justify="space-between" className="stats-container">
+    <Col xs={24} md={16}>
+      <TextArea rows={1} onChange={onChange} value={value} />
+    </Col>
+    <Col>
       <Button htmlType="submit" onClick={onSubmit} type="primary">
         Add Comment
       </Button>
-    </Form.Item>
-  </div>
+    </Col>
+  </Row>
 );
 
 const CommentList: React.FC<CommentListProps> = ({ comments }) => (
@@ -171,9 +171,9 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
             )}
           </Col>
         )}
-        <Col span={24}>
-          <Row type="flex" justify="center">
-            <Col span={12}>
+        <Col span={24} className="stats-container">
+          <Row type="flex" justify="space-around">
+            <Col>
               <Statistic
                 title="Likes"
                 value={previewPubs.upvotes}
@@ -187,7 +187,7 @@ const PreviewPubs: React.FC<PreviewPubs> = ({
                 )}
               />
             </Col>
-            <Col span={12}>
+            <Col>
               <Statistic
                 title="Dislikes"
                 value={previewPubs.downvotes}

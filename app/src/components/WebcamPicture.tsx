@@ -9,10 +9,10 @@ interface webcamProps {
 }
 
 const videoConstraints = {
-  width: 1280,
+  width: 720,
   height: 720,
-  facingMode: "user",
-}
+  facingMode: 'user',
+};
 
 const WebcamPicture: React.FC<webcamProps> = ({ setPicture, visible, toggleModal }) => {
   const [webcam, setWebcam] = useState(null);
