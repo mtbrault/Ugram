@@ -47,7 +47,6 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
   const search = (val: string) => {
     if (val[0] === '#') {
       val.replace('#', '');
-      console.log(val);
     }
     if (val.length !== 0) {
       dispatch(searchPostByDesc(val));
