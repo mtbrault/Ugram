@@ -2,7 +2,7 @@
 
 ## Accéder à l'app
 
-Le lien de l'API : http://ugramapi-env.eba-gaezbxp2.us-east-2.elasticbeanstalk.com.
+Le lien de l'API : https://ugramapi-env.eba-gaezbxp2.us-east-2.elasticbeanstalk.com.
 
 Le lien de l'APP : https://ugram-app.s3.us-east-2.amazonaws.com/index.html.
 
@@ -32,7 +32,7 @@ Le frontend hébergé sur S3 possède des logs avec Sentry.
 
 ## API Documentation
 
-Pour voir la documentation dynamique de l'API, vous pouvoir vous rendre sur http://ugramapi-env.eba-gaezbxp2.us-east-2.elasticbeanstalk.com/documentation
+Pour voir la documentation dynamique de l'API, vous pouvoir vous rendre sur https://ugramapi-env.eba-gaezbxp2.us-east-2.elasticbeanstalk.com/documentation
 
 ## Les différentes features
 
