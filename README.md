@@ -30,7 +30,7 @@ Le frontend hébergé sur S3 possède des logs avec Sentry.
 
 ## API Documentation
 
-Vous trouverez la documentation de l'API [ici](https://github.com/GLO3112-classrooms/ugram-h2020-team-08/wiki/API-Documentation).
+Pour voir la documentation dynamique de l'API, vous pouvoir vous rendre sur https://ugram-api.eba-b2ikdsse.us-east-2.elasticbeanstalk.com/documentation
 
 ## Les différentes features
 
@@ -39,6 +39,8 @@ Vous trouverez la documentation de l'API [ici](https://github.com/GLO3112-classr
 
 * On peut se déconnecter avec le bouton "Logout" dans la barre de navigation.
 * Dans la barre de recherche on peut trouver un user ou un post par hashtag ou description.
+
+* Dans le header, un bouton à droite de la searchbar est disponible. On peut voir à l'intérieur nos notifications en cliquant dessus. Si des notifications n'ont pas encore été lus, alors le nombre de notifications non lus s'affiche dans un cercle rouge. Les notifications passent à "lu" une fois qu'on clique sur le bouton.
 
 Page Home :
 * On peut voir la liste des utilisateurs et se rendre sur leur profil en cliquant dessus.
@@ -49,3 +51,12 @@ Page Profil :
 * On peut supprimer son compte via le bouton "Delete account".
 * On peut créer un post avec le bouton "Upload a picture".
 * On peut consulter ses posts et leurs détails en cliquant dessus.
+
+Visualisation de publication :
+* On peut y ajouter un commentaire, qui se retrouvera en haut des autres.
+* On peut like ou dislike une publication (si l'on clique à nouveau sur notre réaction cela l'enlève).
+
+Les fonctionnalités de 15 points :
+* Lorsque l'on upload une image, on peut choisir d'utiliser la webcam (5 points).
+* Lorsque l'on fait une recherche dans la barre en haut, un autocomplete est disponible qui propose les username et les hashtags qui match (5 points).
+* Dans le bouton avec une étoile dans le header, on peut y retrouver les 5 hashtags les plus populaires (5 points).
