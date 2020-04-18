@@ -6,7 +6,7 @@ import {
 } from 'antd/es';
 import { initialProfile, initialSearch, profileType, publicationType, storeTypes } from '../types';
 import PreviewPubs from '../components/PreviewPubs';
-import { getAllUsers } from '../store/actions';
+import { getAllUsers, getNotif, getTopHashtag } from '../store/actions';
 
 interface SearchProps {
   history: History;
@@ -21,6 +21,8 @@ const Search: React.FC<SearchProps> = ({ history }) => {
 
   useEffect(() => {
     dispatch(getAllUsers());
+    dispatch(getNotif());
+    dispatch(getTopHashtag());
   }, [dispatch]);
 
   useEffect(() => {

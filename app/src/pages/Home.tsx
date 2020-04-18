@@ -4,7 +4,7 @@ import { History } from 'history';
 import {
   Avatar, Button, Card, Col, List, Row, Tag,
 } from 'antd/es';
-import { getAllUsers, getAllPost } from '../store/actions';
+import { getAllUsers, getAllPost, getNotif, getTopHashtag } from '../store/actions';
 import {
   initialProfile, postList, profileType, publicationType, storeTypes,
 } from '../types';
@@ -27,6 +27,8 @@ const Home: React.FC<HomeProps> = ({ history }) => {
       .catch(() => {
         history.push('/login');
       });
+    dispatch(getNotif());
+    dispatch(getTopHashtag());
   }, [dispatch, history])
 
   const openPreview = (item: publicationType) => {
