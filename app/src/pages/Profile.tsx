@@ -4,7 +4,7 @@ import {
 } from 'antd/es';
 import { useDispatch, useSelector } from 'react-redux';
 import { History } from 'history';
-import { getMyProfile, deleteUser } from '../store/actions';
+import { getMyProfile, deleteUser, getNotif, getTopHashtag } from '../store/actions';
 import Loader from '../components/Loader';
 import Cookies from 'js-cookie';
 
@@ -34,6 +34,8 @@ const Profile: React.FC<ProfileProps> = ({ history, location }) => {
   useEffect(() => {
     dispatch(getMyProfile())
       .catch(() => history.goBack());
+    dispatch(getNotif());
+    dispatch(getTopHashtag());
   }, [dispatch, history]);
 
   useEffect(() => {
