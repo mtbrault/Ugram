@@ -62,7 +62,10 @@ const Header: React.FC<HeaderProps> = ({ history }) => {
   };
 
   const autocomplete = async (value: string) => {
-    if (value === '' || value === '#') return;
+    if (value === '' || value === '#') {
+      setAutofill([]);
+      return;
+    };
     const res = await APIManager.autocomplete(value);
     setAutofill(res);
   };
