@@ -2,9 +2,11 @@
 
 ## Accéder à l'app
 
-Le lien de l'API : https://ugram-api.eba-b2ikdsse.us-east-2.elasticbeanstalk.com.
+Le lien de l'API : http://ugramapi-env.eba-gaezbxp2.us-east-2.elasticbeanstalk.com.
 
 Le lien de l'APP : https://ugram-app.s3.us-east-2.amazonaws.com/index.html.
+
+Les 2 serveurs se déploient automatiquement lorsque l'on push sur master.
 
 N'oubliez pas de précisez le *index.html* à la fin du lien de l'app où vous ne pourrez pas  y accéder.
 Comme nous utilisons un certificat non signé et que nous n'avons pas de nom de domaine (qui sont payants) il est nécessaire de d'abord se rendre sur le lien de l'API et d'accepter le certificat https avant de se rendre sur l'app.
@@ -30,7 +32,7 @@ Le frontend hébergé sur S3 possède des logs avec Sentry.
 
 ## API Documentation
 
-Pour voir la documentation dynamique de l'API, vous pouvoir vous rendre sur https://ugram-api.eba-b2ikdsse.us-east-2.elasticbeanstalk.com/documentation
+Pour voir la documentation dynamique de l'API, vous pouvoir vous rendre sur http://ugramapi-env.eba-gaezbxp2.us-east-2.elasticbeanstalk.com/documentation
 
 ## Les différentes features
 
